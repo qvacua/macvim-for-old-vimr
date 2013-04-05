@@ -43,6 +43,7 @@
 #import "MMWindowController.h"
 #import "MMTextView.h"
 #import "Miscellaneous.h"
+#import "MMUtils.h"
 #import <unistd.h>
 #import <CoreServices/CoreServices.h>
 #if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
@@ -173,62 +174,46 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 
     ASLInit();
 
-    // HACK! The following user default must be reset, else Ctrl-q (or
-    // whichever key is specified by the default) will be blocked by the input
-    // manager (interpretKeyEvents: swallows that key).  (We can't use
-    // NSUserDefaults since it only allows us to write to the registration
-    // domain and this preference has "higher precedence" than that so such a
-    // change would have no effect.)
-    CFPreferencesSetAppValue(CFSTR("NSQuotedKeystrokeBinding"),
-                             CFSTR(""),
-                             kCFPreferencesCurrentApplication);
+    [MMUtils setKeyHandlingUserDefaults];
 
-    // Also disable NSRepeatCountBinding -- it is not enabled by default, but
-    // it does not make much sense to support it since Vim has its own way of
-    // dealing with repeat counts.
-    CFPreferencesSetAppValue(CFSTR("NSRepeatCountBinding"),
-                             CFSTR(""),
-                             kCFPreferencesCurrentApplication);
-    
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithBool:NO],   MMNoWindowKey,
-        [NSNumber numberWithInt:64],    MMTabMinWidthKey,
-        [NSNumber numberWithInt:6*64],  MMTabMaxWidthKey,
-        [NSNumber numberWithInt:132],   MMTabOptimumWidthKey,
-        [NSNumber numberWithBool:YES],  MMShowAddTabButtonKey,
-        [NSNumber numberWithInt:2],     MMTextInsetLeftKey,
-        [NSNumber numberWithInt:1],     MMTextInsetRightKey,
-        [NSNumber numberWithInt:1],     MMTextInsetTopKey,
-        [NSNumber numberWithInt:1],     MMTextInsetBottomKey,
-        @"MMTypesetter",                MMTypesetterKey,
-        [NSNumber numberWithFloat:1],   MMCellWidthMultiplierKey,
-        [NSNumber numberWithFloat:-1],  MMBaselineOffsetKey,
-        [NSNumber numberWithBool:YES],  MMTranslateCtrlClickKey,
-        [NSNumber numberWithInt:0],     MMOpenInCurrentWindowKey,
-        [NSNumber numberWithBool:NO],   MMNoFontSubstitutionKey,
-        [NSNumber numberWithBool:YES],  MMLoginShellKey,
-        [NSNumber numberWithInt:2],     MMRendererKey,
-        [NSNumber numberWithInt:MMUntitledWindowAlways],
-                                        MMUntitledWindowKey,
-        [NSNumber numberWithBool:NO],   MMTexturedWindowKey,
-        [NSNumber numberWithBool:NO],   MMZoomBothKey,
-        @"",                            MMLoginShellCommandKey,
-        @"",                            MMLoginShellArgumentKey,
-        [NSNumber numberWithBool:YES],  MMDialogsTrackPwdKey,
-        [NSNumber numberWithInt:3],     MMOpenLayoutKey,
-        [NSNumber numberWithBool:NO],   MMVerticalSplitKey,
-        [NSNumber numberWithInt:0],     MMPreloadCacheSizeKey,
-        [NSNumber numberWithInt:0],     MMLastWindowClosedBehaviorKey,
+    NSDictionary *dict = @{
+            MMNoWindowKey                 : @NO,
+            MMTabMinWidthKey              : @64,
+            MMTabMaxWidthKey              : @(6 * 64),
+            MMTabOptimumWidthKey          : @132,
+            MMShowAddTabButtonKey         : @YES,
+            MMTextInsetLeftKey            : @2,
+            MMTextInsetRightKey           : @1,
+            MMTextInsetTopKey             : @1,
+            MMTextInsetBottomKey          : @1,
+            MMTypesetterKey               : @"MMTypesetter",
+            MMCellWidthMultiplierKey      : @1,
+            MMBaselineOffsetKey           : @(-1),
+            MMTranslateCtrlClickKey       : @YES,
+            MMOpenInCurrentWindowKey      : @0,
+            MMNoFontSubstitutionKey       : @NO,
+            MMLoginShellKey               : @YES,
+            MMRendererKey                 : @2,
+            MMUntitledWindowKey           : @(MMUntitledWindowAlways),
+            MMTexturedWindowKey           : @NO,
+            MMZoomBothKey                 : @NO,
+            MMLoginShellCommandKey        : @"",
+            MMLoginShellArgumentKey       : @"",
+            MMDialogsTrackPwdKey          : @YES,
+            MMOpenLayoutKey               : @3,
+            MMVerticalSplitKey            : @NO,
+            MMPreloadCacheSizeKey         : @0,
+            MMLastWindowClosedBehaviorKey : @0,
+            MMSuppressTerminationAlertKey : @NO,
+            MMNativeFullScreenKey         : @YES,
 #ifdef INCLUDE_OLD_IM_CODE
-        [NSNumber numberWithBool:YES],  MMUseInlineImKey,
+            MMUseInlineImKey              : @YES,
 #endif // INCLUDE_OLD_IM_CODE
-        [NSNumber numberWithBool:NO],   MMSuppressTerminationAlertKey,
-        [NSNumber numberWithBool:YES],  MMNativeFullScreenKey,
-        nil];
+    };
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:dict];
 
-    NSArray *types = [NSArray arrayWithObject:NSStringPboardType];
+    NSArray *types = @[NSStringPboardType];
     [NSApp registerServicesMenuSendTypes:types returnTypes:types];
 
     // NOTE: Set the current directory to user's home directory, otherwise it
