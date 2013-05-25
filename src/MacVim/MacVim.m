@@ -116,9 +116,6 @@ NSString *MMRendererKey	       = @"MMRenderer";
 // Vim find pasteboard type (string contains Vim regex patterns)
 NSString *VimFindPboardType = @"VimFindPboardType";
 
-int ASLogLevel = ASL_LEVEL_NOTICE;
-
-
 
 // Create a string holding the labels of all messages in message queue for
 // debugging purposes (condense some messages since there may typically be LOTS

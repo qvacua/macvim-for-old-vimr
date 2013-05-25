@@ -13,6 +13,8 @@
 NSString *MMLogLevelKey     = @"MMLogLevel";
 NSString *MMLogToStdErrKey  = @"MMLogToStdErr";
 
+int ASLogLevel = ASL_LEVEL_NOTICE;
+
 void
 ASLInit()
 {
