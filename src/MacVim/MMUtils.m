@@ -9,6 +9,16 @@
  */
 
 #import "MMUtils.h"
+#import "MacVim.h"
+
+// This is a private AppKit API gleaned from class-dump.
+@interface NSKeyBindingManager : NSObject
+
++ (id)sharedKeyBindingManager;
+- (id)dictionary;
+- (void)setDictionary:(id)arg1;
+
+@end
 
 @implementation MMUtils
 
@@ -41,6 +51,20 @@
     );
 
     prefSet = YES;
+}
+
++ (void)setVimKeybindings {
+    NSKeyBindingManager *mgr = [NSKeyBindingManager sharedKeyBindingManager];
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    NSString *path = [mainBundle pathForResource:@"KeyBinding"
+                                          ofType:@"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];
+    if (mgr && dict) {
+        [mgr setDictionary:dict];
+    } else {
+        ASLogNotice(@"Failed to override the Cocoa key bindings.  Keyboard "
+                "input may behave strangely as a result (path=%@).", path);
+    }
 }
 
 @end

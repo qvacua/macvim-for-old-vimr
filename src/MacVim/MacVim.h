@@ -11,6 +11,7 @@
 #import <Cocoa/Cocoa.h>
 #import <asl.h>
 
+#import "MMLog.h"
 
 // Taken from /usr/include/AvailabilityMacros.h
 #ifndef MAC_OS_X_VERSION_10_4
@@ -248,8 +249,6 @@ NSString *debugStringForMessageQueue(NSArray *queue);
 // Contrary to the user defaults in Miscellaneous.h these defaults are not
 // intitialized to any default values.  That is, unless the user sets them
 // these keys will not be present in the user default database.
-extern NSString *MMLogLevelKey;
-extern NSString *MMLogToStdErrKey;
 
 // Argument used to stop MacVim from opening an empty window on startup
 // (techincally this is a user default but should not be used as such).
