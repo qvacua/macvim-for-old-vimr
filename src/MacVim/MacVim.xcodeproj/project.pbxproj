@@ -11,6 +11,7 @@
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
 		1929B3086BD2CD8259242896 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B8B5ECD564CAB086FA31 /* MMUtils.m */; };
 		1929B37E3E8E65A65B0FA9EB /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B00B0ACC21406965D749 /* MMLog.m */; };
+		1929B436E3D64A665D467894 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */; };
 		1929BAB9748E48EDB27D1573 /* MMUtils.h in Copy Executables */ = {isa = PBXBuildFile; fileRef = 1929BF8C22F04CBCAC99D88C /* MMUtils.h */; };
 		1D09AB420C6A4D520045497E /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D09AB400C6A4D520045497E /* MMTypesetter.m */; };
 		1D0E051C0BA5F83800B6049E /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D0E051B0BA5F83800B6049E /* Colors.plist */; };
@@ -137,9 +138,11 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1929B00B0ACC21406965D749 /* MMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLog.m; sourceTree = "<group>"; };
+		1929B6709E94FD4A0B4F295C /* MMCocoaCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCocoaCategories.h; sourceTree = "<group>"; };
 		1929B6AC0540B30EA9119D9B /* MMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLog.h; sourceTree = "<group>"; };
 		1929B8B5ECD564CAB086FA31 /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
 		1929BF8C22F04CBCAC99D88C /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
+		1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCocoaCategories.m; sourceTree = "<group>"; };
 		1D09AB3F0C6A4D520045497E /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
 		1D09AB400C6A4D520045497E /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
 		1D0E051B0BA5F83800B6049E /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
@@ -306,6 +309,8 @@
 				1929B8B5ECD564CAB086FA31 /* MMUtils.m */,
 				1929B00B0ACC21406965D749 /* MMLog.m */,
 				1929B6AC0540B30EA9119D9B /* MMLog.h */,
+				1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */,
+				1929B6709E94FD4A0B4F295C /* MMCocoaCategories.h */,
 			);
 			name = VimTextView;
 			sourceTree = "<group>";
@@ -582,6 +587,7 @@
 				1D44972211FCA9B400B0630F /* MMCoreTextView+ToolTip.m in Sources */,
 				1929B3086BD2CD8259242896 /* MMUtils.m in Sources */,
 				1929B37E3E8E65A65B0FA9EB /* MMLog.m in Sources */,
+				1929B436E3D64A665D467894 /* MMCocoaCategories.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 #import <asl.h>
 
 #import "MMLog.h"
+#import "MMCocoaCategories.h"
 
 // Taken from /usr/include/AvailabilityMacros.h
 #ifndef MAC_OS_X_VERSION_10_4
@@ -266,34 +267,6 @@ enum {
 
 
 extern NSString *VimFindPboardType;
-
-
-
-
-@interface NSString (MMExtras)
-- (NSString *)stringByEscapingSpecialFilenameCharacters;
-- (NSString *)stringByRemovingFindPatterns;
-- (NSString *)stringBySanitizingSpotlightSearch;
-@end
-
-
-@interface NSColor (MMExtras)
-+ (NSColor *)colorWithRgbInt:(unsigned)rgb;
-+ (NSColor *)colorWithArgbInt:(unsigned)argb;
-@end
-
-
-@interface NSDictionary (MMExtras)
-+ (id)dictionaryWithData:(NSData *)data;
-- (NSData *)dictionaryAsData;
-@end
-
-@interface NSMutableDictionary (MMExtras)
-+ (id)dictionaryWithData:(NSData *)data;
-@end
-
-
-
 
 // ODB Editor Suite Constants (taken from ODBEditorSuite.h)
 #define	keyFileSender		'FSnd'
