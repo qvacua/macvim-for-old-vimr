@@ -7,6 +7,7 @@
  * Do ":help credits" in Vim to see a list of people who contributed.
  * See README.txt for an overview of the Vim source code.
  */
+
 /*
  * MMTextStorage
  *
@@ -32,10 +33,8 @@
  */
 
 #import "MMTextStorage.h"
-#import "MacVim.h"
-#import "Miscellaneous.h"
-
-
+#import "MMLog.h"
+#import "MMUserDefaults.h"
 
 // Enable debug log messages for situations that should never occur.
 #define MM_TS_PARANOIA_LOG 1

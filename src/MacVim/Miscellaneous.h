@@ -12,6 +12,8 @@
 #import <Cocoa/Cocoa.h>
 #import "MacVim.h"
 
+#import "MMUserDefaults.h"
+
 
 // TODO: Remove this when the inline IM code has been tested
 #define INCLUDE_OLD_IM_CODE
@@ -31,12 +33,10 @@ extern NSString *MMTextInsetRightKey;
 extern NSString *MMTextInsetTopKey;
 extern NSString *MMTextInsetBottomKey;
 extern NSString *MMTypesetterKey;
-extern NSString *MMCellWidthMultiplierKey;
 extern NSString *MMBaselineOffsetKey;
 extern NSString *MMTranslateCtrlClickKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;
-extern NSString *MMNoFontSubstitutionKey;
 extern NSString *MMLoginShellKey;
 extern NSString *MMUntitledWindowKey;
 extern NSString *MMTexturedWindowKey;

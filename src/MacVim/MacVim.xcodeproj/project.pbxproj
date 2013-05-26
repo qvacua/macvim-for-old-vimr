@@ -11,15 +11,16 @@
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
 		1929B3086BD2CD8259242896 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B8B5ECD564CAB086FA31 /* MMUtils.m */; };
 		1929B37E3E8E65A65B0FA9EB /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B00B0ACC21406965D749 /* MMLog.m */; };
+		1929B3C67B365D3BEA9D7D4A /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B62A295C55078E39C6B1 /* MMTextStorage.m */; };
 		1929B436E3D64A665D467894 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */; };
 		1929B4EBF119F5DB313525C2 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BEB2D637F9E95960AFD5 /* MMScroller.m */; };
 		1929BAB9748E48EDB27D1573 /* MMUtils.h in Copy Executables */ = {isa = PBXBuildFile; fileRef = 1929BF8C22F04CBCAC99D88C /* MMUtils.h */; };
-		1D09AB420C6A4D520045497E /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D09AB400C6A4D520045497E /* MMTypesetter.m */; };
+		1929BE925708A51B5D1E4557 /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BCFADF0C900062A10D4B /* MMTypesetter.m */; };
+		1929BF2E5A8AB1F209AA9B9C /* MMUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B34D8F7A51D137F2264B /* MMUserDefaults.m */; };
 		1D0E051C0BA5F83800B6049E /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D0E051B0BA5F83800B6049E /* Colors.plist */; };
 		1D145C7F0E5227CE00691AA0 /* MMTextViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */; };
 		1D1474980C56703C0038FA2B /* MacVim.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474960C56703C0038FA2B /* MacVim.m */; };
 		1D1474A00C5673AE0038FA2B /* MMAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D14749E0C5673AE0038FA2B /* MMAppController.m */; };
-		1D1474AA0C5677450038FA2B /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474A80C5677450038FA2B /* MMTextStorage.m */; };
 		1D1474B00C5678370038FA2B /* MMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474AE0C5678370038FA2B /* MMTextView.m */; };
 		1D1474B60C56796D0038FA2B /* MMVimController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474B40C56796D0038FA2B /* MMVimController.m */; };
 		1D1474BC0C567A910038FA2B /* MMWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474BA0C567A910038FA2B /* MMWindowController.m */; };
@@ -139,16 +140,20 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1929B00B0ACC21406965D749 /* MMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLog.m; sourceTree = "<group>"; };
+		1929B34D8F7A51D137F2264B /* MMUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUserDefaults.m; sourceTree = "<group>"; };
+		1929B62A295C55078E39C6B1 /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
 		1929B6709E94FD4A0B4F295C /* MMCocoaCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCocoaCategories.h; sourceTree = "<group>"; };
 		1929B6AC0540B30EA9119D9B /* MMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLog.h; sourceTree = "<group>"; };
+		1929B6F5FB395DA98805C36D /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
 		1929B7E07D03F5DD1C94A250 /* MMVimBackendProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVimBackendProtocol.h; sourceTree = "<group>"; };
 		1929B889420AF9ABB563AA4F /* MMScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScroller.h; sourceTree = "<group>"; };
 		1929B8B5ECD564CAB086FA31 /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
+		1929B90B0F619CC3F283B406 /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
+		1929BCFADF0C900062A10D4B /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
+		1929BD53AF98BA14DC8F3744 /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
 		1929BEB2D637F9E95960AFD5 /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
 		1929BF8C22F04CBCAC99D88C /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
 		1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCocoaCategories.m; sourceTree = "<group>"; };
-		1D09AB3F0C6A4D520045497E /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
-		1D09AB400C6A4D520045497E /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
 		1D0E051B0BA5F83800B6049E /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
 		1D145C7D0E5227CE00691AA0 /* MMTextViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextViewHelper.h; sourceTree = "<group>"; };
 		1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextViewHelper.m; sourceTree = "<group>"; };
@@ -156,8 +161,6 @@
 		1D1474960C56703C0038FA2B /* MacVim.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MacVim.m; sourceTree = "<group>"; };
 		1D14749D0C5673AE0038FA2B /* MMAppController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMAppController.h; sourceTree = "<group>"; };
 		1D14749E0C5673AE0038FA2B /* MMAppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMAppController.m; sourceTree = "<group>"; };
-		1D1474A70C5677450038FA2B /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
-		1D1474A80C5677450038FA2B /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
 		1D1474AD0C5678370038FA2B /* MMTextView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTextView.h; sourceTree = "<group>"; };
 		1D1474AE0C5678370038FA2B /* MMTextView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTextView.m; sourceTree = "<group>"; };
 		1D1474B30C56796D0038FA2B /* MMVimController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMVimController.h; sourceTree = "<group>"; };
@@ -268,16 +271,12 @@
 				1D80FBD20CBBD3B700102A1C /* MMVimView.m */,
 				1DD66ECB0C803D3600EBDAB3 /* MMApplication.h */,
 				1DD66ECC0C803D3600EBDAB3 /* MMApplication.m */,
-				1D09AB3F0C6A4D520045497E /* MMTypesetter.h */,
-				1D09AB400C6A4D520045497E /* MMTypesetter.m */,
 				1D1474B90C567A910038FA2B /* MMWindowController.h */,
 				1D1474BA0C567A910038FA2B /* MMWindowController.m */,
 				1D1474B30C56796D0038FA2B /* MMVimController.h */,
 				1D1474B40C56796D0038FA2B /* MMVimController.m */,
 				1D1474AD0C5678370038FA2B /* MMTextView.h */,
 				1D1474AE0C5678370038FA2B /* MMTextView.m */,
-				1D1474A70C5677450038FA2B /* MMTextStorage.h */,
-				1D1474A80C5677450038FA2B /* MMTextStorage.m */,
 				1D14749D0C5673AE0038FA2B /* MMAppController.h */,
 				1D14749E0C5673AE0038FA2B /* MMAppController.m */,
 				1D1474950C56703C0038FA2B /* MacVim.h */,
@@ -318,6 +317,12 @@
 				1929B7E07D03F5DD1C94A250 /* MMVimBackendProtocol.h */,
 				1929BEB2D637F9E95960AFD5 /* MMScroller.m */,
 				1929B889420AF9ABB563AA4F /* MMScroller.h */,
+				1929BCFADF0C900062A10D4B /* MMTypesetter.m */,
+				1929B6F5FB395DA98805C36D /* MMTypesetter.h */,
+				1929BD53AF98BA14DC8F3744 /* MMTextStorage.h */,
+				1929B62A295C55078E39C6B1 /* MMTextStorage.m */,
+				1929B34D8F7A51D137F2264B /* MMUserDefaults.m */,
+				1929B90B0F619CC3F283B406 /* MMUserDefaults.h */,
 			);
 			name = VimTextView;
 			sourceTree = "<group>";
@@ -575,11 +580,9 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				1D1474980C56703C0038FA2B /* MacVim.m in Sources */,
 				1D1474A00C5673AE0038FA2B /* MMAppController.m in Sources */,
-				1D1474AA0C5677450038FA2B /* MMTextStorage.m in Sources */,
 				1D1474B00C5678370038FA2B /* MMTextView.m in Sources */,
 				1D1474B60C56796D0038FA2B /* MMVimController.m in Sources */,
 				1D1474BC0C567A910038FA2B /* MMWindowController.m in Sources */,
-				1D09AB420C6A4D520045497E /* MMTypesetter.m in Sources */,
 				1DD66ECE0C803D3600EBDAB3 /* MMApplication.m in Sources */,
 				1D80FBD40CBBD3B700102A1C /* MMFullScreenWindow.m in Sources */,
 				1D80FBD60CBBD3B700102A1C /* MMVimView.m in Sources */,
@@ -596,6 +599,9 @@
 				1929B37E3E8E65A65B0FA9EB /* MMLog.m in Sources */,
 				1929B436E3D64A665D467894 /* MMCocoaCategories.m in Sources */,
 				1929B4EBF119F5DB313525C2 /* MMScroller.m in Sources */,
+				1929BE925708A51B5D1E4557 /* MMTypesetter.m in Sources */,
+				1929B3C67B365D3BEA9D7D4A /* MMTextStorage.m in Sources */,
+				1929BF2E5A8AB1F209AA9B9C /* MMUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@
  * See README.txt for an overview of the Vim source code.
  */
 
-#import "MacVim.h"
+#import <Cocoa/Cocoa.h>
 
 
 #define MM_USE_ROW_CACHE 1
@@ -24,6 +24,29 @@ typedef struct {
 
 
 
+/*
+ * MMTextStorage
+ *
+ * Text rendering related code.
+ *
+ * Note that:
+ * - There are exactly 'actualRows' number of rows
+ * - Each row is terminated by an EOL character ('\n')
+ * - Each row must cover exactly 'actualColumns' display cells
+ * - The attribute "MMWideChar" denotes a character that covers two cells, a
+ *   character without this attribute covers one cell
+ * - Unicode line (U+2028) and paragraph (U+2029) terminators are considered
+ *   invalid and are replaced by spaces
+ * - Spaces are used to fill out blank spaces
+ *
+ * In order to locate a (row,col) pair it is in general necessary to search one
+ * character at a time.  To speed things up we cache the length of each row, as
+ * well as the offset of the last column searched within each row.
+ *
+ * If each character in the text storage has length 1 and is not wide, then
+ * there is no need to search for a (row, col) pair since it can easily be
+ * computed.
+ */
 @interface MMTextStorage : NSTextStorage {
     NSMutableAttributedString   *attribString;
     int                         maxRows, maxColumns;
