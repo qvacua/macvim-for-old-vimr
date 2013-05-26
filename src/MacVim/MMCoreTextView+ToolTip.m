@@ -7,17 +7,6 @@
  * Do ":help credits" in Vim to see a list of people who contributed.
  * See README.txt for an overview of the Vim source code.
  */
-/*
- * MMCoreTextView+ToolTip
- *
- * Cocoa's tool tip interface does not allow changing the tool tip without the
- * user moving the mouse outside the view and then back again.  This category
- * takes care of this problem.
- *
- * The tool tip code was borrowed from the Chromium project which in turn had
- * borrowed it from WebKit (copyright and comments are below).  Some minor
- * changes were made to adapt the code to MacVim.
- */
 
 #import "MMCoreTextView.h"
 

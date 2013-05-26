@@ -9,15 +9,14 @@
 /* Begin PBXBuildFile section */
 		0395A8330D71ED7800881434 /* DBPrefsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0395A8320D71ED7800881434 /* DBPrefsWindowController.m */; };
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
-		1929B00B0ABCE747122A8F4E /* MMCoreTextView+ToolTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BF9C915F9FF4162055E6 /* MMCoreTextView+ToolTip.m */; };
-		1929B3086BD2CD8259242896 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B8B5ECD564CAB086FA31 /* MMUtils.m */; };
-		1929B37E3E8E65A65B0FA9EB /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B00B0ACC21406965D749 /* MMLog.m */; };
-		1929B3C67B365D3BEA9D7D4A /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B62A295C55078E39C6B1 /* MMTextStorage.m */; };
-		1929B436E3D64A665D467894 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */; };
+		1929B1413A6927287EB2B162 /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B8CB77E10AA4F4EF4508 /* MMLog.m */; };
+		1929B4FEFEA159177B0A537E /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B3341B03DC2326020CEF /* MMTextStorage.m */; };
 		1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B387A298335D6D09A500 /* MMScroller.m */; };
-		1929BAB9748E48EDB27D1573 /* MMUtils.h in Copy Executables */ = {isa = PBXBuildFile; fileRef = 1929BF8C22F04CBCAC99D88C /* MMUtils.h */; };
-		1929BE925708A51B5D1E4557 /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BCFADF0C900062A10D4B /* MMTypesetter.m */; };
-		1929BF2E5A8AB1F209AA9B9C /* MMUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B34D8F7A51D137F2264B /* MMUserDefaults.m */; };
+		1929B767579763015BA6B6B6 /* MMCoreTextView+ToolTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B5E1D537F2D9EF682674 /* MMCoreTextView+ToolTip.m */; };
+		1929B8607254FCBBC83661C0 /* MMUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B3D603D0557048B818BF /* MMUserDefaults.m */; };
+		1929BBD2F1A95B3A75252551 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B08409A300EE928C9379 /* MMCocoaCategories.m */; };
+		1929BC905DB9F0B2F208A877 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B96208A371EB8687173D /* MMUtils.m */; };
+		1929BF6F10DA2176728CD7CE /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BB9C952DE24F9CA62D9C /* MMTypesetter.m */; };
 		1D0E051C0BA5F83800B6049E /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D0E051B0BA5F83800B6049E /* Colors.plist */; };
 		1D145C7F0E5227CE00691AA0 /* MMTextViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */; };
 		1D1474980C56703C0038FA2B /* MacVim.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474960C56703C0038FA2B /* MacVim.m */; };
@@ -101,7 +100,6 @@
 			dstSubfolderSpec = 6;
 			files = (
 				1D493D580C5247BF00AB718C /* Vim in Copy Executables */,
-				1929BAB9748E48EDB27D1573 /* MMUtils.h in Copy Executables */,
 			);
 			name = "Copy Executables";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,24 +136,25 @@
 		0395A8A90D72D88B00881434 /* General.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = General.png; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1929B00B0ACC21406965D749 /* MMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLog.m; sourceTree = "<group>"; };
-		1929B34D8F7A51D137F2264B /* MMUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUserDefaults.m; sourceTree = "<group>"; };
+		1929B00561E64BD9E017B4F5 /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
+		1929B08409A300EE928C9379 /* MMCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCocoaCategories.m; sourceTree = "<group>"; };
+		1929B186A060537F3DA04EDA /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
+		1929B3341B03DC2326020CEF /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
 		1929B387A298335D6D09A500 /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
-		1929B62A295C55078E39C6B1 /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
-		1929B6709E94FD4A0B4F295C /* MMCocoaCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCocoaCategories.h; sourceTree = "<group>"; };
-		1929B6AC0540B30EA9119D9B /* MMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLog.h; sourceTree = "<group>"; };
+		1929B3D603D0557048B818BF /* MMUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUserDefaults.m; sourceTree = "<group>"; };
+		1929B4B8E8CC3353A99EBA0C /* MMTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypes.h; sourceTree = "<group>"; };
+		1929B4F24939540E62E5A932 /* MMCocoaCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCocoaCategories.h; sourceTree = "<group>"; };
+		1929B5E1D537F2D9EF682674 /* MMCoreTextView+ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMCoreTextView+ToolTip.m"; sourceTree = "<group>"; };
 		1929B6E589D6109836538941 /* MMScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScroller.h; sourceTree = "<group>"; };
-		1929B6F5FB395DA98805C36D /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
-		1929B7E07D03F5DD1C94A250 /* MMVimBackendProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVimBackendProtocol.h; sourceTree = "<group>"; };
-		1929B8B5ECD564CAB086FA31 /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
-		1929B90B0F619CC3F283B406 /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
-		1929BCFADF0C900062A10D4B /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
-		1929BD53AF98BA14DC8F3744 /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
-		1929BDDC8BF11F91E82D0DCE /* MMTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypes.h; sourceTree = "<group>"; };
+		1929B76767281DC2B18ACD8A /* MMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLog.h; sourceTree = "<group>"; };
+		1929B8CB77E10AA4F4EF4508 /* MMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLog.m; sourceTree = "<group>"; };
+		1929B90A467444499B4691DE /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
+		1929B96208A371EB8687173D /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
+		1929BAE881B609702BA41463 /* MMVimBackendProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVimBackendProtocol.h; sourceTree = "<group>"; };
+		1929BB9C952DE24F9CA62D9C /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
+		1929BCA7CFC2AF2ED6437879 /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
+		1929BD458FB318B44DB83318 /* MMCoreTextView+Tooltip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMCoreTextView+Tooltip.h"; sourceTree = "<group>"; };
 		1929BF7091EDB17A443EE4A5 /* MMCoreTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCoreTextView.h; sourceTree = "<group>"; };
-		1929BF8C22F04CBCAC99D88C /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
-		1929BF9C915F9FF4162055E6 /* MMCoreTextView+ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMCoreTextView+ToolTip.m"; sourceTree = "<group>"; };
-		1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCocoaCategories.m; sourceTree = "<group>"; };
 		1D0E051B0BA5F83800B6049E /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
 		1D145C7D0E5227CE00691AA0 /* MMTextViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextViewHelper.h; sourceTree = "<group>"; };
 		1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextViewHelper.m; sourceTree = "<group>"; };
@@ -277,7 +276,6 @@
 				1D1474960C56703C0038FA2B /* MacVim.m */,
 				32CA4F630368D1EE00C91783 /* MacVim_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				1929B111627B93267AF1C751 /* VimTextView */,
 				1929B387A298335D6D09A500 /* MMScroller.m */,
 				1929B6E589D6109836538941 /* MMScroller.h */,
 				1929BF7091EDB17A443EE4A5 /* MMCoreTextView.h */,
@@ -302,24 +300,25 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		1929B111627B93267AF1C751 /* VimTextView */ = {
+		1929B095FC606503AC900AD8 /* VimTextView */ = {
 			isa = PBXGroup;
 			children = (
-				1929BF8C22F04CBCAC99D88C /* MMUtils.h */,
-				1929B8B5ECD564CAB086FA31 /* MMUtils.m */,
-				1929B00B0ACC21406965D749 /* MMLog.m */,
-				1929B6AC0540B30EA9119D9B /* MMLog.h */,
-				1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */,
-				1929B6709E94FD4A0B4F295C /* MMCocoaCategories.h */,
-				1929B7E07D03F5DD1C94A250 /* MMVimBackendProtocol.h */,
-				1929BCFADF0C900062A10D4B /* MMTypesetter.m */,
-				1929B6F5FB395DA98805C36D /* MMTypesetter.h */,
-				1929BD53AF98BA14DC8F3744 /* MMTextStorage.h */,
-				1929B62A295C55078E39C6B1 /* MMTextStorage.m */,
-				1929B34D8F7A51D137F2264B /* MMUserDefaults.m */,
-				1929B90B0F619CC3F283B406 /* MMUserDefaults.h */,
-				1929BDDC8BF11F91E82D0DCE /* MMTypes.h */,
-				1929BF9C915F9FF4162055E6 /* MMCoreTextView+ToolTip.m */,
+				1929B186A060537F3DA04EDA /* MMUtils.h */,
+				1929B96208A371EB8687173D /* MMUtils.m */,
+				1929B8CB77E10AA4F4EF4508 /* MMLog.m */,
+				1929B76767281DC2B18ACD8A /* MMLog.h */,
+				1929B08409A300EE928C9379 /* MMCocoaCategories.m */,
+				1929B4F24939540E62E5A932 /* MMCocoaCategories.h */,
+				1929BAE881B609702BA41463 /* MMVimBackendProtocol.h */,
+				1929BB9C952DE24F9CA62D9C /* MMTypesetter.m */,
+				1929BCA7CFC2AF2ED6437879 /* MMTypesetter.h */,
+				1929B00561E64BD9E017B4F5 /* MMTextStorage.h */,
+				1929B3341B03DC2326020CEF /* MMTextStorage.m */,
+				1929B3D603D0557048B818BF /* MMUserDefaults.m */,
+				1929B90A467444499B4691DE /* MMUserDefaults.h */,
+				1929B4B8E8CC3353A99EBA0C /* MMTypes.h */,
+				1929B5E1D537F2D9EF682674 /* MMCoreTextView+ToolTip.m */,
+				1929BD458FB318B44DB83318 /* MMCoreTextView+Tooltip.h */,
 			);
 			name = VimTextView;
 			sourceTree = "<group>";
@@ -343,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				1D493D570C5247BF00AB718C /* Vim */,
+				1929B095FC606503AC900AD8 /* VimTextView */,
 			);
 			name = Executables;
 			sourceTree = "<group>";
@@ -590,14 +590,14 @@
 				1D145C7F0E5227CE00691AA0 /* MMTextViewHelper.m in Sources */,
 				1D60088B0E96A0B2003763F0 /* MMFindReplaceController.m in Sources */,
 				1DE63FFB0E71820F00959BDB /* MMCoreTextView.m in Sources */,
-				1929B3086BD2CD8259242896 /* MMUtils.m in Sources */,
-				1929B37E3E8E65A65B0FA9EB /* MMLog.m in Sources */,
-				1929B436E3D64A665D467894 /* MMCocoaCategories.m in Sources */,
-				1929BE925708A51B5D1E4557 /* MMTypesetter.m in Sources */,
-				1929B3C67B365D3BEA9D7D4A /* MMTextStorage.m in Sources */,
-				1929BF2E5A8AB1F209AA9B9C /* MMUserDefaults.m in Sources */,
 				1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */,
-				1929B00B0ABCE747122A8F4E /* MMCoreTextView+ToolTip.m in Sources */,
+				1929BC905DB9F0B2F208A877 /* MMUtils.m in Sources */,
+				1929B1413A6927287EB2B162 /* MMLog.m in Sources */,
+				1929BBD2F1A95B3A75252551 /* MMCocoaCategories.m in Sources */,
+				1929BF6F10DA2176728CD7CE /* MMTypesetter.m in Sources */,
+				1929B4FEFEA159177B0A537E /* MMTextStorage.m in Sources */,
+				1929B8607254FCBBC83661C0 /* MMUserDefaults.m in Sources */,
+				1929B767579763015BA6B6B6 /* MMCoreTextView+ToolTip.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

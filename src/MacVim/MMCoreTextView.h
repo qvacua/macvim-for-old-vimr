@@ -104,10 +104,3 @@
 - (NSSize)constrainRows:(int *)rows columns:(int *)cols toSize:(NSSize)size;
 @end
 
-
-//
-// This category is defined in MMCoreTextView+ToolTip.m
-//
-@interface MMCoreTextView (ToolTip)
-- (void)setToolTipAtMousePoint:(NSString *)string;
-@end
