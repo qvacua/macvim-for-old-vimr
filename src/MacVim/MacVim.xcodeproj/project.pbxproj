@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0395A8330D71ED7800881434 /* DBPrefsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0395A8320D71ED7800881434 /* DBPrefsWindowController.m */; };
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
+		1929B3881D9408663BF8A67A /* MMTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B11839EF061D23763730 /* MMTypes.m */; };
 		1929B4BDEE229E19573C9D95 /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B58A376B99D12870C813 /* MMLog.m */; };
 		1929B5D219627B604C220160 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */; };
 		1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B387A298335D6D09A500 /* MMScroller.m */; };
@@ -137,6 +138,7 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1929B02DD9159EF8FE00DAEF /* MMTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypes.h; sourceTree = "<group>"; };
+		1929B11839EF061D23763730 /* MMTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypes.m; sourceTree = "<group>"; };
 		1929B1D28FEA476210E3D4EC /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
 		1929B2D8B87C35724865DD16 /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
 		1929B387A298335D6D09A500 /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */,
 				1929BE12A2D0D834156ECB31 /* MMCoreTextView+Tooltip.h */,
 				1929B8EDACCF4F448F93E2D2 /* MMTextViewProtocol.h */,
+				1929B11839EF061D23763730 /* MMTypes.m */,
 			);
 			name = VimTextView;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				1929BF2B8A2AB5FB83D9689D /* MMTextStorage.m in Sources */,
 				1929BA48579387C85CE6D49E /* MMUserDefaults.m in Sources */,
 				1929B887CB6B980E8CB12596 /* MMCoreTextView+ToolTip.m in Sources */,
+				1929B3881D9408663BF8A67A /* MMTypes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 #import <asl.h>
 
 #import "MMLog.h"
+#import "MMTypes.h"
 #import "MMCocoaCategories.h"
 #import "MMVimBackendProtocol.h"
 
@@ -48,101 +49,6 @@
               forIdentifier:(unsigned)identifier;
 - (NSArray *)serverList;
 @end
-
-
-//
-// The following enum lists all messages that are passed between MacVim and
-// Vim.  These can be sent in processInput:data: and in processCommandQueue:.
-//
-
-// NOTE! This array must be updated whenever the enum below changes!
-extern char *MessageStrings[];
-
-enum {
-    OpenWindowMsgID = 1,    // NOTE: FIRST IN ENUM MUST BE 1
-    KeyDownMsgID,
-    BatchDrawMsgID,
-    SelectTabMsgID,
-    CloseTabMsgID,
-    AddNewTabMsgID,
-    DraggedTabMsgID,
-    UpdateTabBarMsgID,
-    ShowTabBarMsgID,
-    HideTabBarMsgID,
-    SetTextRowsMsgID,
-    SetTextColumnsMsgID,
-    SetTextDimensionsMsgID,
-    LiveResizeMsgID,
-    SetTextDimensionsReplyMsgID,
-    SetWindowTitleMsgID,
-    ScrollWheelMsgID,
-    MouseDownMsgID,
-    MouseUpMsgID,
-    MouseDraggedMsgID,
-    FlushQueueMsgID,
-    AddMenuMsgID,
-    AddMenuItemMsgID,
-    RemoveMenuItemMsgID,
-    EnableMenuItemMsgID,
-    ExecuteMenuMsgID,
-    ShowToolbarMsgID,
-    ToggleToolbarMsgID,
-    CreateScrollbarMsgID,
-    DestroyScrollbarMsgID,
-    ShowScrollbarMsgID,
-    SetScrollbarPositionMsgID,
-    SetScrollbarThumbMsgID,
-    ScrollbarEventMsgID,
-    SetFontMsgID,
-    SetWideFontMsgID,
-    VimShouldCloseMsgID,
-    SetDefaultColorsMsgID,
-    ExecuteActionMsgID,
-    DropFilesMsgID,
-    DropStringMsgID,
-    ShowPopupMenuMsgID,
-    GotFocusMsgID,
-    LostFocusMsgID,
-    MouseMovedMsgID,
-    SetMouseShapeMsgID,
-    AdjustLinespaceMsgID,
-    ActivateMsgID,
-    SetServerNameMsgID,
-    EnterFullScreenMsgID,
-    LeaveFullScreenMsgID,
-    SetBuffersModifiedMsgID,
-    AddInputMsgID,
-    SetPreEditPositionMsgID,
-    TerminateNowMsgID,
-    XcodeModMsgID,
-    EnableAntialiasMsgID,
-    DisableAntialiasMsgID,
-    SetVimStateMsgID,
-    SetDocumentFilenameMsgID,
-    OpenWithArgumentsMsgID,
-    CloseWindowMsgID,
-    SetFullScreenColorMsgID,
-    ShowFindReplaceDialogMsgID,
-    FindReplaceMsgID,
-    ActivateKeyScriptMsgID,
-    DeactivateKeyScriptMsgID,
-    EnableImControlMsgID,
-    DisableImControlMsgID,
-    ActivatedImMsgID,
-    DeactivatedImMsgID,
-    BrowseForFileMsgID,
-    ShowDialogMsgID,
-    NetBeansMsgID,
-    SetMarkedTextMsgID,
-    ZoomMsgID,
-    SetWindowPositionMsgID,
-    DeleteSignMsgID,
-    SetTooltipMsgID,
-    SetTooltipDelayMsgID,
-    GestureMsgID,
-    AddToMRUMsgID,
-    LastMsgID   // NOTE: MUST BE LAST MESSAGE IN ENUM!
-};
 
 
 enum {
