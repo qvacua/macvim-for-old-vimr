@@ -1286,10 +1286,10 @@ CARBONGUI_TESTARG = VIMPROG=../$(APPDIR)/Contents/MacOS/$(VIMTARGET)
 
 # MACVIM GUI
 MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
-		  MacVim/MacVim.m MacVim/MMLog.m MacVim/MMTypes.m
+		  MacVim/MacVim.m MacVim/MMLog.m MacVim/MMTypes.m MacVim/MMCocoaCategories.m
 MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o objects/pty.o \
 		  objects/gui_macvim.o objects/MMBackend.o objects/MacVim.o \
-          objects/MMLog.o objects/MMTypes.o
+          objects/MMLog.o objects/MMTypes.o objects/MMCocoaCategories.o
 MACVIMGUI_DEFS	= -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
 MACVIMGUI_IPATH	=
 MACVIMGUI_LIBS_DIR =
@@ -2475,6 +2475,9 @@ objects/MMLog.o: MacVim/MMLog.m
 
 objects/MMTypes.o: MacVim/MMTypes.m
 	$(CCC) -o $@ MacVim/MMTypes.m
+
+objects/MMCocoaCategories.o: MacVim/MMCocoaCategories.m
+	$(CCC) -o $@ MacVim/MMCocoaCategories.m
 
 objects/MacVim.o: MacVim/MacVim.m
 	$(CCC) -o $@ MacVim/MacVim.m
