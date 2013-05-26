@@ -33,7 +33,6 @@ extern NSString *MMTextInsetRightKey;
 extern NSString *MMTextInsetTopKey;
 extern NSString *MMTextInsetBottomKey;
 extern NSString *MMTypesetterKey;
-extern NSString *MMBaselineOffsetKey;
 extern NSString *MMTranslateCtrlClickKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;

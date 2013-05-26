@@ -23,7 +23,6 @@ NSString *MMTextInsetRightKey           = @"MMTextInsetRight";
 NSString *MMTextInsetTopKey             = @"MMTextInsetTop";
 NSString *MMTextInsetBottomKey          = @"MMTextInsetBottom";
 NSString *MMTypesetterKey               = @"MMTypesetter";
-NSString *MMBaselineOffsetKey           = @"MMBaselineOffset";
 NSString *MMTranslateCtrlClickKey       = @"MMTranslateCtrlClick";
 NSString *MMTopLeftPointKey             = @"MMTopLeftPoint";
 NSString *MMOpenInCurrentWindowKey      = @"MMOpenInCurrentWindow";

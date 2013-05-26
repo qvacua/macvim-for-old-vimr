@@ -12,4 +12,5 @@
 
 extern NSString *MMCellWidthMultiplierKey;
 extern NSString *MMNoFontSubstitutionKey;
+extern NSString *MMBaselineOffsetKey;
 

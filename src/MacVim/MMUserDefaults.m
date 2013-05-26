@@ -13,3 +13,4 @@
 
 NSString *MMCellWidthMultiplierKey = @"MMCellWidthMultiplier";
 NSString *MMNoFontSubstitutionKey = @"MMNoFontSubstitution";
+NSString *MMBaselineOffsetKey = @"MMBaselineOffset";
