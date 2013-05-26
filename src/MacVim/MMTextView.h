@@ -9,11 +9,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "MMTextViewProtocol.h"
+
 
 @class MMTextViewHelper;
 
 
-@interface MMTextView : NSTextView {
+@interface MMTextView : NSTextView <MMTextViewProtocol> {
     BOOL                shouldDrawInsertionPoint;
     int                 insertionPointRow;
     int                 insertionPointColumn;

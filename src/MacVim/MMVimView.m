@@ -26,6 +26,7 @@
 #import "MMVimView.h"
 #import "MMWindowController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
+
 #import "MMScroller.h"
 
 
@@ -74,7 +75,7 @@
     if (MMRendererCoreText == renderer) {
         // HACK! 'textView' has type MMTextView, but MMCoreTextView is not
         // derived from MMTextView.
-        textView = (MMTextView *)[[MMCoreTextView alloc] initWithFrame:frame];
+        textView = [[MMCoreTextView alloc] initWithFrame:frame];
     } else {
         // Use Cocoa text system for text rendering.
         textView = [[MMTextView alloc] initWithFrame:frame];
@@ -142,7 +143,7 @@
     // keep only a reference to the text view, so release the text storage
     // first (unless we are using the ATSUI renderer).
     if ([textView isKindOfClass:[MMTextView class]])
-        [[textView textStorage] release];
+        [[(MMTextView *) textView textStorage] release];
 
     [textView release];  textView = nil;
 

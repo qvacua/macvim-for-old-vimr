@@ -9,42 +9,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "MMTextViewProtocol.h"
 
 
-@class MMTextViewHelper;
+@protocol MMTextViewProtocol <NSObject>
 
-
-@interface MMCoreTextView : NSView <NSTextInput, MMTextViewProtocol> {
-    // From MMTextStorage
-    int                         maxRows, maxColumns;
-    NSColor                     *defaultBackgroundColor;
-    NSColor                     *defaultForegroundColor;
-    NSSize                      cellSize;
-    NSFont                      *font;
-    NSFont                      *fontWide;
-    float                       linespace;
-
-    // From NSTextView
-    NSSize                      insetSize;
-
-    float                       fontDescent;
-    BOOL                        antialias;
-    NSMutableArray              *drawData;
-
-    MMTextViewHelper            *helper;
-
-    unsigned                    maxlen;
-    CGGlyph                     *glyphs;
-    CGSize                      *advances;
-
-    // These are used in MMCoreTextView+ToolTip.m
-    id trackingRectOwner_;              // (not retained)
-    void *trackingRectUserData_;
-    NSTrackingRectTag lastToolTipTag_;
-    NSString* toolTip_;
-}
-
+@required
 - (id)initWithFrame:(NSRect)frame;
 
 //
@@ -84,14 +53,6 @@
           numColumns:(int)nc;
 
 //
-// NSTextView methods
-//
-- (void)keyDown:(NSEvent *)event;
-- (void)insertText:(id)string;
-- (void)doCommandBySelector:(SEL)selector;
-- (BOOL)performKeyEquivalent:(NSEvent *)event;
-
-//
 // NSTextContainer methods
 //
 - (void)setTextContainerInset:(NSSize)inset;
@@ -103,5 +64,5 @@
 - (NSSize)desiredSize;
 - (NSSize)minSize;
 - (NSSize)constrainRows:(int *)rows columns:(int *)cols toSize:(NSSize)size;
-@end
 
+@end
