@@ -19,8 +19,6 @@
  * changes were made to adapt the code to MacVim.
  */
 
-#import "Miscellaneous.h" // Defines MM_ENABLE_ATSUI
-
 #import "MMCoreTextView.h"
 
 
