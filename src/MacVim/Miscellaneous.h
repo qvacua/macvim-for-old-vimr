@@ -32,7 +32,6 @@ extern NSString *MMShowAddTabButtonKey;
 extern NSString *MMTextInsetLeftKey;
 extern NSString *MMTextInsetTopKey;
 extern NSString *MMTypesetterKey;
-extern NSString *MMTranslateCtrlClickKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;
 extern NSString *MMLoginShellKey;

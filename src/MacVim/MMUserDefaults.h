@@ -15,4 +15,4 @@ extern NSString *MMNoFontSubstitutionKey;
 extern NSString *MMBaselineOffsetKey;
 extern NSString *MMTextInsetRightKey;
 extern NSString *MMTextInsetBottomKey;
-
+extern NSString *MMTranslateCtrlClickKey;

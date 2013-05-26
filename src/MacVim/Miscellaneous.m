@@ -21,7 +21,6 @@ NSString *MMShowAddTabButtonKey         = @"MMShowAddTabButton";
 NSString *MMTextInsetLeftKey            = @"MMTextInsetLeft";
 NSString *MMTextInsetTopKey             = @"MMTextInsetTop";
 NSString *MMTypesetterKey               = @"MMTypesetter";
-NSString *MMTranslateCtrlClickKey       = @"MMTranslateCtrlClick";
 NSString *MMTopLeftPointKey             = @"MMTopLeftPoint";
 NSString *MMOpenInCurrentWindowKey      = @"MMOpenInCurrentWindow";
 NSString *MMLoginShellKey               = @"MMLoginShell";

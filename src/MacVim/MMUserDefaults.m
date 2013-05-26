@@ -16,3 +16,4 @@ NSString *MMNoFontSubstitutionKey = @"MMNoFontSubstitution";
 NSString *MMBaselineOffsetKey = @"MMBaselineOffset";
 NSString *MMTextInsetRightKey = @"MMTextInsetRight";
 NSString *MMTextInsetBottomKey = @"MMTextInsetBottom";
+NSString *MMTranslateCtrlClickKey = @"MMTranslateCtrlClick";

@@ -20,8 +20,8 @@
 #import "MMTextViewHelper.h"
 #import "MMVimController.h"
 #import "MMWindowController.h"
-#import "Miscellaneous.h"
 
+#import "MMUserDefaults.h"
 
 // The max/min drag timer interval in seconds
 static NSTimeInterval MMDragTimerMaxInterval = 0.3;
