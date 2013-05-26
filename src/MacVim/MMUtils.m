@@ -11,6 +11,7 @@
 #import "MMUtils.h"
 #import "MacVim.h"
 
+
 // This is a private AppKit API gleaned from class-dump.
 @interface NSKeyBindingManager : NSObject
 
@@ -19,6 +20,7 @@
 - (void)setDictionary:(id)arg1;
 
 @end
+
 
 @implementation MMUtils
 

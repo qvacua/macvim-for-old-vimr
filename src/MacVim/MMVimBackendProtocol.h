@@ -10,6 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+
 /**
 * This is the protocol MMBackend implements.
 *
@@ -24,14 +25,15 @@
 * @try/@catch/@finally to deal with timeouts.
 */
 @protocol MMBackendProtocol
+
 - (oneway void)processInput:(int)msgid data:(in bycopy NSData *)data;
 - (oneway void)setDialogReturn:(in bycopy id)obj;
 - (NSString *)evaluateExpression:(in bycopy NSString *)expr;
-- (id)evaluateExpressionCocoa:(in bycopy NSString *)expr
-                  errorString:(out bycopy NSString **)errstr;
+- (id)evaluateExpressionCocoa:(in bycopy NSString *)expr errorString:(out bycopy NSString **)errstr;
 - (BOOL)starRegisterToPasteboard:(byref NSPasteboard *)pboard;
 - (oneway void)acknowledgeConnection;
 @end
+
 
 /**
 * The Vim client protocol (implemented by MMBackend).
@@ -40,9 +42,11 @@
 * if you want to implement this protocol in another program.
 */
 @protocol MMVimServerProtocol;
+
+
 @protocol MMVimClientProtocol
-- (oneway void)addReply:(in bycopy NSString *)reply
-                 server:(in byref id <MMVimServerProtocol>)server;
+
+- (oneway void)addReply:(in bycopy NSString *)reply server:(in byref id <MMVimServerProtocol>)server;
 @end
 
 
@@ -54,8 +58,8 @@
 * command line).
 */
 @protocol MMVimServerProtocol
-- (void)addInput:(in bycopy NSString *)input
-          client:(in byref id <MMVimClientProtocol>)client;
-- (NSString *)evaluateExpression:(in bycopy NSString *)expr
-                          client:(in byref id <MMVimClientProtocol>)client;
+
+- (void)addInput:(in bycopy NSString *)input client:(in byref id <MMVimClientProtocol>)client;
+- (NSString *)evaluateExpression:(in bycopy NSString *)expr client:(in byref id <MMVimClientProtocol>)client;
+
 @end

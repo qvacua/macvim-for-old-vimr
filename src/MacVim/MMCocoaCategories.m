@@ -10,10 +10,10 @@
 
 #import "MMCocoaCategories.h"
 
+
 @implementation NSString (MMExtras)
 
-- (NSString *)stringByEscapingSpecialFilenameCharacters
-{
+- (NSString *)stringByEscapingSpecialFilenameCharacters {
     // NOTE: This code assumes that no characters already have been escaped.
     NSMutableString *string = [self mutableCopy];
 
@@ -49,8 +49,7 @@
     return [string autorelease];
 }
 
-- (NSString *)stringByRemovingFindPatterns
-{
+- (NSString *)stringByRemovingFindPatterns {
     // Remove some common patterns added to search strings that other apps are
     // not aware of.
 
@@ -73,14 +72,13 @@
     // \c = case insensitive, \C = case sensitive
     [string replaceOccurrencesOfString:@"\\c"
                             withString:@""
-                               options:NSCaseInsensitiveSearch|NSLiteralSearch
+                               options:NSCaseInsensitiveSearch | NSLiteralSearch
                                  range:NSMakeRange(0, [string length])];
 
     return [string autorelease];
 }
 
-- (NSString *)stringBySanitizingSpotlightSearch
-{
+- (NSString *)stringBySanitizingSpotlightSearch {
     // Limit length of search text
     NSUInteger len = [self length];
     if (len > 1024) len = 1024;
@@ -118,21 +116,19 @@
 
 @implementation NSColor (MMExtras)
 
-+ (NSColor *)colorWithRgbInt:(unsigned)rgb
-{
-    float r = ((rgb>>16) & 0xff)/255.0f;
-    float g = ((rgb>>8) & 0xff)/255.0f;
-    float b = (rgb & 0xff)/255.0f;
++ (NSColor *)colorWithRgbInt:(unsigned)rgb {
+    float r = ((rgb >> 16) & 0xff) / 255.0f;
+    float g = ((rgb >> 8) & 0xff) / 255.0f;
+    float b = (rgb & 0xff) / 255.0f;
 
     return [NSColor colorWithDeviceRed:r green:g blue:b alpha:1.0f];
 }
 
-+ (NSColor *)colorWithArgbInt:(unsigned)argb
-{
-    float a = ((argb>>24) & 0xff)/255.0f;
-    float r = ((argb>>16) & 0xff)/255.0f;
-    float g = ((argb>>8) & 0xff)/255.0f;
-    float b = (argb & 0xff)/255.0f;
++ (NSColor *)colorWithArgbInt:(unsigned)argb {
+    float a = ((argb >> 24) & 0xff) / 255.0f;
+    float r = ((argb >> 16) & 0xff) / 255.0f;
+    float g = ((argb >> 8) & 0xff) / 255.0f;
+    float b = (argb & 0xff) / 255.0f;
 
     return [NSColor colorWithDeviceRed:r green:g blue:b alpha:a];
 }
@@ -140,12 +136,9 @@
 @end // NSColor (MMExtras)
 
 
-
-
 @implementation NSDictionary (MMExtras)
 
-+ (id)dictionaryWithData:(NSData *)data
-{
++ (id)dictionaryWithData:(NSData *)data {
     id plist = [NSPropertyListSerialization
             propertyListFromData:data
                 mutabilityOption:NSPropertyListImmutable
@@ -155,8 +148,7 @@
     return [plist isKindOfClass:[NSDictionary class]] ? plist : nil;
 }
 
-- (NSData *)dictionaryAsData
-{
+- (NSData *)dictionaryAsData {
     return [NSPropertyListSerialization dataFromPropertyList:self
                                                       format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
 }
@@ -164,12 +156,9 @@
 @end
 
 
-
-
 @implementation NSMutableDictionary (MMExtras)
 
-+ (id)dictionaryWithData:(NSData *)data
-{
++ (id)dictionaryWithData:(NSData *)data {
     id plist = [NSPropertyListSerialization
             propertyListFromData:data
                 mutabilityOption:NSPropertyListMutableContainers

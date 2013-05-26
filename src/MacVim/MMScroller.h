@@ -10,12 +10,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+
 // Scroller type; these must match SBAR_* in gui.h
 enum {
     MMScrollerTypeLeft = 0,
     MMScrollerTypeRight,
     MMScrollerTypeBottom
 };
+
 
 @interface MMScroller : NSScroller {
     int32_t identifier;

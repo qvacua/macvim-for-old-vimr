@@ -10,24 +10,34 @@
 
 #import <Cocoa/Cocoa.h>
 
+
 @interface NSString (MMExtras)
+
 - (NSString *)stringByEscapingSpecialFilenameCharacters;
 - (NSString *)stringByRemovingFindPatterns;
 - (NSString *)stringBySanitizingSpotlightSearch;
+
 @end
 
 
 @interface NSColor (MMExtras)
+
 + (NSColor *)colorWithRgbInt:(unsigned)rgb;
 + (NSColor *)colorWithArgbInt:(unsigned)argb;
+
 @end
 
 
 @interface NSDictionary (MMExtras)
+
 + (id)dictionaryWithData:(NSData *)data;
 - (NSData *)dictionaryAsData;
+
 @end
 
+
 @interface NSMutableDictionary (MMExtras)
+
 + (id)dictionaryWithData:(NSData *)data;
+
 @end

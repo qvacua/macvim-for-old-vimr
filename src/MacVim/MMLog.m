@@ -10,14 +10,14 @@
 
 #import "MMLog.h"
 
-NSString *MMLogLevelKey     = @"MMLogLevel";
-NSString *MMLogToStdErrKey  = @"MMLogToStdErr";
+
+NSString *MMLogLevelKey = @"MMLogLevel";
+NSString *MMLogToStdErrKey = @"MMLogToStdErr";
 
 int ASLogLevel = ASL_LEVEL_NOTICE;
 
 void
-ASLInit()
-{
+ASLInit() {
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
 
     // Allow for changing the log level via user defaults.  If no key is found

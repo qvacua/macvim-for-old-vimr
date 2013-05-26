@@ -10,6 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+
 /**
 * Utility class which contains convenience class methods.
 */
