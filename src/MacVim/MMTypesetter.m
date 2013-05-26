@@ -19,7 +19,6 @@
 #import "MMUserDefaults.h"
 
 
-
 @implementation MMTypesetter
 
 - (void)willSetLineFragmentRect:(NSRectPointer)lineRect
@@ -28,7 +27,7 @@
                  baselineOffset:(CGFloat *)baselineOffset
 {
     MMTextStorage *ts = (MMTextStorage*)[[self layoutManager] textStorage];
-    float h = [ts cellSize].height;
+    CGFloat h = [ts cellSize].height;
 
     // HACK! Force each line fragment rect to have a fixed height.  By also
     // forcing the 'usedRect' to the same height we also ensure that the cursor
@@ -42,8 +41,6 @@
 }
 
 @end // MMTypesetter
-
-
 
 
 @implementation MMTypesetter2
@@ -108,7 +105,7 @@
 
     // NOTE: With non-zero linespace the baseline is adjusted so that the text
     // is centered within a line.
-    float baseline = [font descender] - floor(.5*[ts linespace])
+    CGFloat baseline = [font descender] - floor(.5*[ts linespace])
         + [[NSUserDefaults standardUserDefaults]
                 floatForKey:MMBaselineOffsetKey];
     NSSize cellSize = [ts cellSize];
