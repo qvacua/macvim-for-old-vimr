@@ -21,8 +21,6 @@
 
 #import "Miscellaneous.h" // Defines MM_ENABLE_ATSUI
 
-#if !MM_ENABLE_ATSUI
-
 #import "MMCoreTextView.h"
 
 
@@ -232,5 +230,3 @@ static const NSTrackingRectTag kTrackingRectTag = 0xBADFACE;
 }
 
 @end
-
-#endif // !MM_ENABLE_ATSUI

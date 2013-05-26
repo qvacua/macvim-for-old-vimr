@@ -62,7 +62,6 @@
  */
 
 #import "MMAppController.h"
-#import "MMAtsuiTextView.h"
 #import "MMFindReplaceController.h"
 #import "MMFullScreenWindow.h"
 #import "MMTextView.h"

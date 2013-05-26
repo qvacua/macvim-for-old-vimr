@@ -19,10 +19,6 @@
 // TODO: Remove this when the inline IM code has been tested
 #define INCLUDE_OLD_IM_CODE
 
-// Use Core Text instead of ATSUI when compiling on 10.5+.
-// Note: Core Text was introduced with 10.5, ATSUI was deprecated on 10.6.
-#define MM_ENABLE_ATSUI (MAC_OS_X_VERSION_MIN_REQUIRED<MAC_OS_X_VERSION_10_5)
-
 
 // NSUserDefaults keys
 extern NSString *MMTabMinWidthKey;

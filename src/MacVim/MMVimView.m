@@ -20,11 +20,7 @@
 
 #import "Miscellaneous.h"   // Defines MM_ENABLE_ATSUI
 
-#if MM_ENABLE_ATSUI
-# import "MMAtsuiTextView.h"
-#else
-# import "MMCoreTextView.h"
-#endif
+#import "MMCoreTextView.h"
 #import "MMTextView.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
@@ -75,20 +71,11 @@
     NSInteger renderer = [ud integerForKey:MMRendererKey];
     ASLogInfo(@"Use renderer=%ld", renderer);
 
-#if MM_ENABLE_ATSUI
-    if (MMRendererATSUI == renderer) {
-        // HACK! 'textView' has type MMTextView, but MMAtsuiTextView is not
-        // derived from MMTextView.
-        textView = [[MMAtsuiTextView alloc] initWithFrame:frame];
-    }
-#else
     if (MMRendererCoreText == renderer) {
         // HACK! 'textView' has type MMTextView, but MMCoreTextView is not
         // derived from MMTextView.
         textView = (MMTextView *)[[MMCoreTextView alloc] initWithFrame:frame];
-    }
-#endif
-    else {
+    } else {
         // Use Cocoa text system for text rendering.
         textView = [[MMTextView alloc] initWithFrame:frame];
     }

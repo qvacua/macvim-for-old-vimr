@@ -1143,11 +1143,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     BOOL enable = ([sender state] == NSOnState);
 
     if (enable) {
-#if MM_ENABLE_ATSUI
-        renderer = MMRendererATSUI;
-#else
         renderer = MMRendererCoreText;
-#endif
     }
 
     // Update the user default MMRenderer and synchronize the change so that
