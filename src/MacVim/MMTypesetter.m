@@ -41,53 +41,10 @@
     *baselineOffset += floor(.5*[ts linespace]);
 }
 
-#if 0
-- (void)setNotShownAttribute:(BOOL)flag forGlyphRange:(NSRange)glyphRange
-{
-    if (1 != glyphRange.length)
-        return;
-
-    NSLayoutManager *lm = [self layoutManager];
-    unsigned charIdx = [lm characterIndexForGlyphAtIndex:glyphRange.location];
-
-    if ('\n' == [[[lm textStorage] string] characterAtIndex:charIdx])
-        [lm setNotShownAttribute:flag forGlyphAtIndex:glyphRange.location];
-}
-#endif
-
-#if 0
-- (NSTypesetterControlCharacterAction)
-    actionForControlCharacterAtIndex:(unsigned)charIndex
-{
-    /*NSTextStorage *ts = [[self layoutManager] textStorage];
-
-    if ('\n' == [[ts string] characterAtIndex:charIndex])
-        return NSTypesetterLineBreakAction;*/
-
-    return NSTypesetterWhitespaceAction;
-}
-#endif
-
-#if 0
-- (void)setLocation:(NSPoint)location
-        withAdvancements:(const float *)advancements
-    forStartOfGlyphRange:(NSRange)glyphRange
-{
-    ASLogDebug(@"setLocation:%@ withAdvancements:%f forStartOfGlyphRange:%@",
-               NSStringFromPoint(location), advancements ? *advancements : 0,
-               NSStringFromRange(glyphRange));
-    [super setLocation:location withAdvancements:advancements
-            forStartOfGlyphRange:glyphRange];
-}
-#endif
-
-
 @end // MMTypesetter
 
 
 
-
-#if MM_USE_ROW_CACHE
 
 @implementation MMTypesetter2
 
@@ -187,6 +144,4 @@
 }
 
 @end // MMTypesetter2
-
-#endif // MM_USE_ROW_CACHE
 

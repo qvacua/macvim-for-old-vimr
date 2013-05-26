@@ -11,17 +11,11 @@
 #import <Cocoa/Cocoa.h>
 
 
-#define MM_USE_ROW_CACHE 1
-
-
-#if MM_USE_ROW_CACHE
 typedef struct {
-    unsigned    length;     // length of row in unichars
-    int         col;        // last column accessed (in this row)
-    unsigned    colOffset;  // offset of 'col' from start of row (in unichars)
+    unsigned length;        // length of row in unichars
+    int col;                // last column accessed (in this row)
+    unsigned colOffset;     // offset of 'col' from start of row (in unichars)
 } MMRowCacheEntry;
-#endif
-
 
 
 /*
@@ -48,33 +42,29 @@ typedef struct {
  * computed.
  */
 @interface MMTextStorage : NSTextStorage {
-    NSMutableAttributedString   *attribString;
-    int                         maxRows, maxColumns;
-    int                         actualRows, actualColumns;
-    NSAttributedString          *emptyRowString;
-    NSFont                      *font;
-    NSFont                      *boldFont;
-    NSFont                      *italicFont;
-    NSFont                      *boldItalicFont;
-    NSFont                      *fontWide;
-    NSFont                      *boldFontWide;
-    NSFont                      *italicFontWide;
-    NSFont                      *boldItalicFontWide;
-    NSColor                     *defaultBackgroundColor;
-    NSColor                     *defaultForegroundColor;
-    NSSize                      cellSize;
-    float                       linespace;
-#if MM_USE_ROW_CACHE
-    MMRowCacheEntry             *rowCache;
-#endif
-    BOOL                        characterEqualsColumn;
+    NSMutableAttributedString *attribString;
+    int maxRows, maxColumns;
+    int actualRows, actualColumns;
+    NSAttributedString *emptyRowString;
+    NSFont *font;
+    NSFont *boldFont;
+    NSFont *italicFont;
+    NSFont *boldItalicFont;
+    NSFont *fontWide;
+    NSFont *boldFontWide;
+    NSFont *italicFontWide;
+    NSFont *boldItalicFontWide;
+    NSColor *defaultBackgroundColor;
+    NSColor *defaultForegroundColor;
+    NSSize cellSize;
+    float linespace;
+    MMRowCacheEntry *rowCache;
+    BOOL characterEqualsColumn;
 }
 
 - (NSString *)string;
-- (NSDictionary *)attributesAtIndex:(NSUInteger)index
-                     effectiveRange:(NSRangePointer)aRange;
-- (void)replaceCharactersInRange:(NSRange)aRange
-                      withString:(NSString *)aString;
+- (NSDictionary *)attributesAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
+- (void)replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString;
 - (void)setAttributes:(NSDictionary *)attributes range:(NSRange)aRange;
 
 - (int)maxRows;
@@ -83,23 +73,15 @@ typedef struct {
 - (int)actualColumns;
 - (float)linespace;
 - (void)setLinespace:(float)newLinespace;
-- (void)getMaxRows:(int*)rows columns:(int*)cols;
+- (void)getMaxRows:(int *)rows columns:(int *)cols;
 - (void)setMaxRows:(int)rows columns:(int)cols;
-- (void)drawString:(NSString *)string atRow:(int)row column:(int)col
-             cells:(int)cells withFlags:(int)flags
-   foregroundColor:(NSColor *)fg backgroundColor:(NSColor *)bg
-      specialColor:(NSColor *)sp;
-- (void)deleteLinesFromRow:(int)row lineCount:(int)count
-              scrollBottom:(int)bottom left:(int)left right:(int)right
-                     color:(NSColor *)color;
-- (void)insertLinesAtRow:(int)row lineCount:(int)count
-            scrollBottom:(int)bottom left:(int)left right:(int)right
-                   color:(NSColor *)color;
-- (void)clearBlockFromRow:(int)row1 column:(int)col1 toRow:(int)row2
-                   column:(int)col2 color:(NSColor *)color;
+- (void)drawString:(NSString *)string atRow:(int)row column:(int)col cells:(int)cells withFlags:(int)flags
+   foregroundColor:(NSColor *)fg backgroundColor:(NSColor *)bg specialColor:(NSColor *)sp;
+- (void)deleteLinesFromRow:(int)row lineCount:(int)count scrollBottom:(int)bottom left:(int)left right:(int)right color:(NSColor *)color;
+- (void)insertLinesAtRow:(int)row lineCount:(int)count scrollBottom:(int)bottom left:(int)left right:(int)right color:(NSColor *)color;
+- (void)clearBlockFromRow:(int)row1 column:(int)col1 toRow:(int)row2 column:(int)col2 color:(NSColor *)color;
 - (void)clearAll;
-- (void)setDefaultColorsBackground:(NSColor *)bgColor
-                        foreground:(NSColor *)fgColor;
+- (void)setDefaultColorsBackground:(NSColor *)bgColor foreground:(NSColor *)fgColor;
 - (void)setFont:(NSFont *)newFont;
 - (void)setWideFont:(NSFont *)newFont;
 - (NSFont *)font;
@@ -115,8 +97,6 @@ typedef struct {
 - (NSSize)fitToSize:(NSSize)size;
 - (NSSize)fitToSize:(NSSize)size rows:(int *)rows columns:(int *)columns;
 - (NSRect)boundingRectForCharacterAtRow:(int)row column:(int)col;
-#if MM_USE_ROW_CACHE
 - (MMRowCacheEntry *)rowCache;
-#endif
 
 @end
