@@ -9,9 +9,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "Miscellaneous.h" // Defines MM_ENABLE_ATSUI
 
-#if !MM_ENABLE_ATSUI
 
 @class MMTextViewHelper;
 
@@ -113,5 +111,3 @@
 @interface MMCoreTextView (ToolTip)
 - (void)setToolTipAtMousePoint:(NSString *)string;
 @end
-
-#endif // !MM_ENABLE_ATSUI

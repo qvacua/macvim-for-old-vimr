@@ -13,6 +13,7 @@
 #import "MacVim.h"
 
 #import "MMUserDefaults.h"
+#import "MMTypes.h"
 
 
 // TODO: Remove this when the inline IM code has been tested
@@ -29,9 +30,7 @@ extern NSString *MMTabMaxWidthKey;
 extern NSString *MMTabOptimumWidthKey;
 extern NSString *MMShowAddTabButtonKey;
 extern NSString *MMTextInsetLeftKey;
-extern NSString *MMTextInsetRightKey;
 extern NSString *MMTextInsetTopKey;
-extern NSString *MMTextInsetBottomKey;
 extern NSString *MMTypesetterKey;
 extern NSString *MMTranslateCtrlClickKey;
 extern NSString *MMTopLeftPointKey;
@@ -78,17 +77,6 @@ enum {
     MMHideWhenLastWindowClosed = 1,
     MMTerminateWhenLastWindowClosed = 2,
 };
-
-
-
-enum {
-    // These values are chosen so that the min text view size is not too small
-    // with the default font (they only affect resizing with the mouse, you can
-    // still use e.g. ":set lines=2" to go below these values).
-    MMMinRows = 4,
-    MMMinColumns = 30
-};
-
 
 
 @interface NSIndexSet (MMExtras)

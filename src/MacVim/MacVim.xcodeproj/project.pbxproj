@@ -152,6 +152,7 @@
 		1929B90B0F619CC3F283B406 /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
 		1929BCFADF0C900062A10D4B /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
 		1929BD53AF98BA14DC8F3744 /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
+		1929BDDC8BF11F91E82D0DCE /* MMTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypes.h; sourceTree = "<group>"; };
 		1929BF8C22F04CBCAC99D88C /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
 		1929BFF741F0989E100F1B00 /* MMCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCocoaCategories.m; sourceTree = "<group>"; };
 		1D0E051B0BA5F83800B6049E /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
@@ -323,6 +324,7 @@
 				1929B62A295C55078E39C6B1 /* MMTextStorage.m */,
 				1929B34D8F7A51D137F2264B /* MMUserDefaults.m */,
 				1929B90B0F619CC3F283B406 /* MMUserDefaults.h */,
+				1929BDDC8BF11F91E82D0DCE /* MMTypes.h */,
 			);
 			name = VimTextView;
 			sourceTree = "<group>";

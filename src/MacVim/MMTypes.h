@@ -8,11 +8,10 @@
  * See README.txt for an overview of the Vim source code.
  */
 
-#import "MMUserDefaults.h"
-
-
-NSString *MMCellWidthMultiplierKey = @"MMCellWidthMultiplier";
-NSString *MMNoFontSubstitutionKey = @"MMNoFontSubstitution";
-NSString *MMBaselineOffsetKey = @"MMBaselineOffset";
-NSString *MMTextInsetRightKey = @"MMTextInsetRight";
-NSString *MMTextInsetBottomKey = @"MMTextInsetBottom";
+enum {
+    // These values are chosen so that the min text view size is not too small
+    // with the default font (they only affect resizing with the mouse, you can
+    // still use e.g. ":set lines=2" to go below these values).
+    MMMinRows = 4,
+    MMMinColumns = 30
+};
