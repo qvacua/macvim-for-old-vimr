@@ -25,8 +25,6 @@
     NSMenuItem          *recentFilesMenuItem;
     int                 preloadPid;
     BOOL                shouldActivateWhenNextWindowOpens;
-    int                 numChildProcesses;
-    int                 processingFlag;
 
 #if (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4)
     FSEventStreamRef    fsEventStream;

@@ -24,7 +24,8 @@
 - (NSEnumerator *)enumeratorOfVimControllers;
 
 - (NSEnumerator *)enumeratorOfCachedVimControllers;
-- (void)invalidateConnection;
+- (void)removeVimController:(id)controller;
+- (void)cleanUp;
 
 + (MMVimManager *)sharedManager;
 

@@ -572,38 +572,8 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
                                  andEventID:'MOD '];
 #endif
 
-    // This will invalidate all connections (since they were spawned from this
-    // connection).
-    [vimManager invalidateConnection];
-
+    [vimManager cleanUp];
     [NSApp setDelegate:nil];
-
-    // Try to wait for all child processes to avoid leaving zombies behind (but
-    // don't wait around for too long).
-    NSDate *timeOutDate = [NSDate dateWithTimeIntervalSinceNow:2];
-    while ([timeOutDate timeIntervalSinceNow] > 0) {
-        [self reapChildProcesses:nil];
-        if (numChildProcesses <= 0)
-            break;
-
-        ASLogDebug(@"%d processes still left, hold on...", numChildProcesses);
-
-        // Run in NSConnectionReplyMode while waiting instead of calling e.g.
-        // usleep().  Otherwise incoming messages may clog up the DO queues and
-        // the outgoing TerminateNowMsgID sent earlier never reaches the Vim
-        // process.
-        // This has at least one side-effect, namely we may receive the
-        // annoying "dropping incoming DO message".  (E.g. this may happen if
-        // you quickly hit Cmd-n several times in a row and then immediately
-        // press Cmd-q, Enter.)
-        while (CFRunLoopRunInMode((CFStringRef)NSConnectionReplyMode,
-                0.05, true) == kCFRunLoopRunHandledSource)
-            ;   // do nothing
-    }
-
-    if (numChildProcesses > 0) {
-        ASLogNotice(@"%d zombies left behind", numChildProcesses);
-    }
 }
 
 + (MMAppController *)sharedInstance
@@ -626,21 +596,9 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 
 - (void)removeVimController:(id)controller
 {
-    ASLogDebug(@"Remove Vim controller pid=%d id=%d (processingFlag=%d)",
-               [controller pid], [controller vimControllerId], processingFlag);
+    [vimManager removeVimController:controller];
 
-    NSUInteger idx = [vimControllers indexOfObject:controller];
-    if (NSNotFound == idx) {
-        ASLogDebug(@"Controller not found, probably due to duplicate removal");
-        return;
-    }
-
-    [controller retain];
-    [vimControllers removeObjectAtIndex:idx];
-    [controller cleanup];
-    [controller release];
-
-    if (![vimControllers count]) {
+    if (![vimManager countOfVimControllers]) {
         // The last editor window just closed so restore the main menu back to
         // its default state (which is defined in MainMenu.nib).
         [self setMainMenu:defaultMainMenu];
@@ -651,14 +609,6 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         if (hide)
             [NSApp hide:self];
     }
-
-    // There is a small delay before the Vim process actually exits so wait a
-    // little before trying to reap the child process.  If the process still
-    // hasn't exited after this wait it won't be reaped until the next time
-    // reapChildProcesses: is called (but this should be harmless).
-    [self performSelector:@selector(reapChildProcesses:)
-               withObject:nil
-               afterDelay:0.1];
 }
 
 - (void)windowControllerWillOpen:(MMWindowController *)windowController

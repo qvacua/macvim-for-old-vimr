@@ -32,14 +32,65 @@ static NSTimeInterval MMReplyTimeout = 5;
 
     NSMutableArray *_vimControllers;
     NSMutableArray *_cachedVimControllers;
+
+    int numChildProcesses;
+    int processingFlag;
 }
 
 @synthesize mutableVimControllers = _vimControllers;
 @synthesize mutableCachedVimControllers = _cachedVimControllers;
 
 #pragma mark Public
-- (void)invalidateConnection {
+- (void)removeVimController:(MMVimController *)controller {
+    ASLogDebug(@"Remove Vim controller pid=%d id=%d (processingFlag=%d)", controller.pid, controller.vimControllerId, processingFlag);
+
+    NSUInteger idx = [self.vimControllers indexOfObject:controller];
+    if (NSNotFound == idx) {
+        ASLogDebug(@"Controller not found, probably due to duplicate removal");
+        return;
+    }
+
+    [controller retain];
+    [self.mutableVimControllers removeObjectAtIndex:idx];
+    [controller cleanup];
+    [controller release];
+
+    // There is a small delay before the Vim process actually exits so wait a
+    // little before trying to reap the child process.  If the process still
+    // hasn't exited after this wait it won't be reaped until the next time
+    // reapChildProcesses: is called (but this should be harmless).
+    [self performSelector:@selector(reapChildProcesses:) withObject:nil afterDelay:0.1];
+}
+
+- (void)cleanUp {
     [connection invalidate];
+
+    // Try to wait for all child processes to avoid leaving zombies behind (but
+    // don't wait around for too long).
+    NSDate *timeOutDate = [NSDate dateWithTimeIntervalSinceNow:2];
+    while ([timeOutDate timeIntervalSinceNow] > 0) {
+        [self reapChildProcesses:nil];
+
+        if (numChildProcesses <= 0) {
+            break;
+        }
+
+        ASLogDebug(@"%d processes still left, hold on...", numChildProcesses);
+
+        // Run in NSConnectionReplyMode while waiting instead of calling e.g.
+        // usleep().  Otherwise incoming messages may clog up the DO queues and
+        // the outgoing TerminateNowMsgID sent earlier never reaches the Vim
+        // process.
+        // This has at least one side-effect, namely we may receive the
+        // annoying "dropping incoming DO message".  (E.g. this may happen if
+        // you quickly hit Cmd-n several times in a row and then immediately
+        // press Cmd-q, Enter.)
+        while (CFRunLoopRunInMode((CFStringRef) NSConnectionReplyMode, 0.05, true) == kCFRunLoopRunHandledSource); // do nothing
+    }
+
+    if (numChildProcesses > 0) {
+        ASLogNotice(@"%d zombies left behind", numChildProcesses);
+    }
 }
 
 #pragma mark vimControllers
@@ -187,6 +238,24 @@ static NSTimeInterval MMReplyTimeout = 5;
     }
 
     return _instance;
+}
+
+#pragma mark Private
+- (void)reapChildProcesses:(id)sender {
+    // NOTE: numChildProcesses (currently) only counts the number of Vim
+    // processes that have been started with executeInLoginShell::.  If other
+    // processes are spawned this code may need to be adjusted (or
+    // numChildProcesses needs to be incremented when such a process is
+    // started).
+    while (numChildProcesses > 0) {
+        int status = 0;
+        int pid = waitpid(-1, &status, WNOHANG);
+        if (pid <= 0)
+            break;
+
+        ASLogDebug(@"Wait for pid=%d complete", pid);
+        --numChildProcesses;
+    }
 }
 
 @end
