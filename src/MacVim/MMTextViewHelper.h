@@ -21,9 +21,11 @@
 #define RED(argb)       (((argb>>16) & 0xff)/255.0f)
 #define ALPHA(argb)     (((argb>>24) & 0xff)/255.0f)
 
+@protocol MMTextViewProtocol;
+
 
 @interface MMTextViewHelper : NSObject {
-    id                  textView;
+    NSView <MMTextViewProtocol> *textView;
     BOOL                isDragging;
     int                 dragRow;
     int                 dragColumn;
@@ -52,7 +54,7 @@
 }
 
 - (id)init;
-- (void)setTextView:(id)view;
+- (void)setTextView:(NSView <MMTextViewProtocol> *)view;
 - (void)setInsertionPointColor:(NSColor *)color;
 - (NSColor *)insertionPointColor;
 

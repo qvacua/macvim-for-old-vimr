@@ -53,9 +53,10 @@
           numColumns:(int)nc;
 
 //
-// NSTextContainer methods
+// NSTextView methods
 //
 - (void)setTextContainerInset:(NSSize)inset;
+- (NSDictionary *)markedTextAttributes;
 
 //
 // MMCoreTextView methods
