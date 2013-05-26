@@ -11,10 +11,8 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface MMTypesetter : NSATSTypesetter {
-}
+@interface MMTypesetter : NSATSTypesetter
 @end
 
-@interface MMTypesetter2 : NSATSTypesetter {
-}
+@interface MMTypesetter2 : NSATSTypesetter
 @end

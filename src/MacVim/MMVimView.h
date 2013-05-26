@@ -11,11 +11,10 @@
 #import <Cocoa/Cocoa.h>
 
 
-
 @class PSMTabBarControl;
-@class MMTextView;
 @class MMScroller;
 @class MMVimController;
+@protocol MMTextViewProtocol;
 
 
 @interface MMVimView : NSView {
@@ -23,13 +22,13 @@
     NSTabView           *tabView;
     MMVimController     *vimController;
     BOOL                vimTaskSelectedTab;
-    MMTextView          *textView;
+    NSView <MMTextViewProtocol> *textView;
     NSMutableArray      *scrollbars;
 }
 
 - (MMVimView *)initWithFrame:(NSRect)frame vimController:(MMVimController *)c;
 
-- (MMTextView *)textView;
+- (NSView <MMTextViewProtocol> *)textView;
 - (void)cleanup;
 
 - (NSSize)desiredSize;

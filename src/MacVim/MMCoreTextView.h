@@ -9,14 +9,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "Miscellaneous.h" // Defines MM_ENABLE_ATSUI
+#import "MMTextViewProtocol.h"
 
-#if !MM_ENABLE_ATSUI
 
 @class MMTextViewHelper;
 
 
-@interface MMCoreTextView : NSView <NSTextInput> {
+@interface MMCoreTextView : NSView <NSTextInput, MMTextViewProtocol> {
     // From MMTextStorage
     int                         maxRows, maxColumns;
     NSColor                     *defaultBackgroundColor;
@@ -106,12 +105,3 @@
 - (NSSize)constrainRows:(int *)rows columns:(int *)cols toSize:(NSSize)size;
 @end
 
-
-//
-// This category is defined in MMCoreTextView+ToolTip.m
-//
-@interface MMCoreTextView (ToolTip)
-- (void)setToolTipAtMousePoint:(NSString *)string;
-@end
-
-#endif // !MM_ENABLE_ATSUI

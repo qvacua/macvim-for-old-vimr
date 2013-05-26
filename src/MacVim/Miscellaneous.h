@@ -12,13 +12,12 @@
 #import <Cocoa/Cocoa.h>
 #import "MacVim.h"
 
+#import "MMUserDefaults.h"
+#import "MMTypes.h"
+
 
 // TODO: Remove this when the inline IM code has been tested
 #define INCLUDE_OLD_IM_CODE
-
-// Use Core Text instead of ATSUI when compiling on 10.5+.
-// Note: Core Text was introduced with 10.5, ATSUI was deprecated on 10.6.
-#define MM_ENABLE_ATSUI (MAC_OS_X_VERSION_MIN_REQUIRED<MAC_OS_X_VERSION_10_5)
 
 
 // NSUserDefaults keys
@@ -26,17 +25,9 @@ extern NSString *MMTabMinWidthKey;
 extern NSString *MMTabMaxWidthKey;
 extern NSString *MMTabOptimumWidthKey;
 extern NSString *MMShowAddTabButtonKey;
-extern NSString *MMTextInsetLeftKey;
-extern NSString *MMTextInsetRightKey;
-extern NSString *MMTextInsetTopKey;
-extern NSString *MMTextInsetBottomKey;
 extern NSString *MMTypesetterKey;
-extern NSString *MMCellWidthMultiplierKey;
-extern NSString *MMBaselineOffsetKey;
-extern NSString *MMTranslateCtrlClickKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;
-extern NSString *MMNoFontSubstitutionKey;
 extern NSString *MMLoginShellKey;
 extern NSString *MMUntitledWindowKey;
 extern NSString *MMTexturedWindowKey;
@@ -79,17 +70,6 @@ enum {
     MMHideWhenLastWindowClosed = 1,
     MMTerminateWhenLastWindowClosed = 2,
 };
-
-
-
-enum {
-    // These values are chosen so that the min text view size is not too small
-    // with the default font (they only affect resizing with the mouse, you can
-    // still use e.g. ":set lines=2" to go below these values).
-    MMMinRows = 4,
-    MMMinColumns = 30
-};
-
 
 
 @interface NSIndexSet (MMExtras)

@@ -3,24 +3,30 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0395A8330D71ED7800881434 /* DBPrefsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0395A8320D71ED7800881434 /* DBPrefsWindowController.m */; };
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
-		1D09AB420C6A4D520045497E /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D09AB400C6A4D520045497E /* MMTypesetter.m */; };
+		1929B3881D9408663BF8A67A /* MMTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B11839EF061D23763730 /* MMTypes.m */; };
+		1929B4BDEE229E19573C9D95 /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B58A376B99D12870C813 /* MMLog.m */; };
+		1929B5D219627B604C220160 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */; };
+		1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B387A298335D6D09A500 /* MMScroller.m */; };
+		1929B887CB6B980E8CB12596 /* MMCoreTextView+ToolTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */; };
+		1929B9F392F9900B543A3E8F /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B1D28FEA476210E3D4EC /* MMUtils.m */; };
+		1929BA48579387C85CE6D49E /* MMUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9B60F9CC5A37791BC4C /* MMUserDefaults.m */; };
+		1929BDAC82887BD9B347063E /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B6531565968BA52786D1 /* MMTypesetter.m */; };
+		1929BF2B8A2AB5FB83D9689D /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B4ED52B39898B3B30FC1 /* MMTextStorage.m */; };
 		1D0E051C0BA5F83800B6049E /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D0E051B0BA5F83800B6049E /* Colors.plist */; };
 		1D145C7F0E5227CE00691AA0 /* MMTextViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */; };
 		1D1474980C56703C0038FA2B /* MacVim.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474960C56703C0038FA2B /* MacVim.m */; };
 		1D1474A00C5673AE0038FA2B /* MMAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D14749E0C5673AE0038FA2B /* MMAppController.m */; };
-		1D1474AA0C5677450038FA2B /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474A80C5677450038FA2B /* MMTextStorage.m */; };
 		1D1474B00C5678370038FA2B /* MMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474AE0C5678370038FA2B /* MMTextView.m */; };
 		1D1474B60C56796D0038FA2B /* MMVimController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474B40C56796D0038FA2B /* MMVimController.m */; };
 		1D1474BC0C567A910038FA2B /* MMWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474BA0C567A910038FA2B /* MMWindowController.m */; };
 		1D22374B0E45DF4800E6FFFF /* Advanced.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D22374A0E45DF4800E6FFFF /* Advanced.png */; };
 		1D384A0E100D671700D3C22F /* KeyBinding.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D384A0D100D671700D3C22F /* KeyBinding.plist */; };
-		1D44972211FCA9B400B0630F /* MMCoreTextView+ToolTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D44972111FCA9B400B0630F /* MMCoreTextView+ToolTip.m */; };
 		1D493D580C5247BF00AB718C /* Vim in Copy Executables */ = {isa = PBXBuildFile; fileRef = 1D493D570C5247BF00AB718C /* Vim */; };
 		1D493DBA0C52534300AB718C /* PSMTabBarControl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1D493DB90C52533B00AB718C /* PSMTabBarControl.framework */; };
 		1D60088B0E96A0B2003763F0 /* MMFindReplaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60088A0E96A0B2003763F0 /* MMFindReplaceController.m */; };
@@ -29,7 +35,6 @@
 		1D80FBD60CBBD3B700102A1C /* MMVimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D80FBD20CBBD3B700102A1C /* MMVimView.m */; };
 		1D8B5A53104AF9FF002E59D5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D8B5A52104AF9FF002E59D5 /* Carbon.framework */; };
 		1D8BEA74104992290069B072 /* FindAndReplace.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1D8BEA73104992290069B072 /* FindAndReplace.nib */; };
-		1D9918490D299F9900A96335 /* MMAtsuiTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D9918470D299F9900A96335 /* MMAtsuiTextView.m */; };
 		1D9C60520EF79C0C0034AD44 /* MacVim.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1D9C602E0EF79C0C0034AD44 /* MacVim.icns */; };
 		1DCD00BF0E50B2B700460166 /* Attention.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AA0E50B2B700460166 /* Attention.png */; };
 		1DCD00C00E50B2B700460166 /* Copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AB0E50B2B700460166 /* Copy.png */; };
@@ -132,8 +137,27 @@
 		0395A8A90D72D88B00881434 /* General.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = General.png; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1D09AB3F0C6A4D520045497E /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
-		1D09AB400C6A4D520045497E /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
+		1929B02DD9159EF8FE00DAEF /* MMTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypes.h; sourceTree = "<group>"; };
+		1929B11839EF061D23763730 /* MMTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypes.m; sourceTree = "<group>"; };
+		1929B1D28FEA476210E3D4EC /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
+		1929B2D8B87C35724865DD16 /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
+		1929B387A298335D6D09A500 /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
+		1929B3B00D503E4F74BA6F8D /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
+		1929B46919352EC8D4758980 /* MMTypesetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypesetter.h; sourceTree = "<group>"; };
+		1929B4ED52B39898B3B30FC1 /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
+		1929B58A376B99D12870C813 /* MMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLog.m; sourceTree = "<group>"; };
+		1929B5BD46EA06AB1307693F /* MMVimBackendProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVimBackendProtocol.h; sourceTree = "<group>"; };
+		1929B6531565968BA52786D1 /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
+		1929B6E589D6109836538941 /* MMScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScroller.h; sourceTree = "<group>"; };
+		1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMCoreTextView+ToolTip.m"; sourceTree = "<group>"; };
+		1929B8EDACCF4F448F93E2D2 /* MMTextViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextViewProtocol.h; sourceTree = "<group>"; };
+		1929B9B60F9CC5A37791BC4C /* MMUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUserDefaults.m; sourceTree = "<group>"; };
+		1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCocoaCategories.m; sourceTree = "<group>"; };
+		1929BAD0443D1B9CC4E2A49B /* MMCocoaCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCocoaCategories.h; sourceTree = "<group>"; };
+		1929BB3FC34756B00107CAE7 /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
+		1929BE12A2D0D834156ECB31 /* MMCoreTextView+Tooltip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMCoreTextView+Tooltip.h"; sourceTree = "<group>"; };
+		1929BE8B27300F523B780922 /* MMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLog.h; sourceTree = "<group>"; };
+		1929BF7091EDB17A443EE4A5 /* MMCoreTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCoreTextView.h; sourceTree = "<group>"; };
 		1D0E051B0BA5F83800B6049E /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
 		1D145C7D0E5227CE00691AA0 /* MMTextViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextViewHelper.h; sourceTree = "<group>"; };
 		1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextViewHelper.m; sourceTree = "<group>"; };
@@ -141,8 +165,6 @@
 		1D1474960C56703C0038FA2B /* MacVim.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MacVim.m; sourceTree = "<group>"; };
 		1D14749D0C5673AE0038FA2B /* MMAppController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMAppController.h; sourceTree = "<group>"; };
 		1D14749E0C5673AE0038FA2B /* MMAppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMAppController.m; sourceTree = "<group>"; };
-		1D1474A70C5677450038FA2B /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
-		1D1474A80C5677450038FA2B /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
 		1D1474AD0C5678370038FA2B /* MMTextView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTextView.h; sourceTree = "<group>"; };
 		1D1474AE0C5678370038FA2B /* MMTextView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTextView.m; sourceTree = "<group>"; };
 		1D1474B30C56796D0038FA2B /* MMVimController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMVimController.h; sourceTree = "<group>"; };
@@ -151,7 +173,6 @@
 		1D1474BA0C567A910038FA2B /* MMWindowController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMWindowController.m; sourceTree = "<group>"; };
 		1D22374A0E45DF4800E6FFFF /* Advanced.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Advanced.png; sourceTree = "<group>"; };
 		1D384A0D100D671700D3C22F /* KeyBinding.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyBinding.plist; sourceTree = "<group>"; };
-		1D44972111FCA9B400B0630F /* MMCoreTextView+ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMCoreTextView+ToolTip.m"; sourceTree = "<group>"; };
 		1D493D570C5247BF00AB718C /* Vim */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = Vim; path = ../Vim; sourceTree = SOURCE_ROOT; };
 		1D493DB30C52533B00AB718C /* PSMTabBarControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PSMTabBarControl.xcodeproj; path = PSMTabBarControl/PSMTabBarControl.xcodeproj; sourceTree = "<group>"; };
 		1D6008820E96886D003763F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FindAndReplace.nib; sourceTree = "<group>"; };
@@ -164,8 +185,6 @@
 		1D80FBD10CBBD3B700102A1C /* MMVimView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMVimView.h; sourceTree = "<group>"; };
 		1D80FBD20CBBD3B700102A1C /* MMVimView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMVimView.m; sourceTree = "<group>"; };
 		1D8B5A52104AF9FF002E59D5 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		1D9918460D299F9900A96335 /* MMAtsuiTextView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMAtsuiTextView.h; sourceTree = "<group>"; };
-		1D9918470D299F9900A96335 /* MMAtsuiTextView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMAtsuiTextView.m; sourceTree = "<group>"; };
 		1D9C602E0EF79C0C0034AD44 /* MacVim.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = MacVim.icns; path = icons/MacVim.icns; sourceTree = "<group>"; };
 		1DCD00AA0E50B2B700460166 /* Attention.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Attention.png; path = Toolbar/Attention.png; sourceTree = "<group>"; };
 		1DCD00AB0E50B2B700460166 /* Copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Copy.png; path = Toolbar/Copy.png; sourceTree = "<group>"; };
@@ -198,7 +217,6 @@
 		1DE3F8E80D50F84600052B9E /* MMPreferenceController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMPreferenceController.h; sourceTree = "<group>"; };
 		1DE3F8E90D50F84600052B9E /* MMPreferenceController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMPreferenceController.m; sourceTree = "<group>"; };
 		1DE602470C587FD10055263D /* runtime */ = {isa = PBXFileReference; lastKnownFileType = folder; name = runtime; path = ../../runtime; sourceTree = SOURCE_ROOT; };
-		1DE63FF90E71820F00959BDB /* MMCoreTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCoreTextView.h; sourceTree = "<group>"; };
 		1DE63FFA0E71820F00959BDB /* MMCoreTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCoreTextView.m; sourceTree = "<group>"; };
 		1DE8CC610C5E2AAD003F56E3 /* Actions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Actions.plist; sourceTree = "<group>"; };
 		1DE9B94D0D341AB8008FEDD4 /* MMWindow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMWindow.h; sourceTree = "<group>"; };
@@ -230,10 +248,8 @@
 		080E96DDFE201D6D7F000001 /* MacVim Source */ = {
 			isa = PBXGroup;
 			children = (
-				1D44972111FCA9B400B0630F /* MMCoreTextView+ToolTip.m */,
 				1D6008890E96A0B2003763F0 /* MMFindReplaceController.h */,
 				1D60088A0E96A0B2003763F0 /* MMFindReplaceController.m */,
-				1DE63FF90E71820F00959BDB /* MMCoreTextView.h */,
 				1DE63FFA0E71820F00959BDB /* MMCoreTextView.m */,
 				1D145C7D0E5227CE00691AA0 /* MMTextViewHelper.h */,
 				1D145C7E0E5227CE00691AA0 /* MMTextViewHelper.m */,
@@ -245,30 +261,28 @@
 				1DE3F8E90D50F84600052B9E /* MMPreferenceController.m */,
 				1DE9B94D0D341AB8008FEDD4 /* MMWindow.h */,
 				1DE9B94E0D341AB8008FEDD4 /* MMWindow.m */,
-				1D9918460D299F9900A96335 /* MMAtsuiTextView.h */,
-				1D9918470D299F9900A96335 /* MMAtsuiTextView.m */,
 				1D80FBCF0CBBD3B700102A1C /* MMFullScreenWindow.h */,
 				1D80FBD00CBBD3B700102A1C /* MMFullScreenWindow.m */,
 				1D80FBD10CBBD3B700102A1C /* MMVimView.h */,
 				1D80FBD20CBBD3B700102A1C /* MMVimView.m */,
 				1DD66ECB0C803D3600EBDAB3 /* MMApplication.h */,
 				1DD66ECC0C803D3600EBDAB3 /* MMApplication.m */,
-				1D09AB3F0C6A4D520045497E /* MMTypesetter.h */,
-				1D09AB400C6A4D520045497E /* MMTypesetter.m */,
 				1D1474B90C567A910038FA2B /* MMWindowController.h */,
 				1D1474BA0C567A910038FA2B /* MMWindowController.m */,
 				1D1474B30C56796D0038FA2B /* MMVimController.h */,
 				1D1474B40C56796D0038FA2B /* MMVimController.m */,
 				1D1474AD0C5678370038FA2B /* MMTextView.h */,
 				1D1474AE0C5678370038FA2B /* MMTextView.m */,
-				1D1474A70C5677450038FA2B /* MMTextStorage.h */,
-				1D1474A80C5677450038FA2B /* MMTextStorage.m */,
 				1D14749D0C5673AE0038FA2B /* MMAppController.h */,
 				1D14749E0C5673AE0038FA2B /* MMAppController.m */,
 				1D1474950C56703C0038FA2B /* MacVim.h */,
 				1D1474960C56703C0038FA2B /* MacVim.m */,
 				32CA4F630368D1EE00C91783 /* MacVim_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				1929B387A298335D6D09A500 /* MMScroller.m */,
+				1929B6E589D6109836538941 /* MMScroller.h */,
+				1929BF7091EDB17A443EE4A5 /* MMCoreTextView.h */,
+				1929BD6AF83DA11B8E0385BC /* VimTextView */,
 			);
 			name = "MacVim Source";
 			sourceTree = "<group>";
@@ -288,6 +302,31 @@
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		1929BD6AF83DA11B8E0385BC /* VimTextView */ = {
+			isa = PBXGroup;
+			children = (
+				1929BB3FC34756B00107CAE7 /* MMUtils.h */,
+				1929B1D28FEA476210E3D4EC /* MMUtils.m */,
+				1929B58A376B99D12870C813 /* MMLog.m */,
+				1929BE8B27300F523B780922 /* MMLog.h */,
+				1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */,
+				1929BAD0443D1B9CC4E2A49B /* MMCocoaCategories.h */,
+				1929B5BD46EA06AB1307693F /* MMVimBackendProtocol.h */,
+				1929B6531565968BA52786D1 /* MMTypesetter.m */,
+				1929B46919352EC8D4758980 /* MMTypesetter.h */,
+				1929B3B00D503E4F74BA6F8D /* MMTextStorage.h */,
+				1929B4ED52B39898B3B30FC1 /* MMTextStorage.m */,
+				1929B9B60F9CC5A37791BC4C /* MMUserDefaults.m */,
+				1929B2D8B87C35724865DD16 /* MMUserDefaults.h */,
+				1929B02DD9159EF8FE00DAEF /* MMTypes.h */,
+				1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */,
+				1929BE12A2D0D834156ECB31 /* MMCoreTextView+Tooltip.h */,
+				1929B8EDACCF4F448F93E2D2 /* MMTextViewProtocol.h */,
+				1929B11839EF061D23763730 /* MMTypes.m */,
+			);
+			name = VimTextView;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -438,7 +477,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MacVim" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -543,15 +582,12 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				1D1474980C56703C0038FA2B /* MacVim.m in Sources */,
 				1D1474A00C5673AE0038FA2B /* MMAppController.m in Sources */,
-				1D1474AA0C5677450038FA2B /* MMTextStorage.m in Sources */,
 				1D1474B00C5678370038FA2B /* MMTextView.m in Sources */,
 				1D1474B60C56796D0038FA2B /* MMVimController.m in Sources */,
 				1D1474BC0C567A910038FA2B /* MMWindowController.m in Sources */,
-				1D09AB420C6A4D520045497E /* MMTypesetter.m in Sources */,
 				1DD66ECE0C803D3600EBDAB3 /* MMApplication.m in Sources */,
 				1D80FBD40CBBD3B700102A1C /* MMFullScreenWindow.m in Sources */,
 				1D80FBD60CBBD3B700102A1C /* MMVimView.m in Sources */,
-				1D9918490D299F9900A96335 /* MMAtsuiTextView.m in Sources */,
 				1DE9B9500D341AB8008FEDD4 /* MMWindow.m in Sources */,
 				1DE3F8EB0D50F84600052B9E /* MMPreferenceController.m in Sources */,
 				0395A8330D71ED7800881434 /* DBPrefsWindowController.m in Sources */,
@@ -559,7 +595,15 @@
 				1D145C7F0E5227CE00691AA0 /* MMTextViewHelper.m in Sources */,
 				1D60088B0E96A0B2003763F0 /* MMFindReplaceController.m in Sources */,
 				1DE63FFB0E71820F00959BDB /* MMCoreTextView.m in Sources */,
-				1D44972211FCA9B400B0630F /* MMCoreTextView+ToolTip.m in Sources */,
+				1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */,
+				1929B9F392F9900B543A3E8F /* MMUtils.m in Sources */,
+				1929B4BDEE229E19573C9D95 /* MMLog.m in Sources */,
+				1929B5D219627B604C220160 /* MMCocoaCategories.m in Sources */,
+				1929BDAC82887BD9B347063E /* MMTypesetter.m in Sources */,
+				1929BF2B8A2AB5FB83D9689D /* MMTextStorage.m in Sources */,
+				1929BA48579387C85CE6D49E /* MMUserDefaults.m in Sources */,
+				1929B887CB6B980E8CB12596 /* MMCoreTextView+ToolTip.m in Sources */,
+				1929B3881D9408663BF8A67A /* MMTypes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

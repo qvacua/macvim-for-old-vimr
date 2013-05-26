@@ -20,39 +20,14 @@
 
 #import "Miscellaneous.h"   // Defines MM_ENABLE_ATSUI
 
-#if MM_ENABLE_ATSUI
-# import "MMAtsuiTextView.h"
-#else
-# import "MMCoreTextView.h"
-#endif
+#import "MMCoreTextView.h"
 #import "MMTextView.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
 #import "MMWindowController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
-
-
-// Scroller type; these must match SBAR_* in gui.h
-enum {
-    MMScrollerTypeLeft = 0,
-    MMScrollerTypeRight,
-    MMScrollerTypeBottom
-};
-
-
-// TODO:  Move!
-@interface MMScroller : NSScroller {
-    int32_t identifier;
-    int type;
-    NSRange range;
-}
-- (id)initWithIdentifier:(int32_t)ident type:(int)type;
-- (int32_t)scrollerId;
-- (int)type;
-- (NSRange)range;
-- (void)setRange:(NSRange)newRange;
-@end
+#import "MMScroller.h"
 
 
 @interface MMVimView (Private)
@@ -97,20 +72,11 @@ enum {
     NSInteger renderer = [ud integerForKey:MMRendererKey];
     ASLogInfo(@"Use renderer=%ld", renderer);
 
-#if MM_ENABLE_ATSUI
-    if (MMRendererATSUI == renderer) {
-        // HACK! 'textView' has type MMTextView, but MMAtsuiTextView is not
-        // derived from MMTextView.
-        textView = [[MMAtsuiTextView alloc] initWithFrame:frame];
-    }
-#else
     if (MMRendererCoreText == renderer) {
         // HACK! 'textView' has type MMTextView, but MMCoreTextView is not
         // derived from MMTextView.
-        textView = (MMTextView *)[[MMCoreTextView alloc] initWithFrame:frame];
-    }
-#endif
-    else {
+        textView = [[MMCoreTextView alloc] initWithFrame:frame];
+    } else {
         // Use Cocoa text system for text rendering.
         textView = [[MMTextView alloc] initWithFrame:frame];
     }
@@ -177,7 +143,7 @@ enum {
     // keep only a reference to the text view, so release the text storage
     // first (unless we are using the ATSUI renderer).
     if ([textView isKindOfClass:[MMTextView class]])
-        [[textView textStorage] release];
+        [[(MMTextView *) textView textStorage] release];
 
     [textView release];  textView = nil;
 
@@ -906,75 +872,4 @@ enum {
 
 
 
-@implementation MMScroller
 
-- (id)initWithIdentifier:(int32_t)ident type:(int)theType
-{
-    // HACK! NSScroller creates a horizontal scroller if it is init'ed with a
-    // frame whose with exceeds its height; so create a bogus rect and pass it
-    // to initWithFrame.
-    NSRect frame = theType == MMScrollerTypeBottom
-            ? NSMakeRect(0, 0, 1, 0)
-            : NSMakeRect(0, 0, 0, 1);
-
-    self = [super initWithFrame:frame];
-    if (!self) return nil;
-
-    identifier = ident;
-    type = theType;
-    [self setHidden:YES];
-    [self setEnabled:YES];
-    [self setAutoresizingMask:NSViewNotSizable];
-
-    return self;
-}
-
-- (int32_t)scrollerId
-{
-    return identifier;
-}
-
-- (int)type
-{
-    return type;
-}
-
-- (NSRange)range
-{
-    return range;
-}
-
-- (void)setRange:(NSRange)newRange
-{
-    range = newRange;
-}
-
-- (void)scrollWheel:(NSEvent *)event
-{
-    // HACK! Pass message on to the text view.
-    NSView *vimView = [self superview];
-    if ([vimView isKindOfClass:[MMVimView class]])
-        [[(MMVimView*)vimView textView] scrollWheel:event];
-}
-
-- (void)mouseDown:(NSEvent *)event
-{
-    // TODO: This is an ugly way of getting the connection to the backend.
-    NSConnection *connection = nil;
-    id wc = [[self window] windowController];
-    if ([wc isKindOfClass:[MMWindowController class]]) {
-        MMVimController *vc = [(MMWindowController*)wc vimController];
-        id proxy = [vc backendProxy];
-        connection = [(NSDistantObject*)proxy connectionForProxy];
-    }
-
-    // NOTE: The scroller goes into "event tracking mode" when the user clicks
-    // (and holds) the mouse button.  We have to manually add the backend
-    // connection to this mode while the mouse button is held, else DO messages
-    // from Vim will not be processed until the mouse button is released.
-    [connection addRequestMode:NSEventTrackingRunLoopMode];
-    [super mouseDown:event];
-    [connection removeRequestMode:NSEventTrackingRunLoopMode];
-}
-
-@end // MMScroller

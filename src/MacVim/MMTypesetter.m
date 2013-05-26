@@ -16,9 +16,7 @@
 
 #import "MMTextStorage.h"
 #import "MMTypesetter.h"
-#import "Miscellaneous.h"
-
-
+#import "MMUserDefaults.h"
 
 
 @implementation MMTypesetter
@@ -29,7 +27,7 @@
                  baselineOffset:(CGFloat *)baselineOffset
 {
     MMTextStorage *ts = (MMTextStorage*)[[self layoutManager] textStorage];
-    float h = [ts cellSize].height;
+    CGFloat h = [ts cellSize].height;
 
     // HACK! Force each line fragment rect to have a fixed height.  By also
     // forcing the 'usedRect' to the same height we also ensure that the cursor
@@ -42,53 +40,8 @@
     *baselineOffset += floor(.5*[ts linespace]);
 }
 
-#if 0
-- (void)setNotShownAttribute:(BOOL)flag forGlyphRange:(NSRange)glyphRange
-{
-    if (1 != glyphRange.length)
-        return;
-
-    NSLayoutManager *lm = [self layoutManager];
-    unsigned charIdx = [lm characterIndexForGlyphAtIndex:glyphRange.location];
-
-    if ('\n' == [[[lm textStorage] string] characterAtIndex:charIdx])
-        [lm setNotShownAttribute:flag forGlyphAtIndex:glyphRange.location];
-}
-#endif
-
-#if 0
-- (NSTypesetterControlCharacterAction)
-    actionForControlCharacterAtIndex:(unsigned)charIndex
-{
-    /*NSTextStorage *ts = [[self layoutManager] textStorage];
-
-    if ('\n' == [[ts string] characterAtIndex:charIndex])
-        return NSTypesetterLineBreakAction;*/
-
-    return NSTypesetterWhitespaceAction;
-}
-#endif
-
-#if 0
-- (void)setLocation:(NSPoint)location
-        withAdvancements:(const float *)advancements
-    forStartOfGlyphRange:(NSRange)glyphRange
-{
-    ASLogDebug(@"setLocation:%@ withAdvancements:%f forStartOfGlyphRange:%@",
-               NSStringFromPoint(location), advancements ? *advancements : 0,
-               NSStringFromRange(glyphRange));
-    [super setLocation:location withAdvancements:advancements
-            forStartOfGlyphRange:glyphRange];
-}
-#endif
-
-
 @end // MMTypesetter
 
-
-
-
-#if MM_USE_ROW_CACHE
 
 @implementation MMTypesetter2
 
@@ -152,7 +105,7 @@
 
     // NOTE: With non-zero linespace the baseline is adjusted so that the text
     // is centered within a line.
-    float baseline = [font descender] - floor(.5*[ts linespace])
+    CGFloat baseline = [font descender] - floor(.5*[ts linespace])
         + [[NSUserDefaults standardUserDefaults]
                 floatForKey:MMBaselineOffsetKey];
     NSSize cellSize = [ts cellSize];
@@ -188,6 +141,4 @@
 }
 
 @end // MMTypesetter2
-
-#endif // MM_USE_ROW_CACHE
 

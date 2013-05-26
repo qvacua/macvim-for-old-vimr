@@ -8,40 +8,12 @@
  * See README.txt for an overview of the Vim source code.
  */
 
-
 #import <Cocoa/Cocoa.h>
-#import "Miscellaneous.h"
-
-#if MM_ENABLE_ATSUI
-
-enum { MMMaxCellsPerChar = 2 };
-
-@class MMTextViewHelper;
 
 
-@interface MMAtsuiTextView : NSView <NSTextInput> {
-    // From MMTextStorage
-    int                         maxRows, maxColumns;
-    NSColor                     *defaultBackgroundColor;
-    NSColor                     *defaultForegroundColor;
-    NSSize                      cellSize;
-    NSFont                      *font;
-    NSFont                      *fontWide;
-    float                       linespace;
-    float                       ascender;
+@protocol MMTextViewProtocol <NSObject>
 
-    // From NSTextView
-    NSSize                      insetSize;
-
-    // From vim-cocoa
-    NSImage                     *contentImage;
-    NSSize                      imageSize;
-    ATSUStyle                   atsuStyles[MMMaxCellsPerChar];
-    BOOL                        antialias;
-
-    MMTextViewHelper            *helper;
-}
-
+@required
 - (id)initWithFrame:(NSRect)frame;
 
 //
@@ -69,7 +41,7 @@ enum { MMMaxCellsPerChar = 2 };
 // MMTextView methods
 //
 - (void)deleteSign:(NSString *)signName;
-- (void)setToolTipAtMousePoint:(NSString *)string;
+- (void)setShouldDrawInsertionPoint:(BOOL)on;
 - (void)setPreEditRow:(int)row column:(int)col;
 - (void)setMouseShape:(int)shape;
 - (void)setAntialias:(BOOL)state;
@@ -77,25 +49,17 @@ enum { MMMaxCellsPerChar = 2 };
 - (void)activateIm:(BOOL)enable;
 - (void)checkImState;
 - (BOOL)convertPoint:(NSPoint)point toRow:(int *)row column:(int *)column;
-- (NSPoint)pointForRow:(int)row column:(int)col;
-- (NSRect)rectForRow:(int)row column:(int)col numRows:(int)nr
+- (NSRect)rectForRow:(int)row column:(int)column numRows:(int)nr
           numColumns:(int)nc;
 
 //
 // NSTextView methods
 //
-- (void)keyDown:(NSEvent *)event;
-- (void)insertText:(id)string;
-- (void)doCommandBySelector:(SEL)selector;
-- (BOOL)performKeyEquivalent:(NSEvent *)event;
-
-//
-// NSTextContainer methods
-//
 - (void)setTextContainerInset:(NSSize)inset;
+- (NSDictionary *)markedTextAttributes;
 
 //
-// MMAtsuiTextView methods
+// MMCoreTextView methods
 //
 - (void)performBatchDrawWithData:(NSData *)data;
 - (NSSize)desiredSize;
@@ -103,5 +67,3 @@ enum { MMMaxCellsPerChar = 2 };
 - (NSSize)constrainRows:(int *)rows columns:(int *)cols toSize:(NSSize)size;
 
 @end
-
-#endif // MM_ENABLE_ATSUI

@@ -7,39 +7,13 @@
  * Do ":help credits" in Vim to see a list of people who contributed.
  * See README.txt for an overview of the Vim source code.
  */
-/*
- * MMTextStorage
- *
- * Text rendering related code.
- *
- * Note that:
- * - There are exactly 'actualRows' number of rows
- * - Each row is terminated by an EOL character ('\n')
- * - Each row must cover exactly 'actualColumns' display cells
- * - The attribute "MMWideChar" denotes a character that covers two cells, a
- *   character without this attribute covers one cell
- * - Unicode line (U+2028) and paragraph (U+2029) terminators are considered
- *   invalid and are replaced by spaces
- * - Spaces are used to fill out blank spaces
- *
- * In order to locate a (row,col) pair it is in general necessary to search one
- * character at a time.  To speed things up we cache the length of each row, as
- * well as the offset of the last column searched within each row.
- *
- * If each character in the text storage has length 1 and is not wide, then
- * there is no need to search for a (row, col) pair since it can easily be
- * computed.
- */
 
 #import "MMTextStorage.h"
-#import "MacVim.h"
-#import "Miscellaneous.h"
-
-
+#import "MMLog.h"
+#import "MMUserDefaults.h"
 
 // Enable debug log messages for situations that should never occur.
 #define MM_TS_PARANOIA_LOG 1
-
 
 
 // TODO: What does DRAW_TRANSP flag do?  If the background isn't drawn when
@@ -57,14 +31,11 @@
 static NSString *MMWideCharacterAttributeName = @"MMWideChar";
 
 
-
-
 @interface MMTextStorage (Private)
 - (void)lazyResize:(BOOL)force;
 - (NSRange)charRangeForRow:(int)row column:(int*)col cells:(int*)cells;
 - (void)fixInvalidCharactersInRange:(NSRange)range;
 @end
-
 
 
 @implementation MMTextStorage
@@ -87,12 +58,11 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
 {
     ASLogDebug(@"");
 
-#if MM_USE_ROW_CACHE
     if (rowCache) {
         free(rowCache);
         rowCache = NULL;
     }
-#endif
+
     [emptyRowString release];  emptyRowString = nil;
     [boldItalicFontWide release];  boldItalicFontWide = nil;
     [italicFontWide release];  italicFontWide = nil;
@@ -360,9 +330,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
     [self edited:(NSTextStorageEditedCharacters|NSTextStorageEditedAttributes)
            range:range changeInLength:changeInLength];
 
-#if MM_USE_ROW_CACHE
     rowCache[row].length += changeInLength;
-#endif
 }
 
 /*
@@ -420,11 +388,9 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
                 | NSTextStorageEditedAttributes) range:destRange
                 changeInLength:([srcString length]-destRange.length)];
 
-#if MM_USE_ROW_CACHE
         rowCache[destRow].length += [srcString length] - destRange.length;
-#endif
     }
-    
+
     NSRange emptyRange = {0,width};
     NSAttributedString *emptyString =
             [emptyRowString attributedSubstringFromRange:emptyRange];
@@ -456,9 +422,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
                 | NSTextStorageEditedCharacters) range:destRange
                 changeInLength:([emptyString length]-destRange.length)];
 
-#if MM_USE_ROW_CACHE
         rowCache[destRow].length += [emptyString length] - destRange.length;
-#endif
     }
 }
 
@@ -515,18 +479,16 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
                 | NSTextStorageEditedAttributes) range:destRange
                 changeInLength:([srcString length]-destRange.length)];
 
-#if MM_USE_ROW_CACHE
         rowCache[destRow].length += [srcString length] - destRange.length;
-#endif
     }
-    
+
     NSRange emptyRange = {0,width};
     NSAttributedString *emptyString =
             [emptyRowString attributedSubstringFromRange:emptyRange];
     NSDictionary *attribs = [NSDictionary dictionaryWithObjectsAndKeys:
             font, NSFontAttributeName,
             color, NSBackgroundColorAttributeName, nil];
-    
+
     for (i = 0; i < count; ++i, --destRow) {
         int acol = left;
         int acells = width;
@@ -551,9 +513,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
                 | NSTextStorageEditedCharacters) range:destRange
                 changeInLength:([emptyString length]-destRange.length)];
 
-#if MM_USE_ROW_CACHE
         rowCache[destRow].length += [emptyString length] - destRange.length;
-#endif
     }
 }
 
@@ -598,9 +558,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
                 | NSTextStorageEditedCharacters) range:range
                                         changeInLength:cells-range.length];
 
-#if MM_USE_ROW_CACHE
         rowCache[r].length += cells - range.length;
-#endif
     }
 }
 
@@ -878,7 +836,6 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
 
 - (NSRect)boundingRectForCharacterAtRow:(int)row column:(int)col
 {
-#if 1
     // This properly computes the position of where Vim expects the glyph to be
     // drawn.  Had the typesetter actually computed the right position of each
     // character and not hidden some, this code would be correct.
@@ -898,27 +855,12 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
         rect.size.width += rect.size.width;
 
     return rect;
-#else
-    // Use layout manager to compute bounding rect.  This works in situations
-    // where the layout manager decides to hide glyphs (Vim assumes all glyphs
-    // are drawn).
-    NSLayoutManager *lm = [[self layoutManagers] objectAtIndex:0];
-    NSTextContainer *tc = [[lm textContainers] objectAtIndex:0];
-    int cells = 1;
-    NSRange range = [self charRangeForRow:row column:&col cells:&cells];
-    NSRange glyphRange = [lm glyphRangeForCharacterRange:range
-                                    actualCharacterRange:NULL];
-
-    return [lm boundingRectForGlyphRange:glyphRange inTextContainer:tc];
-#endif
 }
 
-#if MM_USE_ROW_CACHE
 - (MMRowCacheEntry *)rowCache
 {
     return rowCache;
 }
-#endif
 
 @end // MMTextStorage
 
@@ -939,10 +881,8 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
     actualColumns = maxColumns;
     characterEqualsColumn = YES;
 
-#if MM_USE_ROW_CACHE
     free(rowCache);
     rowCache = (MMRowCacheEntry*)calloc(actualRows, sizeof(MMRowCacheEntry));
-#endif
 
     NSDictionary *dict;
     if (defaultBackgroundColor) {
@@ -953,7 +893,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
         dict = [NSDictionary dictionaryWithObjectsAndKeys:
                 font, NSFontAttributeName, nil];
     }
-            
+
     NSMutableString *rowString = [NSMutableString string];
     int i;
     for (i = 0; i < maxColumns; ++i) {
@@ -968,9 +908,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
     [attribString release];
     attribString = [[NSMutableAttributedString alloc] init];
     for (i=0; i<maxRows; ++i) {
-#if MM_USE_ROW_CACHE
         rowCache[i].length = actualColumns + 1;
-#endif
         [attribString appendAttributedString:emptyRowString];
     }
 
@@ -1004,7 +942,6 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
         return range;
     }
 
-#if MM_USE_ROW_CACHE
     // Locate the beginning of the row
     MMRowCacheEntry *cache = rowCache;
     idx = 0;
@@ -1012,20 +949,8 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
         idx += cache->length;
 
     int rowEnd = idx + cache->length;
-#else
-    // Locate the beginning of the row by scanning for EOL characters.
-    r.location = 0;
-    for (i = 0; i < row; ++i) {
-        r.length = stringLen - r.location;
-        r = [string rangeOfString:@"\n" options:NSLiteralSearch range:r];
-        if (NSNotFound == r.location)
-            return range;
-        ++r.location;
-    }
-#endif
 
     // Locate the column
-#if MM_USE_ROW_CACHE
     cache = &rowCache[row];
 
     i = cache->col;
@@ -1035,57 +960,6 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
     } else {
         range.location = idx;
 
-#if 0  // Backward search seems to be broken...
-        // Cache miss
-        if (col < i - col) {
-            // Search forward from beginning of line.
-            i = 0;
-        } else if (actualColumns - col < col - i) {
-            // Search backward from end of line.
-            i = actualColumns - 1;
-            idx += cache->length - 2;
-        } else {
-            // Search from cache spot (forward or backward).
-            idx += cache->colOffset;
-        }
-
-        if (col > i) {
-            // Forward search
-            while (col > i) {
-                if (idx >= stringLen)
-                    return NSMakeRange(NSNotFound, 0);
-                r = [string rangeOfComposedCharacterSequenceAtIndex:idx];
-
-                // Wide chars take up two display cells.
-                if ([attribString attribute:MMWideCharacterAttributeName
-                                    atIndex:idx
-                             effectiveRange:nil])
-                    ++i;
-
-                idx += r.length;
-                ++i;
-            }
-        } else if (col < i) {
-            // Backward search
-            while (col < i) {
-                if (idx-1 >= stringLen)
-                    return NSMakeRange(NSNotFound, 0);
-                r = [string rangeOfComposedCharacterSequenceAtIndex:idx-1];
-                idx -= r.length;
-                --i;
-
-                // Wide chars take up two display cells.
-                if ([attribString attribute:MMWideCharacterAttributeName
-                                    atIndex:idx
-                             effectiveRange:nil])
-                    --i;
-            }
-        }
-
-        *pcol = i;
-        cache->col = i;
-        cache->colOffset = idx - range.location;
-#else
         // Cache miss
         if (col < i) {
             // Search forward from beginning of line.
@@ -1114,24 +988,7 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
         *pcol = i;
         cache->col = i;
         cache->colOffset = idx - range.location;
-#endif
     }
-#else
-    idx = r.location;
-    for (i = 0; i < col; ++i) {
-        if (idx >= stringLen)
-            return NSMakeRange(NSNotFound, 0);
-        r = [string rangeOfComposedCharacterSequenceAtIndex:idx];
-
-        // Wide chars take up two display cells.
-        if ([attribString attribute:MMWideCharacterAttributeName
-                            atIndex:idx
-                     effectiveRange:nil])
-            ++i;
-
-        idx += r.length;
-    }
-#endif
 
     // Count the number of characters that cover the cells.
     range.location = idx;
@@ -1153,7 +1010,6 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
     *pcells = i;
 
 #if MM_TS_PARANOIA_LOG
-#if MM_USE_ROW_CACHE
     if (range.location >= rowEnd-1) {
         ASLogErr(@"INTERNAL ERROR: row=%d col=%d cells=%d --> range=%@",
                  row, col, cells, NSStringFromRange(range));
@@ -1164,7 +1020,6 @@ static NSString *MMWideCharacterAttributeName = @"MMWideChar";
                  row, col, cells, NSStringFromRange(range));
         range.length = rowEnd - range.location - 1;
     }
-#endif
 
     if (NSMaxRange(range) > stringLen) {
         ASLogErr(@"INTERNAL ERROR: row=%d col=%d cells=%d --> range=%@",
