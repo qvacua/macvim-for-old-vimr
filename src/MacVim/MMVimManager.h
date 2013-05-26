@@ -26,4 +26,6 @@
 - (NSEnumerator *)enumeratorOfCachedVimControllers;
 - (void)invalidateConnection;
 
++ (MMVimManager *)sharedManager;
+
 @end

@@ -236,7 +236,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     preloadPid = -1;
     pidArguments = [NSMutableDictionary new];
 
-    vimManager = [[MMVimManager alloc] init];
+    vimManager = [MMVimManager sharedManager];
 
     return self;
 }
@@ -250,8 +250,6 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     [recentFilesMenuItem release];  recentFilesMenuItem = nil;
     [defaultMainMenu release];  defaultMainMenu = nil;
     [appMenuItemTemplate release];  appMenuItemTemplate = nil;
-
-    [vimManager release];  vimManager = nil;
 
     [super dealloc];
 }

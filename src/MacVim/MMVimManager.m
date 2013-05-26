@@ -176,4 +176,17 @@ static NSTimeInterval MMReplyTimeout = 5;
     return array;
 }
 
+#pragma mark Static
++ (MMVimManager *)sharedManager {
+    static MMVimManager *_instance = nil;
+
+    @synchronized (self) {
+        if (_instance == nil) {
+            _instance = [[self alloc] init];
+        }
+    }
+
+    return _instance;
+}
+
 @end
