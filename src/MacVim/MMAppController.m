@@ -35,7 +35,7 @@
  * and "Services" menu.  If MainMenu.nib changes these heuristics may have to
  * change as well.  For specifics see the find... methods defined in the NSMenu
  * category "MMExtras".
- */
+ */#import "MMVimManager.h"
 
 #import "MMAppController.h"
 #import "MMPreferenceController.h"
@@ -233,30 +233,10 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         [NSApp disableRelaunchOnLogin];
 #endif
 
-    vimControllers = [NSMutableArray new];
-    cachedVimControllers = [NSMutableArray new];
     preloadPid = -1;
     pidArguments = [NSMutableDictionary new];
-    inputQueues = [NSMutableDictionary new];
 
-    // NOTE: Do not use the default connection since the Logitech Control
-    // Center (LCC) input manager steals and this would cause MacVim to
-    // never open any windows.  (This is a bug in LCC but since they are
-    // unlikely to fix it, we graciously give them the default connection.)
-    connection = [[NSConnection alloc] initWithReceivePort:[NSPort port]
-                                                  sendPort:nil];
-    [connection setRootObject:self];
-    [connection setRequestTimeout:MMRequestTimeout];
-    [connection setReplyTimeout:MMReplyTimeout];
-
-    // NOTE!  If the name of the connection changes here it must also be
-    // updated in MMBackend.m.
-    NSString *name = [NSString stringWithFormat:@"%@-connection",
-             [[NSBundle mainBundle] bundlePath]];
-    if (![connection registerName:name]) {
-        ASLogCrit(@"Failed to register connection with name '%@'", name);
-        [connection release];  connection = nil;
-    }
+    vimManager = [[MMVimManager alloc] init];
 
     return self;
 }
@@ -265,15 +245,13 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 {
     ASLogDebug(@"");
 
-    [connection release];  connection = nil;
-    [inputQueues release];  inputQueues = nil;
     [pidArguments release];  pidArguments = nil;
-    [vimControllers release];  vimControllers = nil;
-    [cachedVimControllers release];  cachedVimControllers = nil;
     [openSelectionString release];  openSelectionString = nil;
     [recentFilesMenuItem release];  recentFilesMenuItem = nil;
     [defaultMainMenu release];  defaultMainMenu = nil;
     [appMenuItemTemplate release];  appMenuItemTemplate = nil;
+
+    [vimManager release];  vimManager = nil;
 
     [super dealloc];
 }
@@ -377,7 +355,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         return NO;
 
     // Never open an untitled window if there is at least one open window.
-    if ([vimControllers count] > 0)
+    if (vimManager.countOfVimControllers > 0)
         return NO;
 
     // Don't open an untitled window if there are processes about to launch...
@@ -451,7 +429,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     BOOL modifiedBuffers = NO;
 
     // Go through Vim controllers, checking for modified buffers.
-    NSEnumerator *e = [vimControllers objectEnumerator];
+    NSEnumerator *e = [vimManager enumeratorOfVimControllers];
     id vc;
     while ((vc = [e nextObject])) {
         if ([vc hasModifiedBuffer]) {
@@ -482,11 +460,11 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
                                 boolForKey:MMSuppressTerminationAlertKey]) {
         // No unmodified buffers, but give a warning if there are multiple
         // windows and/or tabs open.
-        int numWindows = [vimControllers count];
+        int numWindows = [vimManager countOfVimControllers];
         int numTabs = 0;
 
         // Count the number of open tabs
-        e = [vimControllers objectEnumerator];
+        e = [vimManager enumeratorOfVimControllers];
         while ((vc = [e nextObject]))
             numTabs += [[vc objectForVimStateKey:@"numTabs"] intValue];
 
@@ -547,14 +525,14 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     // Tell all Vim processes to terminate now (otherwise they'll leave swap
     // files behind).
     if (NSTerminateNow == reply) {
-        e = [vimControllers objectEnumerator];
+        e = [vimManager enumeratorOfVimControllers];
         id vc;
         while ((vc = [e nextObject])) {
             ASLogDebug(@"Terminate pid=%d", [vc pid]);
             [vc sendMessage:TerminateNowMsgID data:nil];
         }
 
-        e = [cachedVimControllers objectEnumerator];
+        e = [vimManager enumeratorOfCachedVimControllers];
         while ((vc = [e nextObject])) {
             ASLogDebug(@"Terminate pid=%d (cached)", [vc pid]);
             [vc sendMessage:TerminateNowMsgID data:nil];
@@ -579,7 +557,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         usleep(10000);
     }
 
-    return reply;
+    return (NSApplicationTerminateReply) reply;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -598,7 +576,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 
     // This will invalidate all connections (since they were spawned from this
     // connection).
-    [connection invalidate];
+    [vimManager invalidateConnection];
 
     [NSApp setDelegate:nil];
 
@@ -1762,7 +1740,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     }
 
     // 3. Extract Spotlight search text (if any)
-    NSAppleEventDescriptor *spotlightdesc = 
+    NSAppleEventDescriptor *spotlightdesc =
             [desc paramDescriptorForKeyword:keyAESearchText];
     if (spotlightdesc) {
         NSString *s = [[spotlightdesc stringValue]
@@ -2020,7 +1998,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 
     NSString *path = [@"~/.vim" stringByExpandingTildeInPath];
     NSArray *pathsToWatch = [NSArray arrayWithObject:path];
- 
+
     fsEventStream = FSEventStreamCreate(NULL, &fsEventCallback, NULL,
             (CFArrayRef)pathsToWatch, kFSEventStreamEventIdSinceNow,
             MMEventStreamLatency, kFSEventStreamCreateFlagNone);
