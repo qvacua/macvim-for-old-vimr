@@ -20,13 +20,29 @@
 @property (readonly) NSArray *vimControllers;
 @property (readonly) NSArray *cachedVimControllers;
 
+- (BOOL)processesAboutToLaunch;
+- (void)terminateAllVimProcesses;
 - (NSUInteger)countOfVimControllers;
 - (NSEnumerator *)enumeratorOfVimControllers;
+- (MMVimController *)objectInVimControllersAtIndex:(NSUInteger)index;
 
+- (NSUInteger)countOfCachedVimControllers;
 - (NSEnumerator *)enumeratorOfCachedVimControllers;
+- (MMVimController *)objectInCachedVimControllersAtIndex:(NSUInteger)index;
+
+- (void)setUp;
+- (void)rebuildPreloadCache;
+- (void)toggleQuickStart;
+- (BOOL)openVimController:(MMVimController *)vc withArguments:(NSDictionary *)arguments;
+- (MMVimController *)getVimController;
 - (void)removeVimController:(id)controller;
 - (void)cleanUp;
 
+- (void)handleFSEvent;
+
+- (int)launchVimProcessWithArguments:(NSArray *)args workingDirectory:(NSString *)cwd;
+- (BOOL)readAndResetLastVimControllerHasArgs;
+- (int)maxPreloadCacheSize;
 + (MMVimManager *)sharedManager;
 
 @end

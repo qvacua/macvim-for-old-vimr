@@ -19,3 +19,7 @@ NSString *MMTextInsetBottomKey = @"MMTextInsetBottom";
 NSString *MMTextInsetLeftKey = @"MMTextInsetLeft";
 NSString *MMTextInsetTopKey = @"MMTextInsetTop";
 NSString *MMTranslateCtrlClickKey = @"MMTranslateCtrlClick";
+NSString *MMLoginShellKey = @"MMLoginShell";
+NSString *MMPreloadCacheSizeKey = @"MMPreloadCacheSize";
+NSString *MMLoginShellCommandKey = @"MMLoginShellCommand";
+NSString *MMLoginShellArgumentKey = @"MMLoginShellArgument";

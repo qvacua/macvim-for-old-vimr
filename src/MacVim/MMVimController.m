@@ -1349,12 +1349,11 @@ static BOOL isUnsafeMessage(int msgid);
     // Also, since the app may be multithreaded (e.g. as a result of showing
     // the open panel) we have to ensure this call happens on the main thread,
     // else there is a race condition that may lead to a crash.
-    [[MMVimManager sharedManager]
+    [[MMAppController sharedInstance]
             performSelectorOnMainThread:@selector(removeVimController:)
                              withObject:self
                           waitUntilDone:NO
-                                  modes:[NSArray arrayWithObject:
-                                         NSDefaultRunLoopMode]];
+                                  modes:@[NSDefaultRunLoopMode]];
 }
 
 // NSSavePanel delegate

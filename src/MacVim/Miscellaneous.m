@@ -21,17 +21,13 @@ NSString *MMShowAddTabButtonKey         = @"MMShowAddTabButton";
 NSString *MMTypesetterKey               = @"MMTypesetter";
 NSString *MMTopLeftPointKey             = @"MMTopLeftPoint";
 NSString *MMOpenInCurrentWindowKey      = @"MMOpenInCurrentWindow";
-NSString *MMLoginShellKey               = @"MMLoginShell";
 NSString *MMUntitledWindowKey           = @"MMUntitledWindow";
 NSString *MMTexturedWindowKey           = @"MMTexturedWindow";
 NSString *MMZoomBothKey                 = @"MMZoomBoth";
 NSString *MMCurrentPreferencePaneKey    = @"MMCurrentPreferencePane";
-NSString *MMLoginShellCommandKey        = @"MMLoginShellCommand";
-NSString *MMLoginShellArgumentKey       = @"MMLoginShellArgument";
 NSString *MMDialogsTrackPwdKey          = @"MMDialogsTrackPwd";
 NSString *MMOpenLayoutKey               = @"MMOpenLayout";
 NSString *MMVerticalSplitKey            = @"MMVerticalSplit";
-NSString *MMPreloadCacheSizeKey         = @"MMPreloadCacheSize";
 NSString *MMLastWindowClosedBehaviorKey = @"MMLastWindowClosedBehavior";
 #ifdef INCLUDE_OLD_IM_CODE
 NSString *MMUseInlineImKey              = @"MMUseInlineIm";

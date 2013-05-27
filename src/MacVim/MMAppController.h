@@ -17,19 +17,12 @@
 @class MMVimManager;
 
 
-@interface MMAppController : NSObject <MMAppProtocol> {
+@interface MMAppController : NSObject {
     NSString            *openSelectionString;
-    NSMutableDictionary *pidArguments;
     NSMenu              *defaultMainMenu;
     NSMenuItem          *appMenuItemTemplate;
     NSMenuItem          *recentFilesMenuItem;
-    int                 preloadPid;
     BOOL                shouldActivateWhenNextWindowOpens;
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4)
-    FSEventStreamRef    fsEventStream;
-#endif
-
     MMVimManager *vimManager;
 }
 
