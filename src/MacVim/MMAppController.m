@@ -71,14 +71,6 @@ typedef struct
 #pragma pack(pop)
 
 
-// This is a private AppKit API gleaned from class-dump.
-@interface NSKeyBindingManager : NSObject
-+ (id)sharedKeyBindingManager;
-- (id)dictionary;
-- (void)setDictionary:(id)arg1;
-@end
-
-
 @interface MMAppController (MMServices)
 - (void)openSelection:(NSPasteboard *)pboard userData:(NSString *)userData
                 error:(NSString **)error;
