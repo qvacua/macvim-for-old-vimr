@@ -14,14 +14,8 @@
 #import "MMUserDefaults.h"
 #import "MMWindowController.h"
 #import "MMTextView.h"
-
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 // Need Carbon for TIS...() functions
 #import <Carbon/Carbon.h>
-
-
-#endif
 
 
 // Default timeout intervals on all connections.
@@ -29,26 +23,14 @@ static NSTimeInterval MMRequestTimeout = 5;
 static NSTimeInterval MMReplyTimeout = 5;
 
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 // Latency (in s) between FS event occuring and being reported to MacVim.
 // Should be small so that MacVim is notified of changes to the ~/.vim
 // directory more or less immediately.
 static CFTimeInterval MMEventStreamLatency = 0.1;
-#endif
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-
-static void
-fsEventCallback(ConstFSEventStreamRef streamRef,
-        void *clientCallBackInfo,
-        size_t numEvents,
-        void *eventPaths,
-        const FSEventStreamEventFlags eventFlags[],
-        const FSEventStreamEventId eventIds[]) {
+static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBackInfo, size_t numEvents, void *eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]) {
     [[MMVimManager sharedManager] handleFSEvent];
 }
-
-#endif
 
 
 @interface MMVimManager ()
@@ -71,18 +53,31 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     int preloadPid;
     NSMutableDictionary *pidArguments;
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4)
     FSEventStreamRef fsEventStream;
-#endif
     BOOL lastVimControllerHasArgs;
 }
 
 @dynamic mutableVimControllers;
 @dynamic mutableCachedVimControllers;
 
-
-
 #pragma mark Public
+- (void)handleFSEvent {
+    [self clearPreloadCacheWithCount:-1];
+
+    // Several FS events may arrive in quick succession so make sure to cancel
+    // any previous preload requests before making a new one.
+    [self cancelVimControllerPreloadRequests];
+    [self scheduleVimControllerPreloadAfterDelay:0.5];
+}
+
+- (BOOL)readAndResetLastVimControllerHasArgs {
+    BOOL result = lastVimControllerHasArgs;
+
+    lastVimControllerHasArgs = NO;
+
+    return result;
+}
+
 - (int)maxPreloadCacheSize {
     // The maximum number of Vim processes to keep in the cache can be
     // controlled via the user default "MMPreloadCacheSize".
@@ -559,11 +554,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 }
 
 // HACK: fileAttributesAtPath was deprecated in 10.5
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
 #define MM_fileAttributes(fm,p) [fm attributesOfItemAtPath:p error:NULL]
-#else
-#define MM_fileAttributes(fm,p) [fm fileAttributesAtPath:p traverseLink:YES]
-#endif
 
 - (NSDate *)rcFilesModificationDate {
     // Check modification dates for ~/.vimrc and ~/.gvimrc and return the
@@ -601,7 +592,6 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 
 
 - (void)startWatchingVimDir {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
     if (fsEventStream)
         return;
     if (NULL == FSEventStreamStart)
@@ -620,11 +610,9 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 
     FSEventStreamStart(fsEventStream);
     ASLogDebug(@"Started FS event stream");
-#endif
 }
 
 - (void)stopWatchingVimDir {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
     if (NULL == FSEventStreamStop)
         return; // FSEvent functions are weakly linked
 
@@ -635,16 +623,6 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         fsEventStream = NULL;
         ASLogDebug(@"Stopped FS event stream");
     }
-#endif
-}
-
-- (void)handleFSEvent {
-    [self clearPreloadCacheWithCount:-1];
-
-    // Several FS events may arrive in quick succession so make sure to cancel
-    // any previous preload requests before making a new one.
-    [self cancelVimControllerPreloadRequests];
-    [self scheduleVimControllerPreloadAfterDelay:0.5];
 }
 
 - (void)clearPreloadCacheWithCount:(int)count {
@@ -694,7 +672,6 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
 - (void)cancelVimControllerPreloadRequests {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(preloadVimController:) object:nil];
 }
-
 
 - (void)preloadVimController:(id)sender {
     // We only allow preloading of one Vim process at a time (to avoid hogging
@@ -915,21 +892,12 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         [pidArguments removeObjectForKey:pidKey];
 }
 
-- (BOOL)readAndResetLastVimControllerHasArgs {
-    BOOL result = lastVimControllerHasArgs;
-
-    lastVimControllerHasArgs = NO;
-
-    return result;
-}
-
 - (void)markLastVimControllerHasArgs {
     ASLogDebug(@"Activate MacVim when next window opens (last vim controller had arguments)");
     lastVimControllerHasArgs = YES;
 }
 
 - (void)addInputSourceChangedObserver {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
     // The TIS symbols are weakly linked.
     if (NULL != TISCopyCurrentKeyboardInputSource) {
         // We get here when compiled on >=10.5 and running on >=10.5.
@@ -942,10 +910,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
                    name:notifyInputSourceChanged
                  object:nil];
     }
-#endif
 }
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 
 - (void)inputSourceChanged:(NSNotification *)notification {
     unsigned i, count = [self countOfVimControllers];
@@ -957,10 +922,7 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
     }
 }
 
-#endif
-
 - (void)removeInputSourceChangedObserver {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
     // The TIS symbols are weakly linked.
     if (NULL != TISCopyCurrentKeyboardInputSource) {
         // We get here when compiled on >=10.5 and running on >=10.5.
@@ -968,7 +930,6 @@ fsEventCallback(ConstFSEventStreamRef streamRef,
         id nc = [NSDistributedNotificationCenter defaultCenter];
         [nc removeObserver:self];
     }
-#endif
 }
 
 - (NSDictionary *)convertVimControllerArguments:(NSDictionary *)args

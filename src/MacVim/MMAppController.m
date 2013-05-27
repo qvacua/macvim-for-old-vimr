@@ -35,7 +35,9 @@
  * and "Services" menu.  If MainMenu.nib changes these heuristics may have to
  * change as well.  For specifics see the find... methods defined in the NSMenu
  * category "MMExtras".
- */#import "MMVimManager.h"
+ */
+
+#import "MMVimManager.h"
 
 #import "MMAppController.h"
 #import "MMPreferenceController.h"
