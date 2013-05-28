@@ -109,3 +109,12 @@ enum {
     MMMinRows = 4,
     MMMinColumns = 30
 };
+
+// Enum for MMOpenLayoutKey (first 4 must match WIN_* defines in main.c)
+enum {
+    MMLayoutArglist = 0,
+    MMLayoutHorizontalSplit = 1,
+    MMLayoutVerticalSplit = 2,
+    MMLayoutTabs = 3,
+    MMLayoutWindows = 4,
+};

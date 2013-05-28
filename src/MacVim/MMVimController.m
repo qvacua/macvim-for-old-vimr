@@ -35,6 +35,7 @@
 #import "Miscellaneous.h"
 #import "MMCoreTextView.h"
 #import "MMWindow.h"
+#import "MMVimManager.h"
 
 
 static NSString *MMDefaultToolbarImageName = @"Attention";
@@ -1352,8 +1353,7 @@ static BOOL isUnsafeMessage(int msgid);
             performSelectorOnMainThread:@selector(removeVimController:)
                              withObject:self
                           waitUntilDone:NO
-                                  modes:[NSArray arrayWithObject:
-                                         NSDefaultRunLoopMode]];
+                                  modes:@[NSDefaultRunLoopMode]];
 }
 
 // NSSavePanel delegate

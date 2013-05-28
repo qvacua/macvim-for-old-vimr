@@ -36,7 +36,6 @@
 - (void)setAntialias:(BOOL)antialias;
 - (void)setImControl:(BOOL)enable;
 - (void)activateIm:(BOOL)enable;
-- (void)checkImState;
 
 //
 // MMTextStorage methods

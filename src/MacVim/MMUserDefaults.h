@@ -18,3 +18,7 @@ extern NSString *MMTextInsetBottomKey;
 extern NSString *MMTextInsetLeftKey;
 extern NSString *MMTextInsetTopKey;
 extern NSString *MMTranslateCtrlClickKey;
+extern NSString *MMLoginShellKey;
+extern NSString *MMPreloadCacheSizeKey;
+extern NSString *MMLoginShellCommandKey;
+extern NSString *MMLoginShellArgumentKey;

@@ -15,6 +15,7 @@
 #import "MMTypes.h"
 #import "MMCocoaCategories.h"
 #import "MMVimBackendProtocol.h"
+#import "MMAppProtocol.h"
 
 // Taken from /usr/include/AvailabilityMacros.h
 #ifndef MAC_OS_X_VERSION_10_4
@@ -29,26 +30,6 @@
 #ifndef MAC_OS_X_VERSION_10_7
 # define MAC_OS_X_VERSION_10_7 1070
 #endif
-
-
-//
-// This is the protocol MMAppController implements.
-//
-// It handles connections between MacVim and Vim and communication from Vim to
-// MacVim.
-//
-// Do not add methods to this interface without a _very_ good reason (if
-// possible, instead add a new message to the *MsgID enum below and pass it via
-// processInput:forIdentifier).  Methods should not modify the state directly
-// but should instead delay any potential modifications (see
-// connectBackend:pid: and processInput:forIdentifier:).
-//
-@protocol MMAppProtocol
-- (unsigned)connectBackend:(byref in id <MMBackendProtocol>)proxy pid:(int)pid;
-- (oneway void)processInput:(in bycopy NSArray *)queue
-              forIdentifier:(unsigned)identifier;
-- (NSArray *)serverList;
-@end
 
 
 enum {

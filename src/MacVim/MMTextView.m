@@ -37,7 +37,6 @@
 @interface MMTextView (Private)
 - (MMWindowController *)windowController;
 - (MMVimController *)vimController;
-- (void)setShouldDrawInsertionPoint:(BOOL)on;
 - (void)drawInsertionPointAtRow:(int)row column:(int)col shape:(int)shape
                        fraction:(int)percent;
 - (void)drawInvertedRectAtRow:(int)row column:(int)col numRows:(int)nrows
@@ -313,11 +312,6 @@
 - (void)activateIm:(BOOL)enable
 {
     [helper activateIm:enable];
-}
-
-- (void)checkImState
-{
-    [helper checkImState];
 }
 
 - (NSFont *)font
@@ -882,6 +876,11 @@
     return YES;
 }
 
+- (void)setShouldDrawInsertionPoint:(BOOL)on
+{
+    shouldDrawInsertionPoint = on;
+}
+
 @end // MMTextView
 
 
@@ -900,11 +899,6 @@
 - (MMVimController *)vimController
 {
     return [[self windowController] vimController];
-}
-
-- (void)setShouldDrawInsertionPoint:(BOOL)on
-{
-    shouldDrawInsertionPoint = on;
 }
 
 - (void)drawInsertionPointAtRow:(int)row column:(int)col shape:(int)shape

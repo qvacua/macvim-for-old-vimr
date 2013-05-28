@@ -14,26 +14,16 @@
 
 @class MMWindowController;
 @class MMVimController;
+@class MMVimManager;
 
 
-@interface MMAppController : NSObject <MMAppProtocol> {
-    NSConnection        *connection;
-    NSMutableArray      *vimControllers;
+@interface MMAppController : NSObject {
     NSString            *openSelectionString;
-    NSMutableDictionary *pidArguments;
     NSMenu              *defaultMainMenu;
     NSMenuItem          *appMenuItemTemplate;
     NSMenuItem          *recentFilesMenuItem;
-    NSMutableArray      *cachedVimControllers;
-    int                 preloadPid;
     BOOL                shouldActivateWhenNextWindowOpens;
-    int                 numChildProcesses;
-    NSMutableDictionary *inputQueues;
-    int                 processingFlag;
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4)
-    FSEventStreamRef    fsEventStream;
-#endif
+    MMVimManager *vimManager;
 }
 
 + (MMAppController *)sharedInstance;

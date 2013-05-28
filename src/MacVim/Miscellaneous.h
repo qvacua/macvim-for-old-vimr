@@ -28,17 +28,13 @@ extern NSString *MMShowAddTabButtonKey;
 extern NSString *MMTypesetterKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;
-extern NSString *MMLoginShellKey;
 extern NSString *MMUntitledWindowKey;
 extern NSString *MMTexturedWindowKey;
 extern NSString *MMZoomBothKey;
 extern NSString *MMCurrentPreferencePaneKey;
-extern NSString *MMLoginShellCommandKey;
-extern NSString *MMLoginShellArgumentKey;
 extern NSString *MMDialogsTrackPwdKey;
 extern NSString *MMOpenLayoutKey;
 extern NSString *MMVerticalSplitKey;
-extern NSString *MMPreloadCacheSizeKey;
 extern NSString *MMLastWindowClosedBehaviorKey;
 #ifdef INCLUDE_OLD_IM_CODE
 extern NSString *MMUseInlineImKey;
@@ -53,15 +49,6 @@ enum {
     MMUntitledWindowOnOpen = 1,
     MMUntitledWindowOnReopen = 2,
     MMUntitledWindowAlways = 3
-};
-
-// Enum for MMOpenLayoutKey (first 4 must match WIN_* defines in main.c)
-enum {
-    MMLayoutArglist = 0,
-    MMLayoutHorizontalSplit = 1,
-    MMLayoutVerticalSplit = 2,
-    MMLayoutTabs = 3,
-    MMLayoutWindows = 4,
 };
 
 // Enum for MMLastWindowClosedBehaviorKey
