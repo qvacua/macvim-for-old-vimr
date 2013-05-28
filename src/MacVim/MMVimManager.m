@@ -8,14 +8,15 @@
  * See README.txt for an overview of the Vim source code.
  */
 
+// Need Carbon for TIS...() functions
+#import <Carbon/Carbon.h>
+
 #import "MMVimManager.h"
 #import "MMLog.h"
 #import "MMVimController.h"
 #import "MMUserDefaults.h"
 #import "MMWindowController.h"
 #import "MMTextView.h"
-// Need Carbon for TIS...() functions
-#import <Carbon/Carbon.h>
 
 
 // Default timeout intervals on all connections.
@@ -23,12 +24,18 @@ static NSTimeInterval MMRequestTimeout = 5;
 static NSTimeInterval MMReplyTimeout = 5;
 
 
-// Latency (in s) between FS event occuring and being reported to MacVim.
+// Latency (in s) between FS event occurring and being reported to MacVim.
 // Should be small so that MacVim is notified of changes to the ~/.vim
 // directory more or less immediately.
 static CFTimeInterval MMEventStreamLatency = 0.1;
 
-static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBackInfo, size_t numEvents, void *eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]) {
+static void fsEventCallback(
+        ConstFSEventStreamRef streamRef,
+        void *clientCallBackInfo,
+        size_t numEvents,
+        void *eventPaths,
+        const FSEventStreamEventFlags eventFlags[],
+        const FSEventStreamEventId eventIds[]) {
     [[MMVimManager sharedManager] handleFSEvent];
 }
 
@@ -154,7 +161,7 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
     // This method may return nil even though the cache might be non-empty; the
     // caller should handle this by starting a new Vim process.
 
-    int i, count = [self countOfCachedVimControllers];
+    NSUInteger i, count = [self countOfCachedVimControllers];
     if (0 == count) return nil;
 
     // Locate the first Vim controller with up-to-date rc-files sourced.
@@ -515,7 +522,7 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
     NSNumber *key;
     while ((key = [e nextObject])) {
         unsigned ukey = [key unsignedIntValue];
-        int i = 0, count = self.countOfVimControllers;
+        NSUInteger i = 0, count = [self countOfVimControllers];
         for (i = 0; i < count; ++i) {
             MMVimController *vc = [self objectInVimControllersAtIndex:i];
             if (ukey == [vc vimControllerId]) {
@@ -705,7 +712,6 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
 }
 
 - (int)launchVimProcessWithArguments:(NSArray *)args workingDirectory:(NSString *)cwd {
-    int pid = -1;
     NSString *path = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@"Vim"];
 
     if (!path) {
@@ -721,12 +727,13 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
         [fm changeCurrentDirectoryPath:cwd];
     }
 
-    NSArray *taskArgs = [NSArray arrayWithObjects:@"-g", @"-f", nil];
-    if (args)
+    NSArray *taskArgs = @[@"-g", @"-f"];
+    if (args) {
         taskArgs = [taskArgs arrayByAddingObjectsFromArray:args];
+    }
 
-    BOOL useLoginShell = [[NSUserDefaults standardUserDefaults]
-            boolForKey:MMLoginShellKey];
+    BOOL useLoginShell = [[NSUserDefaults standardUserDefaults] boolForKey:MMLoginShellKey];
+    int pid;
     if (useLoginShell) {
         // Run process with a login shell, roughly:
         //   echo "exec Vim -g -f args" | ARGV0=-`basename $SHELL` $SHELL [-l]
@@ -734,8 +741,7 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
     } else {
         // Run process directly:
         //   Vim -g -f args
-        NSTask *task = [NSTask launchedTaskWithLaunchPath:path
-                                                arguments:taskArgs];
+        NSTask *task = [NSTask launchedTaskWithLaunchPath:path arguments:taskArgs];
         pid = task ? [task processIdentifier] : -1;
     }
 
@@ -746,17 +752,18 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
         // NOTE: If there are no arguments to pass we still add a null object
         // so that we can use this dictionary to check if there are any
         // processes loading.
-        NSNumber *pidKey = [NSNumber numberWithInt:pid];
-        if (![pidArguments objectForKey:pidKey])
-            [pidArguments setObject:[NSNull null] forKey:pidKey];
+        NSNumber *pidKey = @(pid);
+        if (!pidArguments[pidKey]) {
+            pidArguments[pidKey] = [NSNull null];
+        }
     } else {
-        ASLogWarn(@"Failed to launch Vim process: args=%@, useLoginShell=%d",
-        args, useLoginShell);
+        ASLogWarn(@"Failed to launch Vim process: args=%@, useLoginShell=%d", args, useLoginShell);
     }
 
     // Now that child has launched, restore the current working directory.
-    if (restoreCwd)
+    if (restoreCwd) {
         [fm changeCurrentDirectoryPath:restoreCwd];
+    }
 
     return pid;
 }
@@ -766,7 +773,7 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
     // in the shell.  This ensures that user environment variables are set even
     // when MacVim was started from the Finder.
 
-    int pid = -1;
+    int pid;
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
 
     // Determine which shell to use to execute the command.  The user
@@ -849,7 +856,7 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
         [input appendString:@"\n"];
         int bytes = [input lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 
-        if (write(ds[1], [input UTF8String], bytes) != bytes) return -1;
+        if (write(ds[1], [input UTF8String], (size_t) bytes) != bytes) return -1;
         if (close(ds[1]) == -1) return -1;
 
         ++numChildProcesses;
@@ -860,8 +867,7 @@ static void fsEventCallback(ConstFSEventStreamRef streamRef, void *clientCallBac
 }
 
 - (void)addVimController:(MMVimController *)vc {
-    ASLogDebug(@"Add Vim controller pid=%d id=%d",
-    [vc pid], [vc vimControllerId]);
+    ASLogDebug(@"Add Vim controller pid=%d id=%d", [vc pid], [vc vimControllerId]);
 
     int pid = [vc pid];
     NSNumber *pidKey = [NSNumber numberWithInt:pid];
