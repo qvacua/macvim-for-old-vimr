@@ -32,6 +32,8 @@ static float MMDragAreaSize = 73.0f;
 
 
 @interface MMTextViewHelper (Private)
+- (void)addInputSourceChangedObserver;
+- (void)removeInputSourceChangedObserver;
 - (MMWindowController *)windowController;
 - (MMVimController *)vimController;
 - (void)doKeyDown:(NSString *)key;
@@ -79,6 +81,7 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
         return nil;
 
     signImages = [[NSMutableDictionary alloc] init];
+    [self addInputSourceChangedObserver];
 
     return self;
 }
@@ -86,6 +89,8 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
 - (void)dealloc
 {
     ASLogDebug(@"");
+
+    [self removeInputSourceChangedObserver];
 
     [insertionPointColor release];  insertionPointColor = nil;
     [markedText release];  markedText = nil;
@@ -1166,5 +1171,34 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
     [[self vimController] sendMessage:GestureMsgID data:data];
 }
 #endif
+
+- (void)addInputSourceChangedObserver {
+    // The TIS symbols are weakly linked.
+    if (NULL != TISCopyCurrentKeyboardInputSource) {
+        // We get here when compiled on >=10.5 and running on >=10.5.
+
+        id nc = [NSDistributedNotificationCenter defaultCenter];
+        NSString *notifyInputSourceChanged =
+                (NSString *) kTISNotifySelectedKeyboardInputSourceChanged;
+        [nc addObserver:self
+               selector:@selector(inputSourceChanged:)
+                   name:notifyInputSourceChanged
+                 object:nil];
+    }
+}
+
+- (void)inputSourceChanged:(NSNotification *)notification {
+    [textView checkImState];
+}
+
+- (void)removeInputSourceChangedObserver {
+    // The TIS symbols are weakly linked.
+    if (NULL != TISCopyCurrentKeyboardInputSource) {
+        // We get here when compiled on >=10.5 and running on >=10.5.
+
+        id nc = [NSDistributedNotificationCenter defaultCenter];
+        [nc removeObserver:self];
+    }
+}
 
 @end // MMTextViewHelper (Private)

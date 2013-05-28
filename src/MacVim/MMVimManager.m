@@ -101,8 +101,6 @@ static void fsEventCallback(
         [self scheduleVimControllerPreloadAfterDelay:2];
         [self startWatchingVimDir];
     }
-
-    [self addInputSourceChangedObserver];
 }
 
 - (void)rebuildPreloadCache {
@@ -219,8 +217,6 @@ static void fsEventCallback(
 }
 
 - (void)cleanUp {
-    [self removeInputSourceChangedObserver];
-
     [self stopWatchingVimDir];
 
     [connection invalidate];
@@ -901,41 +897,6 @@ static void fsEventCallback(
 - (void)markLastVimControllerHasArgs {
     ASLogDebug(@"Activate MacVim when next window opens (last vim controller had arguments)");
     lastVimControllerHasArgs = YES;
-}
-
-- (void)addInputSourceChangedObserver {
-    // The TIS symbols are weakly linked.
-    if (NULL != TISCopyCurrentKeyboardInputSource) {
-        // We get here when compiled on >=10.5 and running on >=10.5.
-
-        id nc = [NSDistributedNotificationCenter defaultCenter];
-        NSString *notifyInputSourceChanged =
-                (NSString *) kTISNotifySelectedKeyboardInputSourceChanged;
-        [nc addObserver:self
-               selector:@selector(inputSourceChanged:)
-                   name:notifyInputSourceChanged
-                 object:nil];
-    }
-}
-
-- (void)inputSourceChanged:(NSNotification *)notification {
-    unsigned i, count = [self countOfVimControllers];
-    for (i = 0; i < count; ++i) {
-        MMVimController *controller = [self objectInVimControllersAtIndex:i];
-        MMWindowController *wc = [controller windowController];
-        MMTextView *tv = (MMTextView *) [[wc vimView] textView];
-        [tv checkImState];
-    }
-}
-
-- (void)removeInputSourceChangedObserver {
-    // The TIS symbols are weakly linked.
-    if (NULL != TISCopyCurrentKeyboardInputSource) {
-        // We get here when compiled on >=10.5 and running on >=10.5.
-
-        id nc = [NSDistributedNotificationCenter defaultCenter];
-        [nc removeObserver:self];
-    }
 }
 
 - (NSDictionary *)convertVimControllerArguments:(NSDictionary *)args

@@ -98,9 +98,6 @@ typedef struct
 - (BOOL)openVimControllerWithArguments:(NSDictionary *)arguments;
 - (void)activateWhenNextWindowOpens;
 - (NSScreen *)screenContainingTopLeftPoint:(NSPoint)pt;
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-- (void)inputSourceChanged:(NSNotification *)notification;
-#endif
 @end
 
 
