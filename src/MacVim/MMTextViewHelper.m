@@ -18,7 +18,6 @@
 
 #import "MMTextViewHelper.h"
 #import "MMVimController.h"
-#import "MMWindowController.h"
 
 #import "MMUserDefaults.h"
 #import "MMTextViewProtocol.h"
@@ -34,7 +33,6 @@ static float MMDragAreaSize = 73.0f;
 @interface MMTextViewHelper (Private)
 - (void)addInputSourceChangedObserver;
 - (void)removeInputSourceChangedObserver;
-- (MMWindowController *)windowController;
 - (MMVimController *)vimController;
 - (void)doKeyDown:(NSString *)key;
 - (void)doInsertText:(NSString *)text;
@@ -905,17 +903,9 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
 
 @implementation MMTextViewHelper (Private)
 
-- (MMWindowController *)windowController
-{
-    id windowController = [[textView window] windowController];
-    if ([windowController isKindOfClass:[MMWindowController class]])
-        return (MMWindowController*)windowController;
-    return nil;
-}
-
 - (MMVimController *)vimController
 {
-    return [[self windowController] vimController];
+    return [textView vimController];
 }
 
 - (void)doKeyDown:(NSString *)key

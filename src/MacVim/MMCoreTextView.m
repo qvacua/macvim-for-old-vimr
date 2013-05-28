@@ -47,7 +47,6 @@
 
 @interface MMCoreTextView (Private)
 - (MMWindowController *)windowController;
-- (MMVimController *)vimController;
 @end
 
 
@@ -748,6 +747,12 @@ defaultAdvanceForFont(NSFont *font)
     return [helper firstRectForCharacterRange:range];
 }
 
+
+- (MMVimController *)vimController
+{
+    return [[self windowController] vimController];
+}
+
 @end // MMCoreTextView
 
 
@@ -761,11 +766,6 @@ defaultAdvanceForFont(NSFont *font)
     if ([windowController isKindOfClass:[MMWindowController class]])
         return (MMWindowController*)windowController;
     return nil;
-}
-
-- (MMVimController *)vimController
-{
-    return [[self windowController] vimController];
 }
 
 @end // MMCoreTextView (Private)

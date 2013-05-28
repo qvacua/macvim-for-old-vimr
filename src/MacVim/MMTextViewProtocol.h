@@ -65,4 +65,6 @@
 - (NSSize)minSize;
 - (NSSize)constrainRows:(int *)rows columns:(int *)cols toSize:(NSSize)size;
 
+- (MMVimController *)vimController;
+
 @end
