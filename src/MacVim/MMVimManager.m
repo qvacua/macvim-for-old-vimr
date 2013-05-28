@@ -15,8 +15,6 @@
 #import "MMLog.h"
 #import "MMVimController.h"
 #import "MMUserDefaults.h"
-#import "MMWindowController.h"
-#import "MMTextView.h"
 
 
 // Default timeout intervals on all connections.
