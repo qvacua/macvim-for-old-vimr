@@ -855,24 +855,7 @@
 {
     if (![sender isKindOfClass:[NSMenuItem class]]) return;
 
-    // TODO: Make into category on NSMenuItem which returns descriptor.
-    NSMenuItem *item = (NSMenuItem*)sender;
-    NSMutableArray *desc = [NSMutableArray arrayWithObject:[item title]];
-
-    NSMenu *menu = [item menu];
-    while (menu) {
-        [desc insertObject:[menu title] atIndex:0];
-        menu = [menu supermenu];
-    }
-
-    // The "MainMenu" item is part of the Cocoa menu and should not be part of
-    // the descriptor.
-    if ([[desc objectAtIndex:0] isEqual:@"MainMenu"])
-        [desc removeObjectAtIndex:0];
-
-    NSDictionary *attrs = [NSDictionary dictionaryWithObject:desc
-                                                      forKey:@"descriptor"];
-    [vimController sendMessage:ExecuteMenuMsgID data:[attrs dictionaryAsData]];
+    [vimController sendMessage:ExecuteMenuMsgID data:[(NSMenuItem*)sender descriptorAsDataForVim]];
 }
 
 - (IBAction)vimToolbarItemAction:(id)sender

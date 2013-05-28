@@ -170,3 +170,24 @@
 
 @end
 
+
+@implementation NSMenuItem (MMExtras)
+
+- (NSData *)descriptorAsDataForVim {
+    NSMutableArray *desc = [NSMutableArray arrayWithObject:[self title]];
+
+    NSMenu *menu = [self menu];
+    while (menu) {
+        [desc insertObject:[menu title] atIndex:0];
+        menu = [menu supermenu];
+    }
+
+    // The "MainMenu" item is part of the Cocoa menu and should not be part of
+    // the descriptor.
+    if ([[desc objectAtIndex:0] isEqual:@"MainMenu"])
+        [desc removeObjectAtIndex:0];
+
+    return [@{@"descriptor" : desc} dictionaryAsData];
+}
+
+@end

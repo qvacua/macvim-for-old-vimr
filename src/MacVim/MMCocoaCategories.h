@@ -41,3 +41,10 @@
 + (id)dictionaryWithData:(NSData *)data;
 
 @end
+
+
+@interface NSMenuItem (MMExtras)
+
+- (NSData *)descriptorAsDataForVim;
+
+@end
