@@ -99,5 +99,6 @@
 #if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 - (void)checkImState;
 #endif
+- (void)sendMenuActionToVim:(id)item;
 
 @end

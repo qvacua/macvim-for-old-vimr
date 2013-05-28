@@ -892,6 +892,12 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
 #endif
 }
 
+- (void)sendMenuActionToVim:(id)item {
+    if (![item isKindOfClass:[NSMenuItem class]]) return;
+
+    [self.vimController sendMessage:ExecuteMenuMsgID data:[(NSMenuItem*) item descriptorAsDataForVim]];
+}
+
 @end // MMTextViewHelper
 
 

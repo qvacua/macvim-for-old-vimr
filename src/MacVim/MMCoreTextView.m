@@ -654,32 +654,32 @@ defaultAdvanceForFont(NSFont *font)
 //
 - (IBAction)cut:(id)sender
 {
-    [[self windowController] vimMenuItemAction:sender];
+    [helper sendMenuActionToVim:sender];
 }
 
 - (IBAction)copy:(id)sender
 {
-    [[self windowController] vimMenuItemAction:sender];
+    [helper sendMenuActionToVim:sender];
 }
 
 - (IBAction)paste:(id)sender
 {
-    [[self windowController] vimMenuItemAction:sender];
+    [helper sendMenuActionToVim:sender];
 }
 
 - (IBAction)undo:(id)sender
 {
-    [[self windowController] vimMenuItemAction:sender];
+    [helper sendMenuActionToVim:sender];
 }
 
 - (IBAction)redo:(id)sender
 {
-    [[self windowController] vimMenuItemAction:sender];
+    [helper sendMenuActionToVim:sender];
 }
 
 - (IBAction)selectAll:(id)sender
 {
-    [[self windowController] vimMenuItemAction:sender];
+    [helper sendMenuActionToVim:sender];
 }
 
 - (BOOL)convertPoint:(NSPoint)point toRow:(int *)row column:(int *)column
