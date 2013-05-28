@@ -81,6 +81,8 @@
         textView = [[MMTextView alloc] initWithFrame:frame];
     }
 
+    [textView setVimController:controller];
+
     // Allow control of text view inset via MMTextInset* user defaults.
     int left = [ud integerForKey:MMTextInsetLeftKey];
     int top = [ud integerForKey:MMTextInsetTopKey];

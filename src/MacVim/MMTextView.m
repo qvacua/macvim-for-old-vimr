@@ -24,7 +24,6 @@
 #import "MMTextViewHelper.h"
 #import "MMTypesetter.h"
 #import "MMVimController.h"
-#import "MMWindowController.h"
 #import "Miscellaneous.h"
 
 
@@ -35,7 +34,6 @@
 
 
 @interface MMTextView (Private)
-- (MMWindowController *)windowController;
 - (void)drawInsertionPointAtRow:(int)row column:(int)col shape:(int)shape
                        fraction:(int)percent;
 - (void)drawInvertedRectAtRow:(int)row column:(int)col numRows:(int)nrows
@@ -880,9 +878,12 @@
     shouldDrawInsertionPoint = on;
 }
 
-- (MMVimController *)vimController
-{
-    return [[self windowController] vimController];
+- (MMVimController *)vimController {
+    return vimController;
+}
+
+- (void)setVimController:(MMVimController *)aVimController {
+    vimController = aVimController;
 }
 
 @end // MMTextView
@@ -891,14 +892,6 @@
 
 
 @implementation MMTextView (Private)
-
-- (MMWindowController *)windowController
-{
-    id windowController = [[self window] windowController];
-    if ([windowController isKindOfClass:[MMWindowController class]])
-        return (MMWindowController*)windowController;
-    return nil;
-}
 
 - (void)drawInsertionPointAtRow:(int)row column:(int)col shape:(int)shape
                        fraction:(int)percent

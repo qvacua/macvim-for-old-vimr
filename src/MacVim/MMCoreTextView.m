@@ -28,7 +28,6 @@
 #import "MMCoreTextView.h"
 #import "MMTextViewHelper.h"
 #import "MMVimController.h"
-#import "MMWindowController.h"
 
 #import "MMUserDefaults.h"
 #import "MMTypes.h"
@@ -44,10 +43,6 @@
 #define DRAW_ITALIC               0x10    /* draw italic text */
 #define DRAW_CURSOR               0x20
 #define DRAW_WIDE                 0x40    /* draw wide text */
-
-@interface MMCoreTextView (Private)
-- (MMWindowController *)windowController;
-@end
 
 
 @interface MMCoreTextView (Drawing)
@@ -747,29 +742,15 @@ defaultAdvanceForFont(NSFont *font)
     return [helper firstRectForCharacterRange:range];
 }
 
+- (MMVimController *)vimController {
+    return vimController;
+}
 
-- (MMVimController *)vimController
-{
-    return [[self windowController] vimController];
+- (void)setVimController:(MMVimController *)aVimController {
+    vimController = aVimController;
 }
 
 @end // MMCoreTextView
-
-
-
-
-@implementation MMCoreTextView (Private)
-
-- (MMWindowController *)windowController
-{
-    id windowController = [[self window] windowController];
-    if ([windowController isKindOfClass:[MMWindowController class]])
-        return (MMWindowController*)windowController;
-    return nil;
-}
-
-@end // MMCoreTextView (Private)
-
 
 
 

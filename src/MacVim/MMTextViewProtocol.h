@@ -67,4 +67,9 @@
 
 - (MMVimController *)vimController;
 
+/**
+* The text view has got a weak reference on the vim controller
+*/
+- (void)setVimController:(MMVimController *)vimController;
+
 @end

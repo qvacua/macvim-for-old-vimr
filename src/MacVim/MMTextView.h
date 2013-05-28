@@ -26,6 +26,8 @@
     int                 numInvertRects;
 
     MMTextViewHelper    *helper;
+
+    MMVimController *vimController;
 }
 
 - (id)initWithFrame:(NSRect)frame;

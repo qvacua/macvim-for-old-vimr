@@ -43,6 +43,8 @@
     void *trackingRectUserData_;
     NSTrackingRectTag lastToolTipTag_;
     NSString* toolTip_;
+
+    MMVimController *vimController;
 }
 
 - (id)initWithFrame:(NSRect)frame;
