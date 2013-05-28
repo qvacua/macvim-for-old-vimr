@@ -1188,7 +1188,7 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
 }
 
 - (void)inputSourceChanged:(NSNotification *)notification {
-    [textView checkImState];
+    [self checkImState];
 }
 
 - (void)removeInputSourceChangedObserver {

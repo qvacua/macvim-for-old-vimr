@@ -315,11 +315,6 @@
     [helper activateIm:enable];
 }
 
-- (void)checkImState
-{
-    [helper checkImState];
-}
-
 - (NSFont *)font
 {
     return [(MMTextStorage*)[self textStorage] font];
