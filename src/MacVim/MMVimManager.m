@@ -132,10 +132,8 @@ static void fsEventCallback(
     } else {
         NSArray *cmdline = nil;
         NSString *cwd = [self workingDirectoryForArguments:arguments];
-        arguments = [self convertVimControllerArguments:arguments
-                                          toCommandLine:&cmdline];
-        int pid = [self launchVimProcessWithArguments:cmdline
-                                     workingDirectory:cwd];
+        arguments = [self convertVimControllerArguments:arguments toCommandLine:&cmdline];
+        int pid = [self launchVimProcessWithArguments:cmdline workingDirectory:cwd];
         if (-1 == pid)
             return NO;
 
@@ -143,9 +141,9 @@ static void fsEventCallback(
         // then the memory allocated for these parameters will leak.
         // Ensure that this cannot happen or somehow detect it.
 
-        if ([arguments count] > 0)
-            [pidArguments setObject:arguments
-                             forKey:[NSNumber numberWithInt:pid]];
+        if ([arguments count] > 0) {
+            pidArguments[@(pid)] = arguments;
+        }
     }
 
     return YES;
