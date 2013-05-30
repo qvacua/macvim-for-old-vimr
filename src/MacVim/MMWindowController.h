@@ -9,7 +9,7 @@
  */
 
 #import "MacVim.h"
-
+#import "MMVimControllerDelegate.h"
 
 
 @class MMWindow;
@@ -17,11 +17,7 @@
 @class MMVimController;
 @class MMVimView;
 
-@interface MMWindowController : NSWindowController
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
-    // 10.6 has turned delegate messages into formal protocols
-    <NSWindowDelegate>
-#endif
+@interface MMWindowController : NSWindowController <NSWindowDelegate, MMVimControllerDelegate>
 {
     MMVimController     *vimController;
     MMVimView           *vimView;

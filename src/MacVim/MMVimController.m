@@ -34,8 +34,6 @@
 #import "MMWindowController.h"
 #import "Miscellaneous.h"
 #import "MMCoreTextView.h"
-#import "MMWindow.h"
-#import "MMVimManager.h"
 
 
 static NSString *MMDefaultToolbarImageName = @"Attention";
