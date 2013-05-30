@@ -23,3 +23,4 @@ NSString *MMLoginShellKey = @"MMLoginShell";
 NSString *MMPreloadCacheSizeKey = @"MMPreloadCacheSize";
 NSString *MMLoginShellCommandKey = @"MMLoginShellCommand";
 NSString *MMLoginShellArgumentKey = @"MMLoginShellArgument";
+NSString *MMTypesetterKey = @"MMTypesetter";

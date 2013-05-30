@@ -28,9 +28,7 @@
 #import "MMCoreTextView.h"
 #import "MMTextViewHelper.h"
 #import "MMVimController.h"
-
 #import "MMUserDefaults.h"
-#import "MMTypes.h"
 
 
 // TODO: What does DRAW_TRANSP flag do?  If the background isn't drawn when

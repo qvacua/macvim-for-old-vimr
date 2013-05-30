@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		0395A8330D71ED7800881434 /* DBPrefsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0395A8320D71ED7800881434 /* DBPrefsWindowController.m */; };
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
+		1929B11322EDD574F466C867 /* MMCoreTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B08DC15089B43AB00F00 /* MMCoreTextView.m */; };
 		1929B3881D9408663BF8A67A /* MMTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B11839EF061D23763730 /* MMTypes.m */; };
 		1929B4BDEE229E19573C9D95 /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B58A376B99D12870C813 /* MMLog.m */; };
 		1929B4F993797DF58FC10D1E /* MMTextViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B1BC05F90BBED8EE5F08 /* MMTextViewHelper.m */; };
 		1929B5D219627B604C220160 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */; };
 		1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B387A298335D6D09A500 /* MMScroller.m */; };
 		1929B68FC43BB073E60EDC7A /* MMVimManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B07DA0688CDD8A96FD70 /* MMVimManager.m */; };
+		1929B7E1AD8BCE8E0B2AEB71 /* MMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B00017509F3629F72B87 /* MMTextView.m */; };
 		1929B887CB6B980E8CB12596 /* MMCoreTextView+ToolTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */; };
 		1929B9F392F9900B543A3E8F /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B1D28FEA476210E3D4EC /* MMUtils.m */; };
 		1929BA48579387C85CE6D49E /* MMUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9B60F9CC5A37791BC4C /* MMUserDefaults.m */; };
@@ -23,7 +25,6 @@
 		1D0E051C0BA5F83800B6049E /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D0E051B0BA5F83800B6049E /* Colors.plist */; };
 		1D1474980C56703C0038FA2B /* MacVim.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474960C56703C0038FA2B /* MacVim.m */; };
 		1D1474A00C5673AE0038FA2B /* MMAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D14749E0C5673AE0038FA2B /* MMAppController.m */; };
-		1D1474B00C5678370038FA2B /* MMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474AE0C5678370038FA2B /* MMTextView.m */; };
 		1D1474B60C56796D0038FA2B /* MMVimController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474B40C56796D0038FA2B /* MMVimController.m */; };
 		1D1474BC0C567A910038FA2B /* MMWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474BA0C567A910038FA2B /* MMWindowController.m */; };
 		1D22374B0E45DF4800E6FFFF /* Advanced.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D22374A0E45DF4800E6FFFF /* Advanced.png */; };
@@ -66,7 +67,6 @@
 		1DE3F8E70D50F80500052B9E /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1DE3F8E50D50F80500052B9E /* Preferences.nib */; };
 		1DE3F8EB0D50F84600052B9E /* MMPreferenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE3F8E90D50F84600052B9E /* MMPreferenceController.m */; };
 		1DE608B40C587FDA0055263D /* runtime in Copy Vim Runtime Files */ = {isa = PBXBuildFile; fileRef = 1DE602470C587FD10055263D /* runtime */; };
-		1DE63FFB0E71820F00959BDB /* MMCoreTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE63FFA0E71820F00959BDB /* MMCoreTextView.m */; };
 		1DE8CC620C5E2AAD003F56E3 /* Actions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1DE8CC610C5E2AAD003F56E3 /* Actions.plist */; };
 		1DE9B9500D341AB8008FEDD4 /* MMWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE9B94E0D341AB8008FEDD4 /* MMWindow.m */; };
 		1DED78600C6DE43D0079945F /* vimrc in Copy Vim Runtime Files */ = {isa = PBXBuildFile; fileRef = 1DED785F0C6DE43D0079945F /* vimrc */; };
@@ -138,12 +138,15 @@
 		0395A8A90D72D88B00881434 /* General.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = General.png; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1929B00017509F3629F72B87 /* MMTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextView.m; sourceTree = "<group>"; };
 		1929B02DD9159EF8FE00DAEF /* MMTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTypes.h; sourceTree = "<group>"; };
 		1929B07DA0688CDD8A96FD70 /* MMVimManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMVimManager.m; sourceTree = "<group>"; };
+		1929B08DC15089B43AB00F00 /* MMCoreTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCoreTextView.m; sourceTree = "<group>"; };
 		1929B10DAA1DD1D375D4C7A1 /* MMVimManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVimManager.h; sourceTree = "<group>"; };
 		1929B11839EF061D23763730 /* MMTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypes.m; sourceTree = "<group>"; };
 		1929B1BC05F90BBED8EE5F08 /* MMTextViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextViewHelper.m; sourceTree = "<group>"; };
 		1929B1D28FEA476210E3D4EC /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
+		1929B207A5C5510FD89A2598 /* MMTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextView.h; sourceTree = "<group>"; };
 		1929B2D8B87C35724865DD16 /* MMUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUserDefaults.h; sourceTree = "<group>"; };
 		1929B387A298335D6D09A500 /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
 		1929B3B00D503E4F74BA6F8D /* MMTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextStorage.h; sourceTree = "<group>"; };
@@ -151,6 +154,7 @@
 		1929B4ED52B39898B3B30FC1 /* MMTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTextStorage.m; sourceTree = "<group>"; };
 		1929B58A376B99D12870C813 /* MMLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLog.m; sourceTree = "<group>"; };
 		1929B5BD46EA06AB1307693F /* MMVimBackendProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVimBackendProtocol.h; sourceTree = "<group>"; };
+		1929B5FF5D83F7E9C603FE50 /* MMCoreTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCoreTextView.h; sourceTree = "<group>"; };
 		1929B6531565968BA52786D1 /* MMTypesetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTypesetter.m; sourceTree = "<group>"; };
 		1929B6E589D6109836538941 /* MMScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScroller.h; sourceTree = "<group>"; };
 		1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMCoreTextView+ToolTip.m"; sourceTree = "<group>"; };
@@ -163,14 +167,11 @@
 		1929BD1891388962DBD186E2 /* MMTextViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTextViewHelper.h; sourceTree = "<group>"; };
 		1929BE12A2D0D834156ECB31 /* MMCoreTextView+Tooltip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMCoreTextView+Tooltip.h"; sourceTree = "<group>"; };
 		1929BE8B27300F523B780922 /* MMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLog.h; sourceTree = "<group>"; };
-		1929BF7091EDB17A443EE4A5 /* MMCoreTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCoreTextView.h; sourceTree = "<group>"; };
 		1D0E051B0BA5F83800B6049E /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
 		1D1474950C56703C0038FA2B /* MacVim.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MacVim.h; sourceTree = "<group>"; };
 		1D1474960C56703C0038FA2B /* MacVim.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MacVim.m; sourceTree = "<group>"; };
 		1D14749D0C5673AE0038FA2B /* MMAppController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMAppController.h; sourceTree = "<group>"; };
 		1D14749E0C5673AE0038FA2B /* MMAppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMAppController.m; sourceTree = "<group>"; };
-		1D1474AD0C5678370038FA2B /* MMTextView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMTextView.h; sourceTree = "<group>"; };
-		1D1474AE0C5678370038FA2B /* MMTextView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMTextView.m; sourceTree = "<group>"; };
 		1D1474B30C56796D0038FA2B /* MMVimController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMVimController.h; sourceTree = "<group>"; };
 		1D1474B40C56796D0038FA2B /* MMVimController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMVimController.m; sourceTree = "<group>"; };
 		1D1474B90C567A910038FA2B /* MMWindowController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMWindowController.h; sourceTree = "<group>"; };
@@ -221,7 +222,6 @@
 		1DE3F8E80D50F84600052B9E /* MMPreferenceController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMPreferenceController.h; sourceTree = "<group>"; };
 		1DE3F8E90D50F84600052B9E /* MMPreferenceController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMPreferenceController.m; sourceTree = "<group>"; };
 		1DE602470C587FD10055263D /* runtime */ = {isa = PBXFileReference; lastKnownFileType = folder; name = runtime; path = ../../runtime; sourceTree = SOURCE_ROOT; };
-		1DE63FFA0E71820F00959BDB /* MMCoreTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCoreTextView.m; sourceTree = "<group>"; };
 		1DE8CC610C5E2AAD003F56E3 /* Actions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Actions.plist; sourceTree = "<group>"; };
 		1DE9B94D0D341AB8008FEDD4 /* MMWindow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MMWindow.h; sourceTree = "<group>"; };
 		1DE9B94E0D341AB8008FEDD4 /* MMWindow.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MMWindow.m; sourceTree = "<group>"; };
@@ -254,7 +254,6 @@
 			children = (
 				1D6008890E96A0B2003763F0 /* MMFindReplaceController.h */,
 				1D60088A0E96A0B2003763F0 /* MMFindReplaceController.m */,
-				1DE63FFA0E71820F00959BDB /* MMCoreTextView.m */,
 				1D8059220E118663001699D1 /* Miscellaneous.h */,
 				1D80591D0E1185EA001699D1 /* Miscellaneous.m */,
 				0395A8310D71ED7800881434 /* DBPrefsWindowController.h */,
@@ -273,8 +272,6 @@
 				1D1474BA0C567A910038FA2B /* MMWindowController.m */,
 				1D1474B30C56796D0038FA2B /* MMVimController.h */,
 				1D1474B40C56796D0038FA2B /* MMVimController.m */,
-				1D1474AD0C5678370038FA2B /* MMTextView.h */,
-				1D1474AE0C5678370038FA2B /* MMTextView.m */,
 				1D14749D0C5673AE0038FA2B /* MMAppController.h */,
 				1D14749E0C5673AE0038FA2B /* MMAppController.m */,
 				1D1474950C56703C0038FA2B /* MacVim.h */,
@@ -283,7 +280,6 @@
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				1929B387A298335D6D09A500 /* MMScroller.m */,
 				1929B6E589D6109836538941 /* MMScroller.h */,
-				1929BF7091EDB17A443EE4A5 /* MMCoreTextView.h */,
 				1929BD6AF83DA11B8E0385BC /* VimTextView */,
 			);
 			name = "MacVim Source";
@@ -332,6 +328,10 @@
 				1929B10DAA1DD1D375D4C7A1 /* MMVimManager.h */,
 				1929B1BC05F90BBED8EE5F08 /* MMTextViewHelper.m */,
 				1929BD1891388962DBD186E2 /* MMTextViewHelper.h */,
+				1929B5FF5D83F7E9C603FE50 /* MMCoreTextView.h */,
+				1929B08DC15089B43AB00F00 /* MMCoreTextView.m */,
+				1929B00017509F3629F72B87 /* MMTextView.m */,
+				1929B207A5C5510FD89A2598 /* MMTextView.h */,
 			);
 			name = VimTextView;
 			sourceTree = "<group>";
@@ -589,7 +589,6 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				1D1474980C56703C0038FA2B /* MacVim.m in Sources */,
 				1D1474A00C5673AE0038FA2B /* MMAppController.m in Sources */,
-				1D1474B00C5678370038FA2B /* MMTextView.m in Sources */,
 				1D1474B60C56796D0038FA2B /* MMVimController.m in Sources */,
 				1D1474BC0C567A910038FA2B /* MMWindowController.m in Sources */,
 				1DD66ECE0C803D3600EBDAB3 /* MMApplication.m in Sources */,
@@ -600,7 +599,6 @@
 				0395A8330D71ED7800881434 /* DBPrefsWindowController.m in Sources */,
 				1D80591F0E1185EA001699D1 /* Miscellaneous.m in Sources */,
 				1D60088B0E96A0B2003763F0 /* MMFindReplaceController.m in Sources */,
-				1DE63FFB0E71820F00959BDB /* MMCoreTextView.m in Sources */,
 				1929B63F6A5CCA99D342E2B8 /* MMScroller.m in Sources */,
 				1929B9F392F9900B543A3E8F /* MMUtils.m in Sources */,
 				1929B4BDEE229E19573C9D95 /* MMLog.m in Sources */,
@@ -612,6 +610,8 @@
 				1929B3881D9408663BF8A67A /* MMTypes.m in Sources */,
 				1929B68FC43BB073E60EDC7A /* MMVimManager.m in Sources */,
 				1929B4F993797DF58FC10D1E /* MMTextViewHelper.m in Sources */,
+				1929B11322EDD574F466C867 /* MMCoreTextView.m in Sources */,
+				1929B7E1AD8BCE8E0B2AEB71 /* MMTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

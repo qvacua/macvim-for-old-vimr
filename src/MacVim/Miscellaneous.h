@@ -25,7 +25,6 @@ extern NSString *MMTabMinWidthKey;
 extern NSString *MMTabMaxWidthKey;
 extern NSString *MMTabOptimumWidthKey;
 extern NSString *MMShowAddTabButtonKey;
-extern NSString *MMTypesetterKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;
 extern NSString *MMUntitledWindowKey;
