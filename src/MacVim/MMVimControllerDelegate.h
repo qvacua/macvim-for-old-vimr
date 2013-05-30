@@ -17,6 +17,12 @@
 @protocol MMVimControllerDelegate <NSObject>
 
 @optional
-- (void)vimController:(MMVimController *)vimController openWindowWithData:(NSData *)data;
-
+- (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data;
+- (void)vimController:(MMVimController *)controller batchDrawWithData:(NSData *)data;
+- (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data;
+- (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
+- (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data;
 @end

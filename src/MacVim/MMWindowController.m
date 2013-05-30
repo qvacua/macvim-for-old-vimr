@@ -1229,6 +1229,53 @@
 
 #endif // (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
 
+#pragma mark MMVimControllerDelegate
+- (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data {
+    [self openWindow];
+
+    // HACK: Delay actually presenting the window onscreen until after
+    // processing the queue since it contains drawing commands that need to
+    // be issued before presentation; otherwise the window may flash white
+    // just as it opens.
+    if ([controller isPreloading]) {
+        [self performSelector:@selector(presentWindow:) withObject:nil afterDelay:0];
+    }
+}
+
+- (void)vimController:(MMVimController *)controller batchDrawWithData:(NSData *)data {
+    [[[self vimView] textView] performBatchDrawWithData:data];
+}
+
+- (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data {
+    [self updateTabsWithData:data];
+}
+
+- (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {
+    [self showTabBar:YES];
+}
+
+- (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data {
+    [self showTabBar:NO];
+}
+
+- (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data {
+    [self setTextDimensionsWithRows:rows columns:columns isLive:live keepOnScreen:keepOnScreen];
+}
+
+- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
+    // While in live resize the window title displays the dimensions of the
+    // window so don't clobber this with a spurious "set title" message
+    // from Vim.
+    if (![[self vimView] inLiveResize]) {
+        [self setTitle:title];
+    }
+}
+
+- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
+    [self setDocumentFilename:filename];
+}
+
+
 @end // MMWindowController
 
 

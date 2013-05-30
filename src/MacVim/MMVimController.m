@@ -27,6 +27,7 @@
  */
 
 #import "MMAppController.h"
+#import "MMVimControllerDelegate.h"
 #import "MMFindReplaceController.h"
 #import "MMTextView.h"
 #import "MMVimController.h"
@@ -124,6 +125,10 @@ static BOOL isUnsafeMessage(int msgid);
 
     windowController =
         [[MMWindowController alloc] initWithVimController:self];
+
+    // TODO: this should not be done here, but somewhere higher
+    _delegate = windowController;
+
     backendProxy = [backend retain];
     popupMenuItems = [[NSMutableArray alloc] init];
     toolbarItemDict = [[NSMutableDictionary alloc] init];
@@ -550,32 +555,36 @@ static BOOL isUnsafeMessage(int msgid);
 - (void)handleMessage:(int)msgid data:(NSData *)data
 {
     if (OpenWindowMsgID == msgid) {
-        [windowController openWindow];
+        [self.delegate vimController:self openWindowWithData:data];
+        return;
+    }
 
-        // HACK: Delay actually presenting the window onscreen until after
-        // processing the queue since it contains drawing commands that need to
-        // be issued before presentation; otherwise the window may flash white
-        // just as it opens.
-        if (!isPreloading)
-            [windowController performSelector:@selector(presentWindow:)
-                                   withObject:nil
-                                   afterDelay:0];
-    } else if (BatchDrawMsgID == msgid) {
-        [[[windowController vimView] textView] performBatchDrawWithData:data];
-    } else if (SelectTabMsgID == msgid) {
-#if 0   // NOTE: Tab selection is done inside updateTabsWithData:.
-        const void *bytes = [data bytes];
-        int idx = *((int*)bytes);
-        [windowController selectTabWithIndex:idx];
-#endif
-    } else if (UpdateTabBarMsgID == msgid) {
-        [windowController updateTabsWithData:data];
-    } else if (ShowTabBarMsgID == msgid) {
-        [windowController showTabBar:YES];
-    } else if (HideTabBarMsgID == msgid) {
-        [windowController showTabBar:NO];
-    } else if (SetTextDimensionsMsgID == msgid || LiveResizeMsgID == msgid ||
-            SetTextDimensionsReplyMsgID == msgid) {
+    if (BatchDrawMsgID == msgid) {
+        [self.delegate vimController:self batchDrawWithData:data];
+        return;
+    }
+
+    if (SelectTabMsgID == msgid) {
+        // NOTE: Tab selection is done inside updateTabsWithData:.
+        return;
+    }
+
+    if (UpdateTabBarMsgID == msgid) {
+        [self.delegate vimController:self updateTabsWithData:data];
+        return;
+    }
+
+    if (ShowTabBarMsgID == msgid) {
+        [self.delegate vimController:self showTabBarWithData:data];
+        return;
+    }
+
+    if (HideTabBarMsgID == msgid) {
+        [self.delegate vimController:self hideTabBarWithData:data];
+        return;
+    }
+
+    if (SetTextDimensionsMsgID == msgid || LiveResizeMsgID == msgid || SetTextDimensionsReplyMsgID == msgid) {
         const void *bytes = [data bytes];
         int rows = *((int*)bytes);  bytes += sizeof(int);
         int cols = *((int*)bytes);
@@ -584,40 +593,51 @@ static BOOL isUnsafeMessage(int msgid);
         // acknowledges it with a reply message.  When this happens the window
         // should not move (the frontend would already have moved the window).
         BOOL onScreen = SetTextDimensionsReplyMsgID!=msgid;
+        BOOL isLive = LiveResizeMsgID == msgid;
 
-        [windowController setTextDimensionsWithRows:rows
-                                 columns:cols
-                                  isLive:(LiveResizeMsgID==msgid)
-                            keepOnScreen:onScreen];
-    } else if (SetWindowTitleMsgID == msgid) {
+        [self.delegate vimController:self
+           setTextDimensionsWithRows:rows
+                             columns:cols
+                              isLive:isLive
+                        keepOnScreen:onScreen
+                                data:data];
+        return;
+    }
+
+    if (SetWindowTitleMsgID == msgid) {
         const void *bytes = [data bytes];
         int len = *((int*)bytes);  bytes += sizeof(int);
 
-        NSString *string = [[NSString alloc] initWithBytes:(void*)bytes
-                length:len encoding:NSUTF8StringEncoding];
+        NSString *title = [[NSString alloc] initWithBytes:(void *) bytes
+                                                    length:(NSUInteger) len
+                                                  encoding:NSUTF8StringEncoding];
 
-        // While in live resize the window title displays the dimensions of the
-        // window so don't clobber this with a spurious "set title" message
-        // from Vim.
-        if (![[windowController vimView] inLiveResize])
-            [windowController setTitle:string];
+        [self.delegate vimController:self setWindowTitle:title data:data];
 
-        [string release];
-    } else if (SetDocumentFilenameMsgID == msgid) {
+        [title release];
+        return;
+    }
+
+    if (SetDocumentFilenameMsgID == msgid) {
         const void *bytes = [data bytes];
         int len = *((int*)bytes);  bytes += sizeof(int);
 
+        NSString *filename;
         if (len > 0) {
-            NSString *filename = [[NSString alloc] initWithBytes:(void*)bytes
-                    length:len encoding:NSUTF8StringEncoding];
-
-            [windowController setDocumentFilename:filename];
-
-            [filename release];
+            filename = [[NSString alloc] initWithBytes:(void *) bytes
+                                                length:(NSUInteger) len
+                                              encoding:NSUTF8StringEncoding];
         } else {
-            [windowController setDocumentFilename:@""];
+            filename = [[NSString alloc] initWithString:@""];
         }
-    } else if (AddMenuMsgID == msgid) {
+
+        [self.delegate vimController:self setDocumentFilename:filename data:data];
+
+        [filename release];
+        return;
+    }
+
+    if (AddMenuMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
         [self addMenuWithDescriptor:[attrs objectForKey:@"descriptor"]
                 atIndex:[[attrs objectForKey:@"index"] intValue]];

@@ -12,7 +12,7 @@
 
 
 @class MMWindowController;
-
+@protocol MMVimControllerDelegate;
 
 
 @interface MMVimController : NSObject
@@ -39,6 +39,8 @@
     NSDate              *creationDate;
     BOOL                hasModifiedBuffer;
 }
+
+@property (assign) id <MMVimControllerDelegate> delegate;
 
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier;
 - (unsigned)vimControllerId;
