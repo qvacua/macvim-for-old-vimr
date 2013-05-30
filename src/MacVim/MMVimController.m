@@ -740,10 +740,13 @@ static BOOL isUnsafeMessage(int msgid);
         const void *bytes = [data bytes];
         float size = *((float*)bytes);  bytes += sizeof(float);
         int len = *((int*)bytes);  bytes += sizeof(int);
-        NSString *name = [[NSString alloc]
-                initWithBytes:(void*)bytes length:len
-                     encoding:NSUTF8StringEncoding];
+
+        NSString *name = [[NSString alloc] initWithBytes:(void *) bytes
+                                                  length:(NSUInteger) len
+                                                encoding:NSUTF8StringEncoding];
         NSFont *font = [NSFont fontWithName:name size:size];
+        [name release];
+
         if (!font) {
             // This should only happen if the system default font has changed
             // name since MacVim was compiled in which case we fall back on
@@ -751,43 +754,55 @@ static BOOL isUnsafeMessage(int msgid);
             font = [NSFont userFixedPitchFontOfSize:size];
         }
 
-        [windowController setFont:font];
-        [name release];
-    } else if (SetWideFontMsgID == msgid) {
+        [self.delegate vimController:self setFont:font data:data];
+        return;
+    }
+
+    if (SetWideFontMsgID == msgid) {
         const void *bytes = [data bytes];
         float size = *((float*)bytes);  bytes += sizeof(float);
         int len = *((int*)bytes);  bytes += sizeof(int);
-        if (len > 0) {
-            NSString *name = [[NSString alloc]
-                    initWithBytes:(void*)bytes length:len
-                         encoding:NSUTF8StringEncoding];
-            NSFont *font = [NSFont fontWithName:name size:size];
-            [windowController setWideFont:font];
 
+        NSFont *font = nil;
+        if (len > 0) {
+            NSString *name = [[NSString alloc] initWithBytes:(void *) bytes
+                                                      length:(NSUInteger) len
+                                                    encoding:NSUTF8StringEncoding];
+            font = [NSFont fontWithName:name size:size];
             [name release];
-        } else {
-            [windowController setWideFont:nil];
         }
-    } else if (SetDefaultColorsMsgID == msgid) {
+
+        [self.delegate vimController:self setWideFont:font data:data];
+        return;
+    }
+
+    if (SetDefaultColorsMsgID == msgid) {
         const void *bytes = [data bytes];
         unsigned bg = *((unsigned*)bytes);  bytes += sizeof(unsigned);
         unsigned fg = *((unsigned*)bytes);
+
         NSColor *back = [NSColor colorWithArgbInt:bg];
         NSColor *fore = [NSColor colorWithRgbInt:fg];
 
-        [windowController setDefaultColorsBackground:back foreground:fore];
-    } else if (ExecuteActionMsgID == msgid) {
+        [self.delegate vimController:self setDefaultColorsBackground:back foreground:fore data:data];
+        return;
+    }
+
+    if (ExecuteActionMsgID == msgid) {
         const void *bytes = [data bytes];
         int len = *((int*)bytes);  bytes += sizeof(int);
-        NSString *actionName = [[NSString alloc]
-                initWithBytes:(void*)bytes length:len
-                     encoding:NSUTF8StringEncoding];
+        NSString *actionName = [[NSString alloc] initWithBytes:(void *) bytes
+                                                        length:(NSUInteger) len
+                                                      encoding:NSUTF8StringEncoding];
 
         SEL sel = NSSelectorFromString(actionName);
         [NSApp sendAction:sel to:nil from:self];
 
         [actionName release];
-    } else if (ShowPopupMenuMsgID == msgid) {
+        return;
+    }
+
+    if (ShowPopupMenuMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
 
         // The popup menu enters a modal loop so delay this call so that we
@@ -795,34 +810,56 @@ static BOOL isUnsafeMessage(int msgid);
         [self performSelector:@selector(popupMenuWithAttributes:)
                    withObject:attrs
                    afterDelay:0];
-    } else if (SetMouseShapeMsgID == msgid) {
+
+        return;
+    }
+
+    if (SetMouseShapeMsgID == msgid) {
         const void *bytes = [data bytes];
         int shape = *((int*)bytes);
 
-        [windowController setMouseShape:shape];
-    } else if (AdjustLinespaceMsgID == msgid) {
+        [self.delegate vimController:self setMouseShape:shape data:data];
+        return;
+    }
+
+    if (AdjustLinespaceMsgID == msgid) {
         const void *bytes = [data bytes];
         int linespace = *((int*)bytes);
 
-        [windowController adjustLinespace:linespace];
-    } else if (ActivateMsgID == msgid) {
-        [NSApp activateIgnoringOtherApps:YES];
-        [[windowController window] makeKeyAndOrderFront:self];
-    } else if (SetServerNameMsgID == msgid) {
-        NSString *name = [[NSString alloc] initWithData:data
-                                               encoding:NSUTF8StringEncoding];
+        [self.delegate vimController:self adjustLinespace:linespace data:data];
+        return;
+    }
+
+    if (ActivateMsgID == msgid) {
+        [self.delegate vimController:self activateWithData:data];
+        return;
+    }
+
+    if (SetServerNameMsgID == msgid) {
+        NSString *name = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         [self setServerName:name];
+
         [name release];
-    } else if (EnterFullScreenMsgID == msgid) {
+        return;
+    }
+
+    if (EnterFullScreenMsgID == msgid) {
         const void *bytes = [data bytes];
         int fuoptions = *((int*)bytes); bytes += sizeof(int);
         int bg = *((int*)bytes);
-        NSColor *back = [NSColor colorWithArgbInt:bg];
 
-        [windowController enterFullScreen:fuoptions backgroundColor:back];
-    } else if (LeaveFullScreenMsgID == msgid) {
-        [windowController leaveFullScreen];
-    } else if (SetBuffersModifiedMsgID == msgid) {
+        NSColor *back = [NSColor colorWithArgbInt:(unsigned int) bg];
+
+        [self.delegate vimController:self enterFullScreen:fuoptions backgroundColor:back data:data];
+        return;
+    }
+
+    if (LeaveFullScreenMsgID == msgid) {
+        [self.delegate vimController:self leaveFullScreenWithData:data];
+        return;
+    }
+
+    if (SetBuffersModifiedMsgID == msgid) {
         const void *bytes = [data bytes];
         // state < 0  <->  some buffer modified
         // state > 0  <->  current buffer modified
@@ -835,17 +872,30 @@ static BOOL isUnsafeMessage(int msgid);
         // to show a warning or not when quitting).
         //
         // TODO: Make 'hasModifiedBuffer' part of the Vim state?
-        [windowController setBufferModified:(state > 0)];
+        [self.delegate vimController:self setBufferModified:(state > 0) data:data];
         hasModifiedBuffer = (state != 0);
-    } else if (SetPreEditPositionMsgID == msgid) {
+
+        return;
+    }
+
+    if (SetPreEditPositionMsgID == msgid) {
         const int *dim = (const int*)[data bytes];
-        [[[windowController vimView] textView] setPreEditRow:dim[0]
-                                                      column:dim[1]];
-    } else if (EnableAntialiasMsgID == msgid) {
-        [[[windowController vimView] textView] setAntialias:YES];
-    } else if (DisableAntialiasMsgID == msgid) {
-        [[[windowController vimView] textView] setAntialias:NO];
-    } else if (SetVimStateMsgID == msgid) {
+
+        [self.delegate vimController:self setPreEditRow:dim[0] column:dim[1] data:data];
+        return;
+    }
+
+    if (EnableAntialiasMsgID == msgid) {
+        [self.delegate vimController:self setAntialias:YES data:data];
+        return;
+    }
+
+    if (DisableAntialiasMsgID == msgid) {
+        [self.delegate vimController:self setAntialias:NO data:data];
+        return;
+    }
+
+    if (SetVimStateMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict) {
             [vimState release];

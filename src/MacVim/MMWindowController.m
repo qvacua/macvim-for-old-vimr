@@ -1299,6 +1299,51 @@
     [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
 }
 
+- (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data {
+    [self setFont:font];
+}
+
+- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
+    [self setWideFont:font];
+}
+
+- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data {
+    [self setDefaultColorsBackground:background foreground:foreground];
+}
+
+- (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
+    [self setMouseShape:shape];
+}
+
+- (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data {
+    [self adjustLinespace:linespace];
+}
+
+- (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data {
+    [NSApp activateIgnoringOtherApps:YES];
+    [[self window] makeKeyAndOrderFront:self];
+}
+
+- (void)vimController:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data {
+    [self enterFullScreen:screen backgroundColor:color];
+}
+
+- (void)vimController:(MMVimController *)controller leaveFullScreenWithData:(NSData *)data {
+    [self leaveFullScreen];
+}
+
+- (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data {
+    [self setBufferModified:modified];
+}
+
+- (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
+    [[[self vimView] textView] setPreEditRow:row column:column];
+}
+
+- (void)vimController:(MMVimController *)controller setAntialias:(BOOL)antialias data:(NSData *)data {
+    [[[self vimView] textView] setAntialias:antialias];
+}
+
 
 @end // MMWindowController
 
