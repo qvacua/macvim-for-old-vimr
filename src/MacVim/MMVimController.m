@@ -34,10 +34,10 @@
 #import "MMWindowController.h"
 #import "Miscellaneous.h"
 #import "MMCoreTextView.h"
+#import "MMAlert.h"
 
 
 static NSString *MMDefaultToolbarImageName = @"Attention";
-static int MMAlertTextFieldHeight = 22;
 
 // NOTE: By default a message sent to the backend will be dropped if it cannot
 // be delivered instantly; otherwise there is a possibility that MacVim will
@@ -61,14 +61,6 @@ static BOOL isUnsafeMessage(int msgid);
 @interface NSObject (NSToolTipManagerPrivateAPI)
 + (id)sharedToolTipManager;
 - (void)setInitialToolTipDelay:(double)arg1;
-@end
-
-
-@interface MMAlert : NSAlert {
-    NSTextField *textField;
-}
-- (void)setTextFieldString:(NSString *)textFieldString;
-- (NSTextField *)textField;
 @end
 
 
@@ -970,7 +962,6 @@ static BOOL isUnsafeMessage(int msgid);
         return;
     }
 
-    // TODO
     if (BrowseForFileMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
@@ -1616,78 +1607,6 @@ static BOOL isUnsafeMessage(int msgid);
 }
 
 @end // MMVimController (Private)
-
-
-
-
-@implementation MMAlert
-
-- (void)dealloc
-{
-    ASLogDebug(@"");
-
-    [textField release];  textField = nil;
-    [super dealloc];
-}
-
-- (void)setTextFieldString:(NSString *)textFieldString
-{
-    [textField release];
-    textField = [[NSTextField alloc] init];
-    [textField setStringValue:textFieldString];
-}
-
-- (NSTextField *)textField
-{
-    return textField;
-}
-
-- (void)setInformativeText:(NSString *)text
-{
-    if (textField) {
-        // HACK! Add some space for the text field.
-        [super setInformativeText:[text stringByAppendingString:@"\n\n\n"]];
-    } else {
-        [super setInformativeText:text];
-    }
-}
-
-- (void)beginSheetModalForWindow:(NSWindow *)window
-                   modalDelegate:(id)delegate
-                  didEndSelector:(SEL)didEndSelector
-                     contextInfo:(void *)contextInfo
-{
-    [super beginSheetModalForWindow:window
-                      modalDelegate:delegate
-                     didEndSelector:didEndSelector
-                        contextInfo:contextInfo];
-
-    // HACK! Place the input text field at the bottom of the informative text
-    // (which has been made a bit larger by adding newline characters).
-    NSView *contentView = [[self window] contentView];
-    NSRect rect = [contentView frame];
-    rect.origin.y = rect.size.height;
-
-    NSArray *subviews = [contentView subviews];
-    unsigned i, count = [subviews count];
-    for (i = 0; i < count; ++i) {
-        NSView *view = [subviews objectAtIndex:i];
-        if ([view isKindOfClass:[NSTextField class]]
-                && [view frame].origin.y < rect.origin.y) {
-            // NOTE: The informative text field is the lowest NSTextField in
-            // the alert dialog.
-            rect = [view frame];
-        }
-    }
-
-    rect.size.height = MMAlertTextFieldHeight;
-    [textField setFrame:rect];
-    [contentView addSubview:textField];
-    [textField becomeFirstResponder];
-}
-
-@end // MMAlert
-
 
 
 
