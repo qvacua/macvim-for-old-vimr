@@ -639,76 +639,104 @@ static BOOL isUnsafeMessage(int msgid);
 
     if (AddMenuMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
-        [self addMenuWithDescriptor:[attrs objectForKey:@"descriptor"]
-                atIndex:[[attrs objectForKey:@"index"] intValue]];
-    } else if (AddMenuItemMsgID == msgid) {
+        [self addMenuWithDescriptor:attrs[@"descriptor"] atIndex:[attrs[@"index"] intValue]];
+
+        return;
+    }
+
+    if (AddMenuItemMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
-        [self addMenuItemWithDescriptor:[attrs objectForKey:@"descriptor"]
-                      atIndex:[[attrs objectForKey:@"index"] intValue]
-                          tip:[attrs objectForKey:@"tip"]
-                         icon:[attrs objectForKey:@"icon"]
-                keyEquivalent:[attrs objectForKey:@"keyEquivalent"]
-                 modifierMask:[[attrs objectForKey:@"modifierMask"] intValue]
-                       action:[attrs objectForKey:@"action"]
-                  isAlternate:[[attrs objectForKey:@"isAlternate"] boolValue]];
-    } else if (RemoveMenuItemMsgID == msgid) {
+        [self addMenuItemWithDescriptor:attrs[@"descriptor"]
+                                atIndex:[attrs[@"index"] intValue]
+                                    tip:attrs[@"tip"]
+                                   icon:attrs[@"icon"]
+                          keyEquivalent:attrs[@"keyEquivalent"]
+                           modifierMask:[attrs[@"modifierMask"] intValue]
+                                 action:attrs[@"action"]
+                            isAlternate:[attrs[@"isAlternate"] boolValue]];
+
+        return;
+    }
+
+    if (RemoveMenuItemMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
-        [self removeMenuItemWithDescriptor:[attrs objectForKey:@"descriptor"]];
-    } else if (EnableMenuItemMsgID == msgid) {
+        [self removeMenuItemWithDescriptor:attrs[@"descriptor"]];
+
+        return;
+    }
+
+    if (EnableMenuItemMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
-        [self enableMenuItemWithDescriptor:[attrs objectForKey:@"descriptor"]
-                state:[[attrs objectForKey:@"enable"] boolValue]];
-    } else if (ShowToolbarMsgID == msgid) {
+        [self enableMenuItemWithDescriptor:attrs[@"descriptor"] state:[attrs[@"enable"] boolValue]];
+
+        return;
+    }
+
+    if (ShowToolbarMsgID == msgid) {
         const void *bytes = [data bytes];
         int enable = *((int*)bytes);  bytes += sizeof(int);
         int flags = *((int*)bytes);
 
         int mode = NSToolbarDisplayModeDefault;
         if (flags & ToolbarLabelFlag) {
-            mode = flags & ToolbarIconFlag ? NSToolbarDisplayModeIconAndLabel
-                    : NSToolbarDisplayModeLabelOnly;
+            mode = flags & ToolbarIconFlag ? NSToolbarDisplayModeIconAndLabel : NSToolbarDisplayModeLabelOnly;
         } else if (flags & ToolbarIconFlag) {
             mode = NSToolbarDisplayModeIconOnly;
         }
 
-        int size = flags & ToolbarSizeRegularFlag ? NSToolbarSizeModeRegular
-                : NSToolbarSizeModeSmall;
+        int size = flags & ToolbarSizeRegularFlag ? NSToolbarSizeModeRegular : NSToolbarSizeModeSmall;
 
-        [windowController showToolbar:enable size:size mode:mode];
-    } else if (CreateScrollbarMsgID == msgid) {
+        [self.delegate vimController:self showToolbar:(BOOL) enable size:(NSToolbarSizeMode) size mode:(NSToolbarDisplayMode) mode data:data];
+        return;
+    }
+
+    if (CreateScrollbarMsgID == msgid) {
         const void *bytes = [data bytes];
         int32_t ident = *((int32_t*)bytes);  bytes += sizeof(int32_t);
         int type = *((int*)bytes);
 
-        [windowController createScrollbarWithIdentifier:ident type:type];
-    } else if (DestroyScrollbarMsgID == msgid) {
+        [self.delegate vimController:self createScrollbarWithIdentifier:ident type:type data:data];
+        return;
+    }
+
+    if (DestroyScrollbarMsgID == msgid) {
         const void *bytes = [data bytes];
         int32_t ident = *((int32_t*)bytes);
 
-        [windowController destroyScrollbarWithIdentifier:ident];
-    } else if (ShowScrollbarMsgID == msgid) {
+        [self.delegate vimController:self destroyScrollbarWithIdentifier:ident data:data];
+        return;
+    }
+
+    if (ShowScrollbarMsgID == msgid) {
         const void *bytes = [data bytes];
         int32_t ident = *((int32_t*)bytes);  bytes += sizeof(int32_t);
         int visible = *((int*)bytes);
 
-        [windowController showScrollbarWithIdentifier:ident state:visible];
-    } else if (SetScrollbarPositionMsgID == msgid) {
+        [self.delegate vimController:self showScrollbarWithIdentifier:ident state:(BOOL) visible data:data];
+        return;
+    }
+
+    if (SetScrollbarPositionMsgID == msgid) {
         const void *bytes = [data bytes];
         int32_t ident = *((int32_t*)bytes);  bytes += sizeof(int32_t);
         int pos = *((int*)bytes);  bytes += sizeof(int);
         int len = *((int*)bytes);
 
-        [windowController setScrollbarPosition:pos length:len
-                                    identifier:ident];
-    } else if (SetScrollbarThumbMsgID == msgid) {
+        [self.delegate vimController:self setScrollbarPosition:pos length:len identifier:ident data:data];
+        return;
+    }
+
+    if (SetScrollbarThumbMsgID == msgid) {
         const void *bytes = [data bytes];
         int32_t ident = *((int32_t*)bytes);  bytes += sizeof(int32_t);
         float val = *((float*)bytes);  bytes += sizeof(float);
         float prop = *((float*)bytes);
 
-        [windowController setScrollbarThumbValue:val proportion:prop
-                                      identifier:ident];
-    } else if (SetFontMsgID == msgid) {
+        [self.delegate vimController:self setScrollbarThumbValue:val proportion:prop identifier:ident data:data];
+        return;
+    }
+
+    if (SetFontMsgID == msgid) {
         const void *bytes = [data bytes];
         float size = *((float*)bytes);  bytes += sizeof(float);
         int len = *((int*)bytes);  bytes += sizeof(int);

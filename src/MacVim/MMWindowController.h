@@ -70,7 +70,7 @@
 - (void)setWideFont:(NSFont *)font;
 - (void)processInputQueueDidFinish;
 - (void)showTabBar:(BOOL)on;
-- (void)showToolbar:(BOOL)on size:(int)size mode:(int)mode;
+- (void)showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode;
 - (void)setMouseShape:(int)shape;
 - (void)adjustLinespace:(int)linespace;
 - (void)liveResizeWillStart;

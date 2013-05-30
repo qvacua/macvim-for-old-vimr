@@ -604,7 +604,7 @@
     shouldMaximizeWindow = YES;
 }
 
-- (void)showToolbar:(BOOL)on size:(int)size mode:(int)mode
+- (void)showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode
 {
     if (!toolbar) return;
 
@@ -1273,6 +1273,30 @@
 
 - (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
     [self setDocumentFilename:filename];
+}
+
+- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode data:(NSData *)data {
+    [self showToolbar:on size:size mode:mode];
+}
+
+- (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
+    [self createScrollbarWithIdentifier:identifier type:type];
+}
+
+- (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data {
+    [self destroyScrollbarWithIdentifier:identifier];
+}
+
+- (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data {
+    [self showScrollbarWithIdentifier:identifier state:state];
+}
+
+- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
+    [self setScrollbarPosition:position length:length identifier:identifier];
+}
+
+- (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
+    [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
 }
 
 
