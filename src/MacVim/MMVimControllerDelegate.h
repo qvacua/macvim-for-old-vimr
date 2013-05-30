@@ -53,4 +53,5 @@
 */
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving;
 @end

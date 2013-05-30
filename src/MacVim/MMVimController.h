@@ -70,4 +70,6 @@
 - (id)evaluateVimExpressionCocoa:(NSString *)expr
                      errorString:(NSString **)errstr;
 - (void)processInputQueue:(NSArray *)queue;
+
+- (BOOL)sendDialogReturnToBackend:(NSString *)path;
 @end

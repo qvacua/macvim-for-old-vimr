@@ -28,7 +28,6 @@
 
 #import "MMAppController.h"
 #import "MMVimControllerDelegate.h"
-#import "MMFindReplaceController.h"
 #import "MMTextView.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
@@ -76,8 +75,6 @@ static BOOL isUnsafeMessage(int msgid);
 @interface MMVimController (Private)
 - (void)doProcessInputQueue:(NSArray *)queue;
 - (void)handleMessage:(int)msgid data:(NSData *)data;
-- (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code
-                context:(void *)context;
 - (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context;
 - (NSMenuItem *)menuItemForDescriptor:(NSArray *)desc;
 - (NSMenu *)parentMenuForDescriptor:(NSArray *)desc;
@@ -489,6 +486,28 @@ static BOOL isUnsafeMessage(int msgid);
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)theToolbar
 {
     return nil;
+}
+
+- (BOOL)sendDialogReturnToBackend:(NSString *)path {
+    // NOTE! setDialogReturn: is a synchronous call so set a proper timeout to
+    // avoid waiting forever for it to finish.  We make this a synchronous call
+    // so that we can be fairly certain that Vim doesn't think the dialog box
+    // is still showing when MacVim has in fact already dismissed it.
+    NSConnection *conn = [backendProxy connectionForProxy];
+    NSTimeInterval oldTimeout = [conn requestTimeout];
+    [conn setRequestTimeout:MMSetDialogReturnTimeout];
+
+    BOOL success = NO;
+    @try {
+        [backendProxy setDialogReturn:path];
+        success = YES;
+    } @catch (NSException *ex) {
+        ASLogDebug(@"Exception: pid=%d id=%d reason=%@", pid, identifier, ex);
+    } @finally {
+        [conn setRequestTimeout:oldTimeout];
+    }
+
+    return success;
 }
 
 @end // MMVimController
@@ -1035,49 +1054,6 @@ static BOOL isUnsafeMessage(int msgid);
     ASLogWarn(@"Unknown message received (msgid=%d)", msgid);
 }
 
-- (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code
-                context:(void *)context
-{
-    NSString *path = nil;
-    if (code == NSOKButton) {
-        NSURL *url = [panel URL];
-        if ([url isFileURL])
-            path = [url path];
-    }
-    ASLogDebug(@"Open/save panel path=%@", path);
-
-    // NOTE!  This causes the sheet animation to run its course BEFORE the rest
-    // of this function is executed.  If we do not wait for the sheet to
-    // disappear before continuing it can happen that the controller is
-    // released from under us (i.e. we'll crash and burn) because this
-    // animation is otherwise performed in the default run loop mode!
-    [panel orderOut:self];
-
-    // NOTE! setDialogReturn: is a synchronous call so set a proper timeout to
-    // avoid waiting forever for it to finish.  We make this a synchronous call
-    // so that we can be fairly certain that Vim doesn't think the dialog box
-    // is still showing when MacVim has in fact already dismissed it.
-    NSConnection *conn = [backendProxy connectionForProxy];
-    NSTimeInterval oldTimeout = [conn requestTimeout];
-    [conn setRequestTimeout:MMSetDialogReturnTimeout];
-
-    @try {
-        [backendProxy setDialogReturn:path];
-
-        // Add file to the "Recent Files" menu (this ensures that files that
-        // are opened/saved from a :browse command are added to this menu).
-        if (path)
-            [[NSDocumentController sharedDocumentController]
-                                                noteNewRecentFilePath:path];
-    }
-    @catch (NSException *ex) {
-        ASLogDebug(@"Exception: pid=%d id=%d reason=%@", pid, identifier, ex);
-    }
-    @finally {
-        [conn setRequestTimeout:oldTimeout];
-    }
-}
-
 - (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context
 {
     NSArray *ret = nil;
@@ -1535,68 +1511,11 @@ static BOOL isUnsafeMessage(int msgid);
             dir = [vimState objectForKey:@"pwd"];
     }
 
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6)
     // 10.6+ APIs uses URLs instead of paths
     dir = [dir stringByExpandingTildeInPath];
     NSURL *dirURL = dir ? [NSURL fileURLWithPath:dir isDirectory:YES] : nil;
-#endif
 
-    if (saving) {
-        NSSavePanel *panel = [NSSavePanel savePanel];
-
-        // The delegate will be notified when the panel is expanded at which
-        // time we may hide/show the "show hidden files" button (this button is
-        // always visible for the open panel since it is always expanded).
-        [panel setDelegate:self];
-        if ([panel isExpanded])
-            [panel setAccessoryView:showHiddenFilesView()];
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6)
-        // NOTE: -[NSSavePanel beginSheetForDirectory::::::] is deprecated on
-        // 10.6 but -[NSSavePanel setDirectoryURL:] requires 10.6 so jump
-        // through the following hoops on 10.6+.
-        if (dirURL)
-            [panel setDirectoryURL:dirURL];
-
-        [panel beginSheetModalForWindow:[windowController window]
-                      completionHandler:^(NSInteger result) {
-            [self savePanelDidEnd:panel code:result context:nil];
-        }];
-#else
-        [panel beginSheetForDirectory:dir file:nil
-                modalForWindow:[windowController window]
-                 modalDelegate:self
-                didEndSelector:@selector(savePanelDidEnd:code:context:)
-                   contextInfo:NULL];
-#endif
-    } else {
-        NSOpenPanel *panel = [NSOpenPanel openPanel];
-        [panel setAllowsMultipleSelection:NO];
-        [panel setAccessoryView:showHiddenFilesView()];
-
-        if (browsedir) {
-            [panel setCanChooseDirectories:YES];
-            [panel setCanChooseFiles:NO];
-        }
-
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6)
-        // NOTE: -[NSOpenPanel beginSheetForDirectory:::::::] is deprecated on
-        // 10.6 but -[NSOpenPanel setDirectoryURL:] requires 10.6 so jump
-        // through the following hoops on 10.6+.
-        if (dirURL)
-            [panel setDirectoryURL:dirURL];
-
-        [panel beginSheetModalForWindow:[windowController window]
-                      completionHandler:^(NSInteger result) {
-            [self savePanelDidEnd:panel code:result context:nil];
-        }];
-#else
-        [panel beginSheetForDirectory:dir file:nil types:nil
-                modalForWindow:[windowController window]
-                 modalDelegate:self
-                didEndSelector:@selector(savePanelDidEnd:code:context:)
-                   contextInfo:NULL];
-#endif
-    }
+    [self.delegate vimController:self handleBrowseWithDirectoryUrl:dirURL browseDir:browsedir saving:saving];
 }
 
 - (void)handleShowDialog:(NSDictionary *)attr

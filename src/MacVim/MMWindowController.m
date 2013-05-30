@@ -82,6 +82,8 @@
 
 
 @interface MMWindowController (Private)
+
+- (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller;
 - (NSSize)contentSize;
 - (void)resizeWindowToFitContentSize:(NSSize)contentSize
                         keepOnScreen:(BOOL)onScreen;
@@ -1376,12 +1378,81 @@
     [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
 }
 
+- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving {
+    if (saving) {
+        NSSavePanel *panel = [NSSavePanel savePanel];
+
+        // The delegate will be notified when the panel is expanded at which
+        // time we may hide/show the "show hidden files" button (this button is
+        // always visible for the open panel since it is always expanded).
+        [panel setDelegate:controller];
+        if ([panel isExpanded])
+            [panel setAccessoryView:showHiddenFilesView()];
+        // NOTE: -[NSSavePanel beginSheetForDirectory::::::] is deprecated on
+        // 10.6 but -[NSSavePanel setDirectoryURL:] requires 10.6 so jump
+        // through the following hoops on 10.6+.
+        if (url)
+            [panel setDirectoryURL:url];
+
+        [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+            [self savePanelDidEnd:panel code:result controller:controller];
+        }];
+
+        return;
+    }
+
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setAccessoryView:showHiddenFilesView()];
+
+    if (dir) {
+        [panel setCanChooseDirectories:YES];
+        [panel setCanChooseFiles:NO];
+    }
+
+    // NOTE: -[NSOpenPanel beginSheetForDirectory:::::::] is deprecated on
+    // 10.6 but -[NSOpenPanel setDirectoryURL:] requires 10.6 so jump
+    // through the following hoops on 10.6+.
+    if (url)
+        [panel setDirectoryURL:url];
+
+    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+        [self savePanelDidEnd:panel code:result controller:controller];
+    }];
+}
+
 
 @end // MMWindowController
 
 
 
 @implementation MMWindowController (Private)
+
+- (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller {
+    NSString *path = nil;
+    if (code == NSOKButton) {
+        NSURL *url = [panel URL];
+        if ([url isFileURL])
+            path = [url path];
+    }
+    ASLogDebug(@"Open/save panel path=%@", path);
+
+    // NOTE!  This causes the sheet animation to run its course BEFORE the rest
+    // of this function is executed.  If we do not wait for the sheet to
+    // disappear before continuing it can happen that the controller is
+    // released from under us (i.e. we'll crash and burn) because this
+    // animation is otherwise performed in the default run loop mode!
+    [panel orderOut:self];
+
+    if (![controller sendDialogReturnToBackend:path]) {
+        return;
+    }
+
+    // Add file to the "Recent Files" menu (this ensures that files that
+    // are opened/saved from a :browse command are added to this menu).
+    if (path)
+        [[NSDocumentController sharedDocumentController] noteNewRecentFilePath:path];
+}
 
 - (NSSize)contentSize
 {
