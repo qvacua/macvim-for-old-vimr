@@ -1239,7 +1239,7 @@
     // processing the queue since it contains drawing commands that need to
     // be issued before presentation; otherwise the window may flash white
     // just as it opens.
-    if ([controller isPreloading]) {
+    if (![controller isPreloading]) {
         [self performSelector:@selector(presentWindow:) withObject:nil afterDelay:0];
     }
 }
