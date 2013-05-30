@@ -11,6 +11,9 @@
 #import <Cocoa/Cocoa.h>
 
 
+@class MMVimController;
+
+
 @protocol MMTextViewProtocol <NSObject>
 
 @required
@@ -21,7 +24,7 @@
 //
 - (int)maxRows;
 - (int)maxColumns;
-- (void)getMaxRows:(int*)rows columns:(int*)cols;
+- (void)getMaxRows:(int *)rows columns:(int *)cols;
 - (void)setMaxRows:(int)rows columns:(int)cols;
 - (void)setDefaultColorsBackground:(NSColor *)bgColor
                         foreground:(NSColor *)fgColor;
