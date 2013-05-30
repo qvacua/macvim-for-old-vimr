@@ -901,60 +901,104 @@ static BOOL isUnsafeMessage(int msgid);
             [vimState release];
             vimState = [dict retain];
         }
-    } else if (CloseWindowMsgID == msgid) {
+
+        return;
+    }
+
+    if (CloseWindowMsgID == msgid) {
+        // TODO: work to do
         [self scheduleClose];
-    } else if (SetFullScreenColorMsgID == msgid) {
+        return;
+    }
+
+    if (SetFullScreenColorMsgID == msgid) {
         const int *bg = (const int*)[data bytes];
         NSColor *color = [NSColor colorWithRgbInt:*bg];
 
-        [windowController setFullScreenBackgroundColor:color];
-    } else if (ShowFindReplaceDialogMsgID == msgid) {
+        [self.delegate vimController:self setFullScreenBackgroundColor:color data:data];
+        return;
+    }
+
+    if (ShowFindReplaceDialogMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict) {
-            [[MMFindReplaceController sharedInstance]
-                showWithText:[dict objectForKey:@"text"]
-                       flags:[[dict objectForKey:@"flags"] intValue]];
+            [self.delegate vimController:self
+           showFindReplaceDialogWithText:dict[@"text"]
+                                   flags:[dict[@"flags"] intValue]
+                                    data:data];
         }
-    } else if (ActivateKeyScriptMsgID == msgid) {
-        [[[windowController vimView] textView] activateIm:YES];
-    } else if (DeactivateKeyScriptMsgID == msgid) {
-        [[[windowController vimView] textView] activateIm:NO];
-    } else if (EnableImControlMsgID == msgid) {
-        [[[windowController vimView] textView] setImControl:YES];
-    } else if (DisableImControlMsgID == msgid) {
-        [[[windowController vimView] textView] setImControl:NO];
-    } else if (BrowseForFileMsgID == msgid) {
+
+        return;
+    }
+
+    if (ActivateKeyScriptMsgID == msgid) {
+        [self.delegate vimController:self activateIm:YES data:data];
+        return;
+    }
+
+    if (DeactivateKeyScriptMsgID == msgid) {
+        [self.delegate vimController:self activateIm:NO data:data];
+        return;
+    }
+
+    if (EnableImControlMsgID == msgid) {
+        [self.delegate vimController:self setImControl:YES data:data];
+        return;
+    }
+
+    if (DisableImControlMsgID == msgid) {
+        [self.delegate vimController:self setImControl:NO data:data];
+        return;
+    }
+
+    // TODO
+    if (BrowseForFileMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
             [self handleBrowseForFile:dict];
-    } else if (ShowDialogMsgID == msgid) {
+        return;
+    }
+
+    // TODO
+    if (ShowDialogMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
             [self handleShowDialog:dict];
-    } else if (DeleteSignMsgID == msgid) {
+        return;
+    }
+
+    // TODO
+    if (DeleteSignMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
             [self handleDeleteSign:dict];
-    } else if (ZoomMsgID == msgid) {
+        return;
+    }
+
+    if (ZoomMsgID == msgid) {
         const void *bytes = [data bytes];
-        int rows = *((int*)bytes);  bytes += sizeof(int);
-        int cols = *((int*)bytes);  bytes += sizeof(int);
-        int state = *((int*)bytes);
+        int rows = *((int *) bytes);
+        bytes += sizeof(int);
+        int cols = *((int *) bytes);
+        bytes += sizeof(int);
+        int state = *((int *) bytes);
 
-        [windowController zoomWithRows:rows
-                               columns:cols
-                                 state:state];
-    } else if (SetWindowPositionMsgID == msgid) {
+        [self.delegate vimController:self zoomWithRows:rows columns:cols state:state data:data];
+        return;
+    }
+
+    if (SetWindowPositionMsgID == msgid) {
         const void *bytes = [data bytes];
-        int x = *((int*)bytes);  bytes += sizeof(int);
-        int y = *((int*)bytes);
+        int x = *((int *) bytes);
+        bytes += sizeof(int);
+        int y = *((int *) bytes);
 
-        // NOTE: Vim measures Y-coordinates from top of screen.
-        NSRect frame = [[[windowController window] screen] frame];
-        y = NSMaxY(frame) - y;
+        [self.delegate vimController:self setWindowPosition:NSMakePoint(x, y) data:data];
+        return;
+    }
 
-        [windowController setTopLeft:NSMakePoint(x,y)];
-    } else if (SetTooltipMsgID == msgid) {
+    // TODO
+    if (SetTooltipMsgID == msgid) {
         id textView = [[windowController vimView] textView];
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         NSString *toolTip = dict ? [dict objectForKey:@"toolTip"] : nil;
@@ -962,23 +1006,33 @@ static BOOL isUnsafeMessage(int msgid);
             [textView setToolTipAtMousePoint:toolTip];
         else
             [textView setToolTipAtMousePoint:nil];
-    } else if (SetTooltipDelayMsgID == msgid) {
+        return;
+    }
+
+    // TODO
+    if (SetTooltipDelayMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         NSNumber *delay = dict ? [dict objectForKey:@"delay"] : nil;
         if (delay)
             [self setToolTipDelay:[delay floatValue]];
-    } else if (AddToMRUMsgID == msgid) {
+        return;
+    }
+
+    if (AddToMRUMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
+
         NSArray *filenames = dict ? [dict objectForKey:@"filenames"] : nil;
-        if (filenames)
-            [[NSDocumentController sharedDocumentController]
-                                            noteNewRecentFilePaths:filenames];
+        if (filenames) {
+            [self.delegate vimController:self addToMru:filenames data:data];
+        }
+
+        return;
+    }
 
     // IMPORTANT: When adding a new message, make sure to update
     // isUnsafeMessage() if necessary!
-    } else {
-        ASLogWarn(@"Unknown message received (msgid=%d)", msgid);
-    }
+
+    ASLogWarn(@"Unknown message received (msgid=%d)", msgid);
 }
 
 - (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code

@@ -1344,6 +1344,38 @@
     [[[self vimView] textView] setAntialias:antialias];
 }
 
+- (void)vimController:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data {
+    [self setFullScreenBackgroundColor:color];
+}
+
+- (void)vimController:(MMVimController *)controller showFindReplaceDialogWithText:(id)text flags:(int)flags data:(NSData *)data {
+    [[MMFindReplaceController sharedInstance] showWithText:text flags:flags];
+}
+
+- (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data {
+    [[[self vimView] textView] activateIm:activate];
+}
+
+- (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data {
+    [[[self vimView] textView] setImControl:control];
+}
+
+- (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data {
+    [self zoomWithRows:rows columns:columns state:state];
+}
+
+- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data {
+    // NOTE: Vim measures Y-coordinates from top of screen.
+    NSRect frame = [[[self window] screen] frame];
+    position.y = NSMaxY(frame) - position.y;
+
+    [self setTopLeft:position];
+}
+
+- (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data {
+    [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
+}
+
 
 @end // MMWindowController
 
