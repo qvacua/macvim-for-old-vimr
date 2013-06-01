@@ -16,6 +16,24 @@
 @protocol MMVimControllerDelegate;
 
 
+/**
+* MMVimController
+*
+* Coordinates input/output to/from backend.  A MMVimController sends input
+* directly to a MMBackend, but communication from MMBackend to MMVimController
+* goes via MMAppController so that it can coordinate all incoming distributed
+* object messages.
+*
+* MMVimController does not deal with visual presentation.  Essentially it
+* should be able to run with no window present.
+*
+* Output from the backend is received in processInputQueue: (this message is
+* called from MMAppController so it is not a DO call).  Input is sent to the
+* backend via sendMessage:data: or addVimInput:.  The latter allows execution
+* of arbitrary strings in the Vim process, much like the Vim script function
+* remote_send() does.  The messages that may be passed between frontend and
+* backend are defined in an enum in MacVim.h.
+*/
 @interface MMVimController : NSObject {
     unsigned            identifier;
     BOOL                isInitialized;
