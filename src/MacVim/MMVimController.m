@@ -34,7 +34,6 @@
 #import "MMWindowController.h"
 #import "Miscellaneous.h"
 #import "MMCoreTextView.h"
-#import "MMAlert.h"
 
 
 static NSString *MMDefaultToolbarImageName = @"Attention";
@@ -69,7 +68,6 @@ static BOOL isUnsafeMessage(int msgid);
 - (void)handleMessage:(int)msgid data:(NSData *)data;
 - (NSMenuItem *)menuItemForDescriptor:(NSArray *)desc;
 - (NSMenu *)parentMenuForDescriptor:(NSArray *)desc;
-- (NSMenu *)topLevelMenuForTitle:(NSString *)title;
 - (void)addMenuWithDescriptor:(NSArray *)desc atIndex:(int)index;
 - (void)addMenuItemWithDescriptor:(NSArray *)desc
                           atIndex:(int)index
@@ -1103,27 +1101,6 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     return menu;
-}
-
-- (NSMenu *)topLevelMenuForTitle:(NSString *)title
-{
-    // Search only the top-level menus.
-
-    unsigned i, count = [popupMenuItems count];
-    for (i = 0; i < count; ++i) {
-        NSMenuItem *item = [popupMenuItems objectAtIndex:i];
-        if ([title isEqual:[item title]])
-            return [item submenu];
-    }
-
-    count = [mainMenu numberOfItems];
-    for (i = 0; i < count; ++i) {
-        NSMenuItem *item = [mainMenu itemAtIndex:i];
-        if ([title isEqual:[item title]])
-            return [item submenu];
-    }
-
-    return nil;
 }
 
 - (void)addMenuWithDescriptor:(NSArray *)desc atIndex:(int)idx
