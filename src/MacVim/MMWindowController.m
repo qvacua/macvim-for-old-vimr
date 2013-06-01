@@ -80,9 +80,12 @@
 #define FUOPT_BGCOLOR_HLGROUP 0x004
 
 
+static NSString *MMDefaultToolbarImageName = @"Attention";
+
 
 @interface MMWindowController (Private)
 
+- (void)addToolbarItemToDictionaryWithLabel:(NSString *)title toolTip:(NSString *)tip icon:(NSString *)icon;
 - (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context;
 - (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller;
 - (NSSize)contentSize;
@@ -154,6 +157,20 @@
 
     vimController = controller;
     decoratedWindow = [win retain];
+
+    toolbarItemDict = [[NSMutableDictionary alloc] init];
+
+    // NOTE! Each toolbar must have a unique identifier, else each
+    // window will have the same toolbar.
+    NSString *ident = [NSString stringWithFormat:@"%d", [vimController vimControllerId]];
+    toolbar = [[NSToolbar alloc] initWithIdentifier:ident];
+
+    [toolbar setShowsBaselineSeparator:NO];
+    [toolbar setDelegate:self];
+    [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
+    [toolbar setSizeMode:NSToolbarSizeModeSmall];
+
+    [self setToolbar:toolbar];
 
     // Window cascading is handled by MMAppController.
     [self setShouldCascadeWindows:NO];
@@ -229,6 +246,7 @@
     [vimView release];  vimView = nil;
     [toolbar release];  toolbar = nil;
 
+    [toolbarItemDict release];
     [super dealloc];
 }
 
@@ -1487,6 +1505,46 @@
     [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
 }
 
+- (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
+    if (!toolbar) return;
+
+    // Check for separator items.
+    if (!label) {
+        label = NSToolbarSeparatorItemIdentifier;
+    } else if ([label length] >= 2 && [label hasPrefix:@"-"]
+            && [label hasSuffix:@"-"]) {
+        // The label begins and ends with '-'; decided which kind of separator
+        // item it is by looking at the prefix.
+        if ([label hasPrefix:@"-space"]) {
+            label = NSToolbarSpaceItemIdentifier;
+        } else if ([label hasPrefix:@"-flexspace"]) {
+            label = NSToolbarFlexibleSpaceItemIdentifier;
+        } else {
+            label = NSToolbarSeparatorItemIdentifier;
+        }
+    }
+
+    [self addToolbarItemToDictionaryWithLabel:label toolTip:tip icon:icon];
+
+    int maxIdx = [[toolbar items] count];
+    if (maxIdx < idx) idx = maxIdx;
+
+    [toolbar insertItemWithItemIdentifier:label atIndex:idx];
+}
+
+- (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier {
+    // Only remove toolbar items, never actually remove the toolbar
+    // itself or strange things may happen.
+    NSUInteger idx = [toolbar indexOfItemWithItemIdentifier:identifier];
+    if (idx != NSNotFound)
+        [toolbar removeItemAtIndex:idx];
+}
+
+- (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state {
+    [[toolbar itemWithItemIdentifier:identifier] setEnabled:state];
+}
+
+
 #pragma mark NSOpenSavePanelDelegate
 - (void)panel:(id)sender willExpand:(BOOL)expanding
 {
@@ -1498,11 +1556,69 @@
         [sender setAccessoryView:nil];
     }
 }
+
+#pragma mark NSToolbarDelegate
+- (NSToolbarItem *)toolbar:(NSToolbar *)theToolbar itemForItemIdentifier:(NSString *)itemId willBeInsertedIntoToolbar:(BOOL)flag {
+    NSToolbarItem *item = [toolbarItemDict objectForKey:itemId];
+    if (!item) {
+        ASLogWarn(@"No toolbar item with id '%@'", itemId);
+    }
+
+    return item;
+}
+
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)theToolbar {
+    return nil;
+}
+
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)theToolbar {
+    return nil;
+}
+
 @end // MMWindowController
 
 
 
 @implementation MMWindowController (Private)
+
+- (void)addToolbarItemToDictionaryWithLabel:(NSString *)title
+                                    toolTip:(NSString *)tip
+                                       icon:(NSString *)icon
+{
+    // If the item corresponds to a separator then do nothing, since it is
+    // already defined by Cocoa.
+    if (!title || [title isEqual:NSToolbarSeparatorItemIdentifier]
+            || [title isEqual:NSToolbarSpaceItemIdentifier]
+            || [title isEqual:NSToolbarFlexibleSpaceItemIdentifier])
+        return;
+
+    NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:title];
+    [item setLabel:title];
+    [item setToolTip:tip];
+    [item setAction:@selector(vimToolbarItemAction:)];
+    [item setAutovalidates:NO];
+
+    NSImage *img = [NSImage imageNamed:icon];
+    if (!img) {
+        img = [[[NSImage alloc] initByReferencingFile:icon] autorelease];
+        if (!(img && [img isValid]))
+            img = nil;
+    }
+    if (!img) {
+        ASLogNotice(@"Could not find image with name '%@' to use as toolbar"
+                " image for identifier '%@';"
+                " using default toolbar icon '%@' instead.",
+        icon, title, MMDefaultToolbarImageName);
+
+        img = [NSImage imageNamed:MMDefaultToolbarImageName];
+    }
+
+    [item setImage:img];
+
+    [toolbarItemDict setObject:item forKey:title];
+
+    [item release];
+}
 
 - (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)controllerContext
 {

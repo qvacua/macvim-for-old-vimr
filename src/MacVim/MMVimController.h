@@ -16,17 +16,13 @@
 @protocol MMVimControllerDelegate;
 
 
-@interface MMVimController : NSObject <NSToolbarDelegate> {
+@interface MMVimController : NSObject {
     unsigned            identifier;
     BOOL                isInitialized;
     MMWindowController  *windowController;
     id                  backendProxy;
     NSMenu              *mainMenu;
     NSMutableArray      *popupMenuItems;
-
-    // TODO: Move all toolbar code to window controller?
-    NSToolbar           *toolbar;
-    NSMutableDictionary *toolbarItemDict;
 
     int                 pid;
     NSString            *serverName;

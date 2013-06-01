@@ -39,8 +39,6 @@
 #import "Miscellaneous.h"
 
 
-static NSString *MMDefaultToolbarImageName = @"Attention";
-
 // NOTE: By default a message sent to the backend will be dropped if it cannot
 // be delivered instantly; otherwise there is a possibility that MacVim will
 // 'beachball' while waiting to deliver DO messages to an unresponsive Vim
@@ -82,11 +80,6 @@ static BOOL isUnsafeMessage(int msgid);
                       isAlternate:(BOOL)isAlternate;
 - (void)removeMenuItemWithDescriptor:(NSArray *)desc;
 - (void)enableMenuItemWithDescriptor:(NSArray *)desc state:(BOOL)on;
-- (void)addToolbarItemToDictionaryWithLabel:(NSString *)title
-        toolTip:(NSString *)tip icon:(NSString *)icon;
-- (void)addToolbarItemWithLabel:(NSString *)label
-                          tip:(NSString *)tip icon:(NSString *)icon
-                      atIndex:(int)idx;
 - (void)popupMenuWithDescriptor:(NSArray *)desc
                           atRow:(NSNumber *)row
                          column:(NSNumber *)col;
@@ -123,7 +116,6 @@ static BOOL isUnsafeMessage(int msgid);
 
     backendProxy = [backend retain];
     popupMenuItems = [[NSMutableArray alloc] init];
-    toolbarItemDict = [[NSMutableDictionary alloc] init];
     pid = processIdentifier;
     creationDate = [[NSDate alloc] init];
 
@@ -169,8 +161,6 @@ static BOOL isUnsafeMessage(int msgid);
     [serverName release];  serverName = nil;
     [backendProxy release];  backendProxy = nil;
 
-    [toolbarItemDict release];  toolbarItemDict = nil;
-    [toolbar release];  toolbar = nil;
     [popupMenuItems release];  popupMenuItems = nil;
     [windowController release];  windowController = nil;
 
@@ -417,7 +407,6 @@ static BOOL isUnsafeMessage(int msgid);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     isInitialized = NO;
-    [toolbar setDelegate:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     //[[backendProxy connectionForProxy] invalidate];
     //[windowController close];
@@ -439,27 +428,6 @@ static BOOL isUnsafeMessage(int msgid);
     }
 }
 
-- (NSToolbarItem *)toolbar:(NSToolbar *)theToolbar
-    itemForItemIdentifier:(NSString *)itemId
-    willBeInsertedIntoToolbar:(BOOL)flag
-{
-    NSToolbarItem *item = [toolbarItemDict objectForKey:itemId];
-    if (!item) {
-        ASLogWarn(@"No toolbar item with id '%@'", itemId);
-    }
-
-    return item;
-}
-
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)theToolbar
-{
-    return nil;
-}
-
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)theToolbar
-{
-    return nil;
-}
 
 - (BOOL)tellBackend:(id)obj {
     BOOL success = NO;
@@ -1093,22 +1061,6 @@ static BOOL isUnsafeMessage(int msgid);
 
     NSString *rootName = [desc objectAtIndex:0];
     if ([rootName isEqual:@"ToolBar"]) {
-        // The toolbar only has one menu, we take this as a hint to create a
-        // toolbar, then we return.
-        if (!toolbar) {
-            // NOTE! Each toolbar must have a unique identifier, else each
-            // window will have the same toolbar.
-            NSString *ident = [NSString stringWithFormat:@"%d", identifier];
-            toolbar = [[NSToolbar alloc] initWithIdentifier:ident];
-
-            [toolbar setShowsBaselineSeparator:NO];
-            [toolbar setDelegate:self];
-            [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
-            [toolbar setSizeMode:NSToolbarSizeModeSmall];
-
-            [windowController setToolbar:toolbar];
-        }
-
         return;
     }
 
@@ -1158,8 +1110,8 @@ static BOOL isUnsafeMessage(int msgid);
     NSString *rootName = [desc objectAtIndex:0];
 
     if ([rootName isEqual:@"ToolBar"]) {
-        if (toolbar && [desc count] == 2)
-            [self addToolbarItemWithLabel:title tip:tip icon:icon atIndex:idx];
+        if ([desc count] == 2)
+            [self.delegate vimController:self addToolbarItemWithLabel:title tip:tip icon:icon atIndex:idx];
         return;
     }
 
@@ -1214,15 +1166,10 @@ static BOOL isUnsafeMessage(int msgid);
     NSString *title = [desc lastObject];
     NSString *rootName = [desc objectAtIndex:0];
     if ([rootName isEqual:@"ToolBar"]) {
-        if (toolbar) {
-            // Only remove toolbar items, never actually remove the toolbar
-            // itself or strange things may happen.
-            if ([desc count] == 2) {
-                NSUInteger idx = [toolbar indexOfItemWithItemIdentifier:title];
-                if (idx != NSNotFound)
-                    [toolbar removeItemAtIndex:idx];
-            }
+        if ([desc count] == 2) {
+            [self.delegate vimController:self removeToolbarItemWithIdentifier:title];
         }
+
         return;
     }
 
@@ -1254,9 +1201,9 @@ static BOOL isUnsafeMessage(int msgid);
 
     NSString *rootName = [desc objectAtIndex:0];
     if ([rootName isEqual:@"ToolBar"]) {
-        if (toolbar && [desc count] == 2) {
+        if ([desc count] == 2) {
             NSString *title = [desc lastObject];
-            [[toolbar itemWithItemIdentifier:title] setEnabled:on];
+            [self.delegate vimController:self setStateToolbarItemWithIdentifier:title state:on];
         }
     } else {
         // Use tag to set whether item is enabled or disabled instead of
@@ -1265,76 +1212,6 @@ static BOOL isUnsafeMessage(int msgid);
         // wants to.
         [[self menuItemForDescriptor:desc] setTag:on];
     }
-}
-
-- (void)addToolbarItemToDictionaryWithLabel:(NSString *)title
-                                    toolTip:(NSString *)tip
-                                       icon:(NSString *)icon
-{
-    // If the item corresponds to a separator then do nothing, since it is
-    // already defined by Cocoa.
-    if (!title || [title isEqual:NSToolbarSeparatorItemIdentifier]
-               || [title isEqual:NSToolbarSpaceItemIdentifier]
-               || [title isEqual:NSToolbarFlexibleSpaceItemIdentifier])
-        return;
-
-    NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:title];
-    [item setLabel:title];
-    [item setToolTip:tip];
-    [item setAction:@selector(vimToolbarItemAction:)];
-    [item setAutovalidates:NO];
-
-    NSImage *img = [NSImage imageNamed:icon];
-    if (!img) {
-        img = [[[NSImage alloc] initByReferencingFile:icon] autorelease];
-        if (!(img && [img isValid]))
-            img = nil;
-    }
-    if (!img) {
-        ASLogNotice(@"Could not find image with name '%@' to use as toolbar"
-            " image for identifier '%@';"
-            " using default toolbar icon '%@' instead.",
-            icon, title, MMDefaultToolbarImageName);
-
-        img = [NSImage imageNamed:MMDefaultToolbarImageName];
-    }
-
-    [item setImage:img];
-
-    [toolbarItemDict setObject:item forKey:title];
-
-    [item release];
-}
-
-- (void)addToolbarItemWithLabel:(NSString *)label
-                            tip:(NSString *)tip
-                           icon:(NSString *)icon
-                        atIndex:(int)idx
-{
-    if (!toolbar) return;
-
-    // Check for separator items.
-    if (!label) {
-        label = NSToolbarSeparatorItemIdentifier;
-    } else if ([label length] >= 2 && [label hasPrefix:@"-"]
-                                   && [label hasSuffix:@"-"]) {
-        // The label begins and ends with '-'; decided which kind of separator
-        // item it is by looking at the prefix.
-        if ([label hasPrefix:@"-space"]) {
-            label = NSToolbarSpaceItemIdentifier;
-        } else if ([label hasPrefix:@"-flexspace"]) {
-            label = NSToolbarFlexibleSpaceItemIdentifier;
-        } else {
-            label = NSToolbarSeparatorItemIdentifier;
-        }
-    }
-
-    [self addToolbarItemToDictionaryWithLabel:label toolTip:tip icon:icon];
-
-    int maxIdx = [[toolbar items] count];
-    if (maxIdx < idx) idx = maxIdx;
-
-    [toolbar insertItemWithItemIdentifier:label atIndex:idx];
 }
 
 - (void)popupMenuWithDescriptor:(NSArray *)desc

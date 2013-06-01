@@ -17,7 +17,7 @@
 @class MMVimController;
 @class MMVimView;
 
-@interface MMWindowController : NSWindowController <NSWindowDelegate, MMVimControllerDelegate, NSOpenSavePanelDelegate>
+@interface MMWindowController : NSWindowController <NSWindowDelegate, MMVimControllerDelegate, NSOpenSavePanelDelegate, NSToolbarDelegate>
 {
     MMVimController     *vimController;
     MMVimView           *vimView;
@@ -40,7 +40,9 @@
     int                 userCols;
     NSPoint             userTopLeft;
     NSPoint             defaultTopLeft;
+
     NSToolbar           *toolbar;
+    NSMutableDictionary *toolbarItemDict;
 }
 
 - (id)initWithVimController:(MMVimController *)controller;
