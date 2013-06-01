@@ -930,7 +930,6 @@ static BOOL isUnsafeMessage(int msgid);
         return;
     }
 
-    // TODO
     if (DeleteSignMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
@@ -1325,8 +1324,7 @@ static BOOL isUnsafeMessage(int msgid);
 
 - (void)handleDeleteSign:(NSDictionary *)attr
 {
-    NSView <MMTextViewProtocol> *view = [[windowController vimView] textView];
-    [view deleteSign:[attr objectForKey:@"imgName"]];
+    [[self.vimView textView] deleteSign:[attr objectForKey:@"imgName"]];
 }
 
 - (void)setToolTipDelay:(NSTimeInterval)seconds
