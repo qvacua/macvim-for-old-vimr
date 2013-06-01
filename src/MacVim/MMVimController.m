@@ -28,15 +28,12 @@
 
 #import "MMAppController.h"
 #import "MMVimControllerDelegate.h"
-#import "MMTextView.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
 #import "MMWindowController.h"
-#import "MMCoreTextView.h"
 #import "MMUserDefaults.h"
 #import "MMUtils.h"
-
-#import "Miscellaneous.h"
+#import "MMTextViewProtocol.h"
 
 
 // NOTE: By default a message sent to the backend will be dropped if it cannot
@@ -950,7 +947,7 @@ static BOOL isUnsafeMessage(int msgid);
 
     // TODO: Tae
     if (SetTooltipMsgID == msgid) {
-        id textView = [[windowController vimView] textView];
+        NSView <MMTextViewProtocol> *textView = [self.vimView textView];
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         NSString *toolTip = dict ? [dict objectForKey:@"toolTip"] : nil;
         if (toolTip && [toolTip length] > 0)
