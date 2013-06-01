@@ -65,7 +65,6 @@
 #import "MMFindReplaceController.h"
 #import "MMFullScreenWindow.h"
 #import "MMTextView.h"
-#import "MMTypesetter.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
 #import "MMWindow.h"
@@ -1481,6 +1480,11 @@
                         contextInfo:controller];
 
     [alert release];
+}
+
+- (void)vimController:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force {
+    // Add dropped files to the "Recent Files" menu.
+    [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
 }
 
 #pragma mark NSOpenSavePanelDelegate

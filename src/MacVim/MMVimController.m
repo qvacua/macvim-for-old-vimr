@@ -32,8 +32,11 @@
 #import "MMVimController.h"
 #import "MMVimView.h"
 #import "MMWindowController.h"
-#import "Miscellaneous.h"
 #import "MMCoreTextView.h"
+#import "MMUserDefaults.h"
+#import "MMUtils.h"
+
+#import "Miscellaneous.h"
 
 
 static NSString *MMDefaultToolbarImageName = @"Attention";
@@ -257,17 +260,14 @@ static BOOL isUnsafeMessage(int msgid);
     if (splitVert && MMLayoutHorizontalSplit == layout)
         layout = MMLayoutVerticalSplit;
 
-    NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInt:layout],    @"layout",
-            filenames,                          @"filenames",
-            [NSNumber numberWithBool:force],    @"forceOpen",
-            nil];
+    NSDictionary *args = @{
+            @"layout" : @(layout),
+            @"filenames" : filenames,
+            @"forceOpen" : @(force),
+    };
 
     [self sendMessage:DropFilesMsgID data:[args dictionaryAsData]];
-
-    // Add dropped files to the "Recent Files" menu.
-    [[NSDocumentController sharedDocumentController]
-                                            noteNewRecentFilePaths:filenames];
+    [self.delegate vimController:self dropFiles:filenames forceOpen:force];
 }
 
 - (void)file:(NSString *)filename draggedToTabAtIndex:(NSUInteger)tabIndex

@@ -24,3 +24,6 @@ NSString *MMPreloadCacheSizeKey = @"MMPreloadCacheSize";
 NSString *MMLoginShellCommandKey = @"MMLoginShellCommand";
 NSString *MMLoginShellArgumentKey = @"MMLoginShellArgument";
 NSString *MMTypesetterKey = @"MMTypesetter";
+NSString *MMOpenLayoutKey = @"MMOpenLayout";
+NSString *MMVerticalSplitKey = @"MMVerticalSplit";
+NSString *MMDialogsTrackPwdKey = @"MMDialogsTrackPwd";

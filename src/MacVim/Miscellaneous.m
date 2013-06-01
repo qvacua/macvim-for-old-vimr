@@ -24,9 +24,6 @@ NSString *MMUntitledWindowKey           = @"MMUntitledWindow";
 NSString *MMTexturedWindowKey           = @"MMTexturedWindow";
 NSString *MMZoomBothKey                 = @"MMZoomBoth";
 NSString *MMCurrentPreferencePaneKey    = @"MMCurrentPreferencePane";
-NSString *MMDialogsTrackPwdKey          = @"MMDialogsTrackPwd";
-NSString *MMOpenLayoutKey               = @"MMOpenLayout";
-NSString *MMVerticalSplitKey            = @"MMVerticalSplit";
 NSString *MMLastWindowClosedBehaviorKey = @"MMLastWindowClosedBehavior";
 #ifdef INCLUDE_OLD_IM_CODE
 NSString *MMUseInlineImKey              = @"MMUseInlineIm";
@@ -283,27 +280,3 @@ showHiddenFilesView()
     return button;
 }
 
-
-
-
-    NSString *
-normalizeFilename(NSString *filename)
-{
-    return [filename precomposedStringWithCanonicalMapping];
-}
-
-    NSArray *
-normalizeFilenames(NSArray *filenames)
-{
-    NSMutableArray *outnames = [NSMutableArray array];
-    if (!filenames)
-        return outnames;
-
-    unsigned i, count = [filenames count];
-    for (i = 0; i < count; ++i) {
-        NSString *nfkc = normalizeFilename([filenames objectAtIndex:i]);
-        [outnames addObject:nfkc];
-    }
-
-    return outnames;
-}

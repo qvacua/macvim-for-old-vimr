@@ -46,12 +46,13 @@
 - (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force;
 
 /**
 * Vim measures Y-coordinates from top of screen.
 */
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data;
 @end

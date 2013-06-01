@@ -12,6 +12,7 @@
 
 
 @class MMWindowController;
+@class MMVimView;
 @protocol MMVimControllerDelegate;
 
 

@@ -23,3 +23,6 @@ extern NSString *MMPreloadCacheSizeKey;
 extern NSString *MMLoginShellCommandKey;
 extern NSString *MMLoginShellArgumentKey;
 extern NSString *MMTypesetterKey;
+extern NSString *MMOpenLayoutKey;
+extern NSString *MMVerticalSplitKey;
+extern NSString *MMDialogsTrackPwdKey;
