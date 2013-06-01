@@ -54,16 +54,6 @@ static unsigned identifierCounter = 1;
 static BOOL isUnsafeMessage(int msgid);
 
 
-// HACK! AppKit private methods from NSToolTipManager.  As an alternative to
-// using private methods, it would be possible to set the user default
-// NSInitialToolTipDelay (in ms) on app startup, but then it is impossible to
-// change the balloon delay without closing/reopening a window.
-@interface NSObject (NSToolTipManagerPrivateAPI)
-+ (id)sharedToolTipManager;
-- (void)setInitialToolTipDelay:(double)arg1;
-@end
-
-
 @interface MMVimController (Private)
 - (void)doProcessInputQueue:(NSArray *)queue;
 - (void)handleMessage:(int)msgid data:(NSData *)data;
@@ -89,7 +79,6 @@ static BOOL isUnsafeMessage(int msgid);
 - (void)handleBrowseForFile:(NSDictionary *)attr data:(NSData *)data;
 - (void)handleShowDialog:(NSDictionary *)attr data:(NSData *)data;
 - (void)handleDeleteSign:(NSDictionary *)attr;
-- (void)setToolTipDelay:(NSTimeInterval)seconds;
 @end
 
 
@@ -959,7 +948,7 @@ static BOOL isUnsafeMessage(int msgid);
         return;
     }
 
-    // TODO
+    // TODO: Tae
     if (SetTooltipMsgID == msgid) {
         id textView = [[windowController vimView] textView];
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
@@ -971,12 +960,11 @@ static BOOL isUnsafeMessage(int msgid);
         return;
     }
 
-    // TODO
     if (SetTooltipDelayMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         NSNumber *delay = dict ? [dict objectForKey:@"delay"] : nil;
         if (delay)
-            [self setToolTipDelay:[delay floatValue]];
+            [self.delegate vimController:self setTooltipDelay:[delay floatValue]];
         return;
     }
 
@@ -1325,23 +1313,6 @@ static BOOL isUnsafeMessage(int msgid);
 - (void)handleDeleteSign:(NSDictionary *)attr
 {
     [[self.vimView textView] deleteSign:[attr objectForKey:@"imgName"]];
-}
-
-- (void)setToolTipDelay:(NSTimeInterval)seconds
-{
-    // HACK! NSToolTipManager is an AppKit private class.
-    static Class TTM = nil;
-    if (!TTM)
-        TTM = NSClassFromString(@"NSToolTipManager");
-
-    if (seconds < 0)
-        seconds = 0;
-
-    if (TTM) {
-        [[TTM sharedToolTipManager] setInitialToolTipDelay:seconds];
-    } else {
-        ASLogNotice(@"Failed to get NSToolTipManager");
-    }
 }
 
 @end // MMVimController (Private)

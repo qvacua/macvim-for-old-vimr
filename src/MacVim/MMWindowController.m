@@ -83,6 +83,16 @@
 static NSString *MMDefaultToolbarImageName = @"Attention";
 
 
+// HACK! AppKit private methods from NSToolTipManager.  As an alternative to
+// using private methods, it would be possible to set the user default
+// NSInitialToolTipDelay (in ms) on app startup, but then it is impossible to
+// change the balloon delay without closing/reopening a window.
+@interface NSObject (NSToolTipManagerPrivateAPI)
++ (id)sharedToolTipManager;
+- (void)setInitialToolTipDelay:(double)arg1;
+@end
+
+
 @interface MMWindowController (Private)
 
 - (void)addToolbarItemToDictionaryWithLabel:(NSString *)title toolTip:(NSString *)tip icon:(NSString *)icon;
@@ -1544,6 +1554,21 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [[toolbar itemWithItemIdentifier:identifier] setEnabled:state];
 }
 
+- (void)vimController:(MMVimController *)controller setTooltipDelay:(float)seconds {
+    // HACK! NSToolTipManager is an AppKit private class.
+    static Class TTM = nil;
+    if (!TTM)
+        TTM = NSClassFromString(@"NSToolTipManager");
+
+    if (seconds < 0)
+        seconds = 0;
+
+    if (TTM) {
+        [[TTM sharedToolTipManager] setInitialToolTipDelay:seconds];
+    } else {
+        ASLogNotice(@"Failed to get NSToolTipManager");
+    }
+}
 
 #pragma mark NSOpenSavePanelDelegate
 - (void)panel:(id)sender willExpand:(BOOL)expanding

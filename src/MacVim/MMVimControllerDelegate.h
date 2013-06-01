@@ -53,6 +53,7 @@
 - (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx;
 - (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier;
 - (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state;
+- (void)vimController:(MMVimController *)controller setTooltipDelay:(float)delay;
 
 /**
 * Vim measures Y-coordinates from top of screen.
