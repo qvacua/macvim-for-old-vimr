@@ -67,7 +67,6 @@ static BOOL isUnsafeMessage(int msgid);
 @interface MMVimController (Private)
 - (void)doProcessInputQueue:(NSArray *)queue;
 - (void)handleMessage:(int)msgid data:(NSData *)data;
-- (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context;
 - (NSMenuItem *)menuItemForDescriptor:(NSArray *)desc;
 - (NSMenu *)parentMenuForDescriptor:(NSArray *)desc;
 - (NSMenu *)topLevelMenuForTitle:(NSString *)title;
@@ -93,8 +92,8 @@ static BOOL isUnsafeMessage(int msgid);
 - (void)popupMenuWithAttributes:(NSDictionary *)attrs;
 - (void)connectionDidDie:(NSNotification *)notification;
 - (void)scheduleClose;
-- (void)handleBrowseForFile:(NSDictionary *)attr;
-- (void)handleShowDialog:(NSDictionary *)attr;
+- (void)handleBrowseForFile:(NSDictionary *)attr data:(NSData *)data;
+- (void)handleShowDialog:(NSDictionary *)attr data:(NSData *)data;
 - (void)handleDeleteSign:(NSDictionary *)attr;
 - (void)setToolTipDelay:(NSTimeInterval)seconds;
 @end
@@ -480,7 +479,19 @@ static BOOL isUnsafeMessage(int msgid);
     return nil;
 }
 
-- (BOOL)sendDialogReturnToBackend:(NSString *)path {
+- (BOOL)tellBackend:(id)obj {
+    BOOL success = NO;
+    @try {
+        [backendProxy setDialogReturn:obj];
+        success = YES;
+    } @catch (NSException *ex) {
+        ASLogDebug(@"setDialogReturn: failed: pid=%d id=%d reason=%@", pid, identifier, ex);
+    }
+
+    return success;
+}
+
+- (BOOL)sendDialogReturnToBackend:(id)obj {
     // NOTE! setDialogReturn: is a synchronous call so set a proper timeout to
     // avoid waiting forever for it to finish.  We make this a synchronous call
     // so that we can be fairly certain that Vim doesn't think the dialog box
@@ -489,15 +500,8 @@ static BOOL isUnsafeMessage(int msgid);
     NSTimeInterval oldTimeout = [conn requestTimeout];
     [conn setRequestTimeout:MMSetDialogReturnTimeout];
 
-    BOOL success = NO;
-    @try {
-        [backendProxy setDialogReturn:path];
-        success = YES;
-    } @catch (NSException *ex) {
-        ASLogDebug(@"Exception: pid=%d id=%d reason=%@", pid, identifier, ex);
-    } @finally {
-        [conn setRequestTimeout:oldTimeout];
-    }
+    BOOL success = [self tellBackend:obj];
+    [conn setRequestTimeout:oldTimeout];
 
     return success;
 }
@@ -965,15 +969,14 @@ static BOOL isUnsafeMessage(int msgid);
     if (BrowseForFileMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
-            [self handleBrowseForFile:dict];
+            [self handleBrowseForFile:dict data:data];
         return;
     }
 
-    // TODO
     if (ShowDialogMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict)
-            [self handleShowDialog:dict];
+            [self handleShowDialog:dict data:data];
         return;
     }
 
@@ -1043,37 +1046,6 @@ static BOOL isUnsafeMessage(int msgid);
     // isUnsafeMessage() if necessary!
 
     ASLogWarn(@"Unknown message received (msgid=%d)", msgid);
-}
-
-- (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context
-{
-    NSArray *ret = nil;
-
-    code = code - NSAlertFirstButtonReturn + 1;
-
-    if ([alert isKindOfClass:[MMAlert class]] && [alert textField]) {
-        ret = [NSArray arrayWithObjects:[NSNumber numberWithInt:code],
-            [[alert textField] stringValue], nil];
-    } else {
-        ret = [NSArray arrayWithObject:[NSNumber numberWithInt:code]];
-    }
-
-    ASLogDebug(@"Alert return=%@", ret);
-
-    // NOTE!  This causes the sheet animation to run its course BEFORE the rest
-    // of this function is executed.  If we do not wait for the sheet to
-    // disappear before continuing it can happen that the controller is
-    // released from under us (i.e. we'll crash and burn) because this
-    // animation is otherwise performed in the default run loop mode!
-    [[alert window] orderOut:self];
-
-    @try {
-        [backendProxy setDialogReturn:ret];
-    }
-    @catch (NSException *ex) {
-        ASLogDebug(@"setDialogReturn: failed: pid=%d id=%d reason=%@",
-                pid, identifier, ex);
-    }
 }
 
 - (NSMenuItem *)menuItemForDescriptor:(NSArray *)desc
@@ -1473,114 +1445,44 @@ static BOOL isUnsafeMessage(int msgid);
                                   modes:@[NSDefaultRunLoopMode]];
 }
 
-// NSSavePanel delegate
-- (void)panel:(id)sender willExpand:(BOOL)expanding
-{
-    // Show or hide the "show hidden files" button
-    if (expanding) {
-        [sender setAccessoryView:showHiddenFilesView()];
-    } else {
-        [sender setShowsHiddenFiles:NO];
-        [sender setAccessoryView:nil];
-    }
-}
-
-- (void)handleBrowseForFile:(NSDictionary *)attr
+- (void)handleBrowseForFile:(NSDictionary *)attr data:(NSData *)data
 {
     if (!isInitialized) return;
 
-    NSString *dir = [attr objectForKey:@"dir"];
-    BOOL saving = [[attr objectForKey:@"saving"] boolValue];
-    BOOL browsedir = [[attr objectForKey:@"browsedir"] boolValue];
+    NSString *dir = attr[@"dir"];
+    BOOL saving = [attr[@"saving"] boolValue];
+    BOOL browsedir = [attr[@"browsedir"] boolValue];
 
     if (!dir) {
         // 'dir == nil' means: set dir to the pwd of the Vim process, or let
         // open dialog decide (depending on the below user default).
-        BOOL trackPwd = [[NSUserDefaults standardUserDefaults]
-                boolForKey:MMDialogsTrackPwdKey];
+        BOOL trackPwd = [[NSUserDefaults standardUserDefaults] boolForKey:MMDialogsTrackPwdKey];
         if (trackPwd)
-            dir = [vimState objectForKey:@"pwd"];
+            dir = vimState[@"pwd"];
     }
 
     // 10.6+ APIs uses URLs instead of paths
     dir = [dir stringByExpandingTildeInPath];
     NSURL *dirURL = dir ? [NSURL fileURLWithPath:dir isDirectory:YES] : nil;
 
-    [self.delegate vimController:self handleBrowseWithDirectoryUrl:dirURL browseDir:browsedir saving:saving];
+    [self.delegate vimController:self handleBrowseWithDirectoryUrl:dirURL browseDir:browsedir saving:saving data:data];
 }
 
-- (void)handleShowDialog:(NSDictionary *)attr
-{
+- (void)handleShowDialog:(NSDictionary *)attr data:(NSData *)data {
     if (!isInitialized) return;
 
-    NSArray *buttonTitles = [attr objectForKey:@"buttonTitles"];
-    if (!(buttonTitles && [buttonTitles count])) return;
-
-    int style = [[attr objectForKey:@"alertStyle"] intValue];
-    NSString *message = [attr objectForKey:@"messageText"];
-    NSString *text = [attr objectForKey:@"informativeText"];
-    NSString *textFieldString = [attr objectForKey:@"textFieldString"];
-    MMAlert *alert = [[MMAlert alloc] init];
-
-    // NOTE! This has to be done before setting the informative text.
-    if (textFieldString)
-        [alert setTextFieldString:textFieldString];
-
-    [alert setAlertStyle:style];
-
-    if (message) {
-        [alert setMessageText:message];
-    } else {
-        // If no message text is specified 'Alert' is used, which we don't
-        // want, so set an empty string as message text.
-        [alert setMessageText:@""];
+    NSArray *buttonTitles = attr[@"buttonTitles"];
+    if (!(buttonTitles && [buttonTitles count])) {
+        return;
     }
 
-    if (text) {
-        [alert setInformativeText:text];
-    } else if (textFieldString) {
-        // Make sure there is always room for the input text field.
-        [alert setInformativeText:@""];
-    }
+    NSAlertStyle style = (NSAlertStyle) [attr[@"alertStyle"] intValue];
+    NSString *message = attr[@"messageText"];
+    NSString *text = attr[@"informativeText"];
+    NSString *textFieldString = attr[@"textFieldString"];
 
-    unsigned i, count = [buttonTitles count];
-    for (i = 0; i < count; ++i) {
-        NSString *title = [buttonTitles objectAtIndex:i];
-        // NOTE: The title of the button may contain the character '&' to
-        // indicate that the following letter should be the key equivalent
-        // associated with the button.  Extract this letter and lowercase it.
-        NSString *keyEquivalent = nil;
-        NSRange hotkeyRange = [title rangeOfString:@"&"];
-        if (NSNotFound != hotkeyRange.location) {
-            if ([title length] > NSMaxRange(hotkeyRange)) {
-                NSRange keyEquivRange = NSMakeRange(hotkeyRange.location+1, 1);
-                keyEquivalent = [[title substringWithRange:keyEquivRange]
-                    lowercaseString];
-            }
-
-            NSMutableString *string = [NSMutableString stringWithString:title];
-            [string deleteCharactersInRange:hotkeyRange];
-            title = string;
-        }
-
-        [alert addButtonWithTitle:title];
-
-        // Set key equivalent for the button, but only if NSAlert hasn't
-        // already done so.  (Check the documentation for
-        // - [NSAlert addButtonWithTitle:] to see what key equivalents are
-        // automatically assigned.)
-        NSButton *btn = [[alert buttons] lastObject];
-        if ([[btn keyEquivalent] length] == 0 && keyEquivalent) {
-            [btn setKeyEquivalent:keyEquivalent];
-        }
-    }
-
-    [alert beginSheetModalForWindow:[windowController window]
-                      modalDelegate:self
-                     didEndSelector:@selector(alertDidEnd:code:context:)
-                        contextInfo:NULL];
-
-    [alert release];
+    [self.delegate vimController:self handleShowDialogWithButtonTitles:buttonTitles style:style message:message
+                            text:text textFieldString:textFieldString data:data];
 }
 
 - (void)handleDeleteSign:(NSDictionary *)attr

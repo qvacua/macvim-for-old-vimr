@@ -71,6 +71,7 @@
 #import "MMWindow.h"
 #import "MMWindowController.h"
 #import "Miscellaneous.h"
+#import "MMAlert.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 
@@ -83,6 +84,7 @@
 
 @interface MMWindowController (Private)
 
+- (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context;
 - (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller;
 - (NSSize)contentSize;
 - (void)resizeWindowToFitContentSize:(NSSize)contentSize
@@ -1378,7 +1380,7 @@
     [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
 }
 
-- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving {
+- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data {
     if (saving) {
         NSSavePanel *panel = [NSSavePanel savePanel];
 
@@ -1421,12 +1423,111 @@
     }];
 }
 
+- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)textFieldString data:(NSData *)data {
+    MMAlert *alert = [[MMAlert alloc] init];
 
+    // NOTE! This has to be done before setting the informative text.
+    if (textFieldString)
+        [alert setTextFieldString:textFieldString];
+
+    [alert setAlertStyle:style];
+
+    if (message) {
+        [alert setMessageText:message];
+    } else {
+        // If no message text is specified 'Alert' is used, which we don't
+        // want, so set an empty string as message text.
+        [alert setMessageText:@""];
+    }
+
+    if (text) {
+        [alert setInformativeText:text];
+    } else if (textFieldString) {
+        // Make sure there is always room for the input text field.
+        [alert setInformativeText:@""];
+    }
+
+    unsigned i, count = [buttonTitles count];
+    for (i = 0; i < count; ++i) {
+        NSString *title = [buttonTitles objectAtIndex:i];
+        // NOTE: The title of the button may contain the character '&' to
+        // indicate that the following letter should be the key equivalent
+        // associated with the button.  Extract this letter and lowercase it.
+        NSString *keyEquivalent = nil;
+        NSRange hotkeyRange = [title rangeOfString:@"&"];
+        if (NSNotFound != hotkeyRange.location) {
+            if ([title length] > NSMaxRange(hotkeyRange)) {
+                NSRange keyEquivRange = NSMakeRange(hotkeyRange.location+1, 1);
+                keyEquivalent = [[title substringWithRange:keyEquivRange]
+                        lowercaseString];
+            }
+
+            NSMutableString *string = [NSMutableString stringWithString:title];
+            [string deleteCharactersInRange:hotkeyRange];
+            title = string;
+        }
+
+        [alert addButtonWithTitle:title];
+
+        // Set key equivalent for the button, but only if NSAlert hasn't
+        // already done so.  (Check the documentation for
+        // - [NSAlert addButtonWithTitle:] to see what key equivalents are
+        // automatically assigned.)
+        NSButton *btn = [[alert buttons] lastObject];
+        if ([[btn keyEquivalent] length] == 0 && keyEquivalent) {
+            [btn setKeyEquivalent:keyEquivalent];
+        }
+    }
+
+    [alert beginSheetModalForWindow:[self window]
+                      modalDelegate:self
+                     didEndSelector:@selector(alertDidEnd:code:context:)
+                        contextInfo:controller];
+
+    [alert release];
+}
+
+#pragma mark NSOpenSavePanelDelegate
+- (void)panel:(id)sender willExpand:(BOOL)expanding
+{
+    // Show or hide the "show hidden files" button
+    if (expanding) {
+        [sender setAccessoryView:showHiddenFilesView()];
+    } else {
+        [sender setShowsHiddenFiles:NO];
+        [sender setAccessoryView:nil];
+    }
+}
 @end // MMWindowController
 
 
 
 @implementation MMWindowController (Private)
+
+- (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)controllerContext
+{
+    MMVimController *controller = (MMVimController *) controllerContext;
+    NSArray *ret = nil;
+    code = code - NSAlertFirstButtonReturn + 1;
+
+    if ([alert isKindOfClass:[MMAlert class]] && [alert textField]) {
+        ret = @[@(code), [[alert textField] stringValue]];
+    } else {
+        ret = @[@(code)];
+    }
+
+    ASLogDebug(@"Alert return=%@", ret);
+
+    // NOTE!  This causes the sheet animation to run its course BEFORE the rest
+    // of this function is executed.  If we do not wait for the sheet to
+    // disappear before continuing it can happen that the controller is
+    // released from under us (i.e. we'll crash and burn) because this
+    // animation is otherwise performed in the default run loop mode!
+    [[alert window] orderOut:self];
+
+    // TODO: Tae: shouldn't we use [controller sendDialogReturnToBackend:ret]?
+    [controller tellBackend:ret];
+}
 
 - (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller {
     NSString *path = nil;

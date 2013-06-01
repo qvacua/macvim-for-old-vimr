@@ -17,7 +17,7 @@
 @class MMVimController;
 @class MMVimView;
 
-@interface MMWindowController : NSWindowController <NSWindowDelegate, MMVimControllerDelegate>
+@interface MMWindowController : NSWindowController <NSWindowDelegate, MMVimControllerDelegate, NSOpenSavePanelDelegate>
 {
     MMVimController     *vimController;
     MMVimView           *vimView;
