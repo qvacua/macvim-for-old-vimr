@@ -112,8 +112,11 @@ static BOOL isUnsafeMessage(int msgid);
     windowController =
         [[MMWindowController alloc] initWithVimController:self];
 
-    // TODO: this should not be done here, but somewhere higher
+    // TODO: Tae: this should not be done here, but somewhere higher
     _delegate = windowController;
+
+    // TODO: Tae: should be instantiated here, not in the window controller (and retained then)
+    _vimView = [windowController vimView];
 
     backendProxy = [backend retain];
     popupMenuItems = [[NSMutableArray alloc] init];
@@ -554,7 +557,7 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (BatchDrawMsgID == msgid) {
-        [self.delegate vimController:self batchDrawWithData:data];
+        [[self.vimView textView] performBatchDrawWithData:data];
         return;
     }
 

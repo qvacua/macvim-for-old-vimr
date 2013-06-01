@@ -1246,10 +1246,6 @@
     }
 }
 
-- (void)vimController:(MMVimController *)controller batchDrawWithData:(NSData *)data {
-    [[[self vimView] textView] performBatchDrawWithData:data];
-}
-
 - (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data {
     [self updateTabsWithData:data];
 }

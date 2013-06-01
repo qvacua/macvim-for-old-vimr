@@ -36,6 +36,7 @@
 }
 
 @property (assign) id <MMVimControllerDelegate> delegate;
+@property (assign) MMVimView *vimView;
 
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier;
 - (unsigned)vimControllerId;

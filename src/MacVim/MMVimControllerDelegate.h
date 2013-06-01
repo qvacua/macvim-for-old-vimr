@@ -18,7 +18,6 @@
 
 @optional
 - (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data;
-- (void)vimController:(MMVimController *)controller batchDrawWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
