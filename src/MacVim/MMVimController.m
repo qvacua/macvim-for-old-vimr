@@ -907,7 +907,7 @@ static BOOL isUnsafeMessage(int msgid);
 
     if (SetFullScreenColorMsgID == msgid) {
         const int *bg = (const int*)[data bytes];
-        NSColor *color = [NSColor colorWithRgbInt:*bg];
+        NSColor *color = [NSColor colorWithRgbInt:(unsigned int) *bg];
 
         [self.delegate vimController:self setFullScreenBackgroundColor:color data:data];
         return;
@@ -1038,7 +1038,7 @@ static BOOL isUnsafeMessage(int msgid);
     NSMenuItem *item = nil;
     int i, count = [rootItems count];
     for (i = 0; i < count; ++i) {
-        item = [rootItems objectAtIndex:i];
+        item = [rootItems objectAtIndex:(NSUInteger) i];
         if ([[item title] isEqual:rootName])
             break;
     }
@@ -1047,7 +1047,7 @@ static BOOL isUnsafeMessage(int msgid);
 
     count = [desc count];
     for (i = 1; i < count; ++i) {
-        item = [[item submenu] itemWithTitle:[desc objectAtIndex:i]];
+        item = [[item submenu] itemWithTitle:[desc objectAtIndex:(NSUInteger) i]];
         if (!item) return nil;
     }
 
@@ -1065,7 +1065,7 @@ static BOOL isUnsafeMessage(int msgid);
     NSMenu *menu = nil;
     int i, count = [rootItems count];
     for (i = 0; i < count; ++i) {
-        NSMenuItem *item = [rootItems objectAtIndex:i];
+        NSMenuItem *item = [rootItems objectAtIndex:(NSUInteger) i];
         if ([[item title] isEqual:rootName]) {
             menu = [item submenu];
             break;
@@ -1076,7 +1076,7 @@ static BOOL isUnsafeMessage(int msgid);
 
     count = [desc count] - 1;
     for (i = 1; i < count; ++i) {
-        NSMenuItem *item = [menu itemWithTitle:[desc objectAtIndex:i]];
+        NSMenuItem *item = [menu itemWithTitle:[desc objectAtIndex:(NSUInteger) i]];
         menu = [item submenu];
         if (!menu) return nil;
     }
@@ -1122,7 +1122,7 @@ static BOOL isUnsafeMessage(int msgid);
         if ([popupMenuItems count] <= idx) {
             [popupMenuItems addObject:item];
         } else {
-            [popupMenuItems insertObject:item atIndex:idx];
+            [popupMenuItems insertObject:item atIndex:(NSUInteger) idx];
         }
     } else {
         // If descriptor has no parent and its not a popup (or toolbar) menu,
@@ -1188,7 +1188,7 @@ static BOOL isUnsafeMessage(int msgid);
         if ([tip length] > 0) [item setToolTip:tip];
         if ([keyEquivalent length] > 0) {
             [item setKeyEquivalent:keyEquivalent];
-            [item setKeyEquivalentModifierMask:modifierMask];
+            [item setKeyEquivalentModifierMask:(NSUInteger) modifierMask];
         }
         [item setAlternate:isAlternate];
 
@@ -1445,7 +1445,7 @@ static BOOL isUnsafeMessage(int msgid);
 
 - (void)handleDeleteSign:(NSDictionary *)attr
 {
-    MMTextView *view = [[windowController vimView] textView];
+    NSView <MMTextViewProtocol> *view = [[windowController vimView] textView];
     [view deleteSign:[attr objectForKey:@"imgName"]];
 }
 
