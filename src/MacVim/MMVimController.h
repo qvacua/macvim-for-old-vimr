@@ -62,8 +62,6 @@
                timeout:(NSTimeInterval)timeout;
 - (void)addVimInput:(NSString *)string;
 - (NSString *)evaluateVimExpression:(NSString *)expr;
-- (id)evaluateVimExpressionCocoa:(NSString *)expr
-                     errorString:(NSString **)errstr;
 - (void)processInputQueue:(NSArray *)queue;
 
 - (BOOL)tellBackend:(id)obj;

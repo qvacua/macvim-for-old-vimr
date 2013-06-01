@@ -123,8 +123,7 @@ static BOOL isUnsafeMessage(int msgid);
 
     NSConnection *connection = [backendProxy connectionForProxy];
 
-    // TODO: Check that this will not set the timeout for the root proxy
-    // (in MMAppController).
+    // TODO: Check that this will not set the timeout for the root proxy (in MMAppController).
     [connection setRequestTimeout:MMBackendProxyRequestTimeout];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -305,7 +304,7 @@ static BOOL isUnsafeMessage(int msgid);
         NSMutableData *data = [NSMutableData data];
 
         [data appendBytes:&len length:sizeof(int)];
-        [data appendBytes:[string UTF8String] length:len];
+        [data appendBytes:[string UTF8String] length:(NSUInteger) len];
 
         [self sendMessage:DropStringMsgID data:data];
     }
@@ -397,24 +396,6 @@ static BOOL isUnsafeMessage(int msgid);
     @catch (NSException *ex) {
         ASLogDebug(@"evaluateExpression: failed: pid=%d id=%d reason=%@",
                 pid, identifier, ex);
-    }
-
-    return eval;
-}
-
-- (id)evaluateVimExpressionCocoa:(NSString *)expr
-                     errorString:(NSString **)errstr
-{
-    id eval = nil;
-
-    @try {
-        eval = [backendProxy evaluateExpressionCocoa:expr
-                                         errorString:errstr];
-        ASLogDebug(@"eval(%@)=%@", expr, eval);
-    } @catch (NSException *ex) {
-        ASLogDebug(@"evaluateExpressionCocoa: failed: pid=%d id=%d reason=%@",
-                pid, identifier, ex);
-        *errstr = [ex reason];
     }
 
     return eval;
