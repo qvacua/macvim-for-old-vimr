@@ -11,6 +11,9 @@
 #import <Cocoa/Cocoa.h>
 
 
+@class MMVimController;
+
+
 // Scroller type; these must match SBAR_* in gui.h
 enum {
     MMScrollerTypeLeft = 0,
@@ -24,6 +27,8 @@ enum {
     int type;
     NSRange range;
 }
+
+@property (assign) MMVimController *vimController;
 
 - (id)initWithIdentifier:(int32_t)ident type:(int)type;
 - (int32_t)scrollerId;

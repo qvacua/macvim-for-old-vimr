@@ -61,7 +61,7 @@
     if (!(self = [super initWithFrame:frame]))
         return nil;
     
-    vimController = controller;
+    _vimController = controller;
     scrollbars = [[NSMutableArray alloc] init];
 
     // Only the tabline is autoresized, all other subview placement is done in
@@ -214,7 +214,7 @@
 
 - (void)cleanup
 {
-    vimController = nil;
+    _vimController = nil;
     
     // NOTE! There is a bug in PSMTabBarControl in that it retains the delegate
     // so reset the delegate here, otherwise the delegate may never get
@@ -265,7 +265,7 @@
 
 - (IBAction)addNewTab:(id)sender
 {
-    [vimController sendMessage:AddNewTabMsgID data:nil];
+    [self.vimController sendMessage:AddNewTabMsgID data:nil];
 }
 
 - (void)updateTabsWithData:(NSData *)data
@@ -374,8 +374,8 @@
 
 - (void)createScrollbarWithIdentifier:(int32_t)ident type:(int)type
 {
-    MMScroller *scroller = [[MMScroller alloc] initWithIdentifier:ident
-                                                             type:type];
+    MMScroller *scroller = [[MMScroller alloc] initWithIdentifier:ident type:type];
+    scroller.vimController = self.vimController;
     [scroller setTarget:self];
     [scroller setAction:@selector(scroll:)];
 
@@ -436,7 +436,7 @@
     [data appendBytes:&hitPart length:sizeof(int)];
     [data appendBytes:&value length:sizeof(float)];
 
-    [vimController sendMessage:ScrollbarEventMsgID data:data];
+    [self.vimController sendMessage:ScrollbarEventMsgID data:data];
 }
 
 - (void)setScrollbarPosition:(int)pos length:(int)len identifier:(int32_t)ident
@@ -480,7 +480,7 @@
         if (NSNotFound != idx) {
             int i = (int)idx;   // HACK! Never more than MAXINT tabs?!
             NSData *data = [NSData dataWithBytes:&i length:sizeof(int)];
-            [vimController sendMessage:SelectTabMsgID data:data];
+            [self.vimController sendMessage:SelectTabMsgID data:data];
         }
     }
 
@@ -498,7 +498,7 @@
     NSUInteger idx = [self representedIndexOfTabViewItem:tabViewItem];
     int i = (int)idx;   // HACK! Never more than MAXINT tabs?!
     NSData *data = [NSData dataWithBytes:&i length:sizeof(int)];
-    [vimController sendMessage:CloseTabMsgID data:data];
+    [self.vimController sendMessage:CloseTabMsgID data:data];
 
     return NO;
 }
@@ -509,7 +509,7 @@
     NSMutableData *data = [NSMutableData data];
     [data appendBytes:&idx length:sizeof(int)];
 
-    [vimController sendMessage:DraggedTabMsgID data:data];
+    [self.vimController sendMessage:DraggedTabMsgID data:data];
 }
 
 - (NSDragOperation)tabBarControl:(PSMTabBarControl *)theTabBarControl
@@ -533,11 +533,11 @@
             return NO;
         if (tabIndex != NSNotFound) {
             // If dropping on a specific tab, only open one file
-            [vimController file:[filenames objectAtIndex:0]
+            [self.vimController file:[filenames objectAtIndex:0]
                 draggedToTabAtIndex:tabIndex];
         } else {
             // Files were dropped on empty part of tab bar; open them all
-            [vimController filesDraggedToTabBar:filenames];
+            [self.vimController filesDraggedToTabBar:filenames];
         }
         return YES;
     } else {
@@ -858,7 +858,7 @@
                    "%dx%d (%s)", cols, rows, constrained[1], constrained[0],
                    MessageStrings[msgid]);
 
-        [vimController sendMessage:msgid data:data];
+        [self.vimController sendMessage:msgid data:data];
 
         // We only want to set the window title if this resize came from
         // a live-resize, not (for example) setting 'columns' or 'lines'.

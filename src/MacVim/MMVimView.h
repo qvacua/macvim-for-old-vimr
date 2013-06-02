@@ -20,11 +20,12 @@
 @interface MMVimView : NSView {
     PSMTabBarControl    *tabBarControl;
     NSTabView           *tabView;
-    MMVimController     *vimController;
     BOOL                vimTaskSelectedTab;
     NSView <MMTextViewProtocol> *textView;
     NSMutableArray      *scrollbars;
 }
+
+@property (assign) MMVimController *vimController;
 
 - (MMVimView *)initWithFrame:(NSRect)frame vimController:(MMVimController *)c;
 
