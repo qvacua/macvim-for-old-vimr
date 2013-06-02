@@ -18,7 +18,7 @@
 @class MMVimManager;
 
 
-@interface MMAppController : NSObject <MMVimManagerDelegateProtocol> {
+@interface MMAppController : NSObject <NSApplicationDelegate, MMVimManagerDelegateProtocol> {
     NSString            *openSelectionString;
     NSMenu              *defaultMainMenu;
     NSMenuItem          *appMenuItemTemplate;

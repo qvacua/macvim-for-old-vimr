@@ -198,285 +198,6 @@ typedef struct
     [super dealloc];
 }
 
-- (void)applicationWillFinishLaunching:(NSNotification *)notification
-{
-    // Remember the default menu so that it can be restored if the user closes
-    // all editor windows.
-    defaultMainMenu = [[NSApp mainMenu] retain];
-
-    // Store a copy of the default app menu so we can use this as a template
-    // for all other menus.  We make a copy here because the "Services" menu
-    // will not yet have been populated at this time.  If we don't we get
-    // problems trying to set key equivalents later on because they might clash
-    // with items on the "Services" menu.
-    appMenuItemTemplate = [defaultMainMenu itemAtIndex:0];
-    appMenuItemTemplate = [appMenuItemTemplate copy];
-
-    // Set up the "Open Recent" menu. See
-    //   http://lapcatsoftware.com/blog/2007/07/10/
-    //     working-without-a-nib-part-5-open-recent-menu/
-    // and
-    //   http://www.cocoabuilder.com/archive/message/cocoa/2007/8/15/187793
-    // for more information.
-    //
-    // The menu itself is created in MainMenu.nib but we still seem to have to
-    // hack around a bit to get it to work.  (This has to be done in
-    // applicationWillFinishLaunching at the latest, otherwise it doesn't
-    // work.)
-    NSMenu *fileMenu = [defaultMainMenu findFileMenu];
-    if (fileMenu) {
-        int idx = [fileMenu indexOfItemWithAction:@selector(fileOpen:)];
-        if (idx >= 0 && idx+1 < [fileMenu numberOfItems])
-
-        recentFilesMenuItem = [fileMenu itemWithTitle:@"Open Recent"];
-        [[recentFilesMenuItem submenu] performSelector:@selector(_setMenuName:)
-                                        withObject:@"NSRecentDocumentsMenu"];
-
-        // Note: The "Recent Files" menu must be moved around since there is no
-        // -[NSApp setRecentFilesMenu:] method.  We keep a reference to it to
-        // facilitate this move (see setMainMenu: below).
-        [recentFilesMenuItem retain];
-    }
-
-#if MM_HANDLE_XCODE_MOD_EVENT
-    [[NSAppleEventManager sharedAppleEventManager]
-            setEventHandler:self
-                andSelector:@selector(handleXcodeModEvent:replyEvent:)
-              forEventClass:'KAHL'
-                 andEventID:'MOD '];
-#endif
-
-    // Register 'mvim://' URL handler
-    [[NSAppleEventManager sharedAppleEventManager]
-            setEventHandler:self
-                andSelector:@selector(handleGetURLEvent:replyEvent:)
-              forEventClass:kInternetEventClass
-                 andEventID:kAEGetURL];
-
-    [MMUtils setVimKeybindings];
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
-{
-    [NSApp setServicesProvider:self];
-
-    [vimManager setUp];
-
-    ASLogInfo(@"MacVim finished launching");
-}
-
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender
-{
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSAppleEventManager *aem = [NSAppleEventManager sharedAppleEventManager];
-    NSAppleEventDescriptor *desc = [aem currentAppleEvent];
-
-    // The user default MMUntitledWindow can be set to control whether an
-    // untitled window should open on 'Open' and 'Reopen' events.
-    int untitledWindowFlag = [ud integerForKey:MMUntitledWindowKey];
-
-    BOOL isAppOpenEvent = [desc eventID] == kAEOpenApplication;
-    if (isAppOpenEvent && (untitledWindowFlag & MMUntitledWindowOnOpen) == 0)
-        return NO;
-
-    BOOL isAppReopenEvent = [desc eventID] == kAEReopenApplication;
-    if (isAppReopenEvent
-            && (untitledWindowFlag & MMUntitledWindowOnReopen) == 0)
-        return NO;
-
-    // When a process is started from the command line, the 'Open' event may
-    // contain a parameter to surpress the opening of an untitled window.
-    desc = [desc paramDescriptorForKeyword:keyAEPropData];
-    desc = [desc paramDescriptorForKeyword:keyMMUntitledWindow];
-    if (desc && ![desc booleanValue])
-        return NO;
-
-    // Never open an untitled window if there is at least one open window.
-    if (vimManager.countOfVimControllers > 0)
-        return NO;
-
-    if ([vimManager processesAboutToLaunch]) {
-        return NO;
-    }
-
-    // NOTE!  This way it possible to start the app with the command-line
-    // argument '-nowindow yes' and no window will be opened by default but
-    // this argument will only be heeded when the application is opening.
-    if (isAppOpenEvent && [ud boolForKey:MMNoWindowKey] == YES)
-        return NO;
-
-    return YES;
-}
-
-- (BOOL)applicationOpenUntitledFile:(NSApplication *)sender
-{
-    ASLogDebug(@"Opening untitled window...");
-    [self newWindow:self];
-    return YES;
-}
-
-- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
-{
-    ASLogInfo(@"Opening files %@", filenames);
-
-    // Extract ODB/Xcode/Spotlight parameters from the current Apple event,
-    // sort the filenames, and then let openFiles:withArguments: do the heavy
-    // lifting.
-
-    if (!(filenames && [filenames count] > 0))
-        return;
-
-    // Sort filenames since the Finder doesn't take care in preserving the
-    // order in which files are selected anyway (and "sorted" is more
-    // predictable than "random").
-    if ([filenames count] > 1)
-        filenames = [filenames sortedArrayUsingSelector:
-                @selector(localizedCompare:)];
-
-    // Extract ODB/Xcode/Spotlight parameters from the current Apple event
-    NSMutableDictionary *arguments = [self extractArgumentsFromOdocEvent:
-            [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent]];
-
-    if ([self openFiles:filenames withArguments:arguments]) {
-        [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
-    } else {
-        // TODO: Notify user of failure?
-        [NSApp replyToOpenOrPrint:NSApplicationDelegateReplyFailure];
-    }
-}
-
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
-{
-    return (MMTerminateWhenLastWindowClosed ==
-            [[NSUserDefaults standardUserDefaults]
-                integerForKey:MMLastWindowClosedBehaviorKey]);
-}
-
-- (NSApplicationTerminateReply)applicationShouldTerminate:
-    (NSApplication *)sender
-{
-    // TODO: Follow Apple's guidelines for 'Graceful Application Termination'
-    // (in particular, allow user to review changes and save).
-    int reply = NSTerminateNow;
-    BOOL modifiedBuffers = NO;
-
-    // Go through Vim controllers, checking for modified buffers.
-    NSEnumerator *e = [vimManager enumeratorOfVimControllers];
-    id vc;
-    while ((vc = [e nextObject])) {
-        if ([vc hasModifiedBuffer]) {
-            modifiedBuffers = YES;
-            break;
-        }
-    }
-
-    if (modifiedBuffers) {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setAlertStyle:NSWarningAlertStyle];
-        [alert addButtonWithTitle:NSLocalizedString(@"Quit",
-                @"Dialog button")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel",
-                @"Dialog button")];
-        [alert setMessageText:NSLocalizedString(@"Quit without saving?",
-                @"Quit dialog with changed buffers, title")];
-        [alert setInformativeText:NSLocalizedString(
-                @"There are modified buffers, "
-                "if you quit now all changes will be lost.  Quit anyway?",
-                @"Quit dialog with changed buffers, text")];
-
-        if ([alert runModal] != NSAlertFirstButtonReturn)
-            reply = NSTerminateCancel;
-
-        [alert release];
-    } else if (![[NSUserDefaults standardUserDefaults]
-                                boolForKey:MMSuppressTerminationAlertKey]) {
-        // No unmodified buffers, but give a warning if there are multiple
-        // windows and/or tabs open.
-        int numWindows = [vimManager countOfVimControllers];
-        int numTabs = 0;
-
-        // Count the number of open tabs
-        e = [vimManager enumeratorOfVimControllers];
-        while ((vc = [e nextObject]))
-            numTabs += [[vc objectForVimStateKey:@"numTabs"] intValue];
-
-        if (numWindows > 1 || numTabs > 1) {
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setAlertStyle:NSWarningAlertStyle];
-            [alert addButtonWithTitle:NSLocalizedString(@"Quit",
-                    @"Dialog button")];
-            [alert addButtonWithTitle:NSLocalizedString(@"Cancel",
-                    @"Dialog button")];
-            [alert setMessageText:NSLocalizedString(
-                    @"Are you sure you want to quit MacVim?",
-                    @"Quit dialog with no changed buffers, title")];
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-            [alert setShowsSuppressionButton:YES];
-#endif
-
-            NSString *info = nil;
-            if (numWindows > 1) {
-                if (numTabs > numWindows)
-                    info = [NSString stringWithFormat:NSLocalizedString(
-                            @"There are %d windows open in MacVim, with a "
-                            "total of %d tabs. Do you want to quit anyway?",
-                            @"Quit dialog with no changed buffers, text"),
-                         numWindows, numTabs];
-                else
-                    info = [NSString stringWithFormat:NSLocalizedString(
-                            @"There are %d windows open in MacVim. "
-                            "Do you want to quit anyway?",
-                            @"Quit dialog with no changed buffers, text"),
-                        numWindows];
-
-            } else {
-                info = [NSString stringWithFormat:NSLocalizedString(
-                        @"There are %d tabs open in MacVim. "
-                        "Do you want to quit anyway?",
-                        @"Quit dialog with no changed buffers, text"), 
-                     numTabs];
-            }
-
-            [alert setInformativeText:info];
-
-            if ([alert runModal] != NSAlertFirstButtonReturn)
-                reply = NSTerminateCancel;
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-            if ([[alert suppressionButton] state] == NSOnState) {
-                [[NSUserDefaults standardUserDefaults]
-                            setBool:YES forKey:MMSuppressTerminationAlertKey];
-            }
-#endif
-
-            [alert release];
-        }
-    }
-
-
-    // Tell all Vim processes to terminate now (otherwise they'll leave swap
-    // files behind).
-    if (NSTerminateNow == reply) {
-        [vimManager terminateAllVimProcesses];
-    }
-
-    return (NSApplicationTerminateReply) reply;
-}
-
-- (void)applicationWillTerminate:(NSNotification *)notification
-{
-    ASLogInfo(@"Terminating MacVim...");
-
-#if MM_HANDLE_XCODE_MOD_EVENT
-    [[NSAppleEventManager sharedAppleEventManager]
-            removeEventHandlerForEventClass:'KAHL'
-                                 andEventID:'MOD '];
-#endif
-
-    [vimManager cleanUp];
-    [NSApp setDelegate:nil];
-}
-
 + (MMAppController *)sharedInstance
 {
     // Note: The app controller is a singleton which is instantiated in
@@ -990,6 +711,286 @@ typedef struct
     }
 
     return nil;
+}
+
+#pragma mark NSApplicationDelegate
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+    // Remember the default menu so that it can be restored if the user closes
+    // all editor windows.
+    defaultMainMenu = [[NSApp mainMenu] retain];
+
+    // Store a copy of the default app menu so we can use this as a template
+    // for all other menus.  We make a copy here because the "Services" menu
+    // will not yet have been populated at this time.  If we don't we get
+    // problems trying to set key equivalents later on because they might clash
+    // with items on the "Services" menu.
+    appMenuItemTemplate = [defaultMainMenu itemAtIndex:0];
+    appMenuItemTemplate = [appMenuItemTemplate copy];
+
+    // Set up the "Open Recent" menu. See
+    //   http://lapcatsoftware.com/blog/2007/07/10/
+    //     working-without-a-nib-part-5-open-recent-menu/
+    // and
+    //   http://www.cocoabuilder.com/archive/message/cocoa/2007/8/15/187793
+    // for more information.
+    //
+    // The menu itself is created in MainMenu.nib but we still seem to have to
+    // hack around a bit to get it to work.  (This has to be done in
+    // applicationWillFinishLaunching at the latest, otherwise it doesn't
+    // work.)
+    NSMenu *fileMenu = [defaultMainMenu findFileMenu];
+    if (fileMenu) {
+        int idx = [fileMenu indexOfItemWithAction:@selector(fileOpen:)];
+        if (idx >= 0 && idx+1 < [fileMenu numberOfItems])
+
+            recentFilesMenuItem = [fileMenu itemWithTitle:@"Open Recent"];
+        [[recentFilesMenuItem submenu] performSelector:@selector(_setMenuName:)
+                                            withObject:@"NSRecentDocumentsMenu"];
+
+        // Note: The "Recent Files" menu must be moved around since there is no
+        // -[NSApp setRecentFilesMenu:] method.  We keep a reference to it to
+        // facilitate this move (see setMainMenu: below).
+        [recentFilesMenuItem retain];
+    }
+
+#if MM_HANDLE_XCODE_MOD_EVENT
+    [[NSAppleEventManager sharedAppleEventManager]
+            setEventHandler:self
+                andSelector:@selector(handleXcodeModEvent:replyEvent:)
+              forEventClass:'KAHL'
+                 andEventID:'MOD '];
+#endif
+
+    // Register 'mvim://' URL handler
+    [[NSAppleEventManager sharedAppleEventManager]
+            setEventHandler:self
+                andSelector:@selector(handleGetURLEvent:replyEvent:)
+              forEventClass:kInternetEventClass
+                 andEventID:kAEGetURL];
+
+    [MMUtils setVimKeybindings];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{
+    [NSApp setServicesProvider:self];
+
+    [vimManager setUp];
+
+    ASLogInfo(@"MacVim finished launching");
+}
+
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSAppleEventManager *aem = [NSAppleEventManager sharedAppleEventManager];
+    NSAppleEventDescriptor *desc = [aem currentAppleEvent];
+
+    // The user default MMUntitledWindow can be set to control whether an
+    // untitled window should open on 'Open' and 'Reopen' events.
+    int untitledWindowFlag = [ud integerForKey:MMUntitledWindowKey];
+
+    BOOL isAppOpenEvent = [desc eventID] == kAEOpenApplication;
+    if (isAppOpenEvent && (untitledWindowFlag & MMUntitledWindowOnOpen) == 0)
+        return NO;
+
+    BOOL isAppReopenEvent = [desc eventID] == kAEReopenApplication;
+    if (isAppReopenEvent
+            && (untitledWindowFlag & MMUntitledWindowOnReopen) == 0)
+        return NO;
+
+    // When a process is started from the command line, the 'Open' event may
+    // contain a parameter to surpress the opening of an untitled window.
+    desc = [desc paramDescriptorForKeyword:keyAEPropData];
+    desc = [desc paramDescriptorForKeyword:keyMMUntitledWindow];
+    if (desc && ![desc booleanValue])
+        return NO;
+
+    // Never open an untitled window if there is at least one open window.
+    if (vimManager.countOfVimControllers > 0)
+        return NO;
+
+    if ([vimManager processesAboutToLaunch]) {
+        return NO;
+    }
+
+    // NOTE!  This way it possible to start the app with the command-line
+    // argument '-nowindow yes' and no window will be opened by default but
+    // this argument will only be heeded when the application is opening.
+    if (isAppOpenEvent && [ud boolForKey:MMNoWindowKey] == YES)
+        return NO;
+
+    return YES;
+}
+
+- (BOOL)applicationOpenUntitledFile:(NSApplication *)sender
+{
+    ASLogDebug(@"Opening untitled window...");
+    [self newWindow:self];
+    return YES;
+}
+
+- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
+{
+    ASLogInfo(@"Opening files %@", filenames);
+
+    // Extract ODB/Xcode/Spotlight parameters from the current Apple event,
+    // sort the filenames, and then let openFiles:withArguments: do the heavy
+    // lifting.
+
+    if (!(filenames && [filenames count] > 0))
+        return;
+
+    // Sort filenames since the Finder doesn't take care in preserving the
+    // order in which files are selected anyway (and "sorted" is more
+    // predictable than "random").
+    if ([filenames count] > 1)
+        filenames = [filenames sortedArrayUsingSelector:
+                @selector(localizedCompare:)];
+
+    // Extract ODB/Xcode/Spotlight parameters from the current Apple event
+    NSMutableDictionary *arguments = [self extractArgumentsFromOdocEvent:
+            [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent]];
+
+    if ([self openFiles:filenames withArguments:arguments]) {
+        [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+    } else {
+        // TODO: Notify user of failure?
+        [NSApp replyToOpenOrPrint:NSApplicationDelegateReplyFailure];
+    }
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+    return (MMTerminateWhenLastWindowClosed ==
+            [[NSUserDefaults standardUserDefaults]
+                    integerForKey:MMLastWindowClosedBehaviorKey]);
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:
+        (NSApplication *)sender
+{
+    // TODO: Follow Apple's guidelines for 'Graceful Application Termination'
+    // (in particular, allow user to review changes and save).
+    int reply = NSTerminateNow;
+    BOOL modifiedBuffers = NO;
+
+    // Go through Vim controllers, checking for modified buffers.
+    NSEnumerator *e = [vimManager enumeratorOfVimControllers];
+    id vc;
+    while ((vc = [e nextObject])) {
+        if ([vc hasModifiedBuffer]) {
+            modifiedBuffers = YES;
+            break;
+        }
+    }
+
+    if (modifiedBuffers) {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert addButtonWithTitle:NSLocalizedString(@"Quit",
+        @"Dialog button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel",
+        @"Dialog button")];
+        [alert setMessageText:NSLocalizedString(@"Quit without saving?",
+        @"Quit dialog with changed buffers, title")];
+        [alert setInformativeText:NSLocalizedString(
+        @"There are modified buffers, "
+                "if you quit now all changes will be lost.  Quit anyway?",
+        @"Quit dialog with changed buffers, text")];
+
+        if ([alert runModal] != NSAlertFirstButtonReturn)
+            reply = NSTerminateCancel;
+
+        [alert release];
+    } else if (![[NSUserDefaults standardUserDefaults]
+            boolForKey:MMSuppressTerminationAlertKey]) {
+        // No unmodified buffers, but give a warning if there are multiple
+        // windows and/or tabs open.
+        int numWindows = [vimManager countOfVimControllers];
+        int numTabs = 0;
+
+        // Count the number of open tabs
+        e = [vimManager enumeratorOfVimControllers];
+        while ((vc = [e nextObject]))
+            numTabs += [[vc objectForVimStateKey:@"numTabs"] intValue];
+
+        if (numWindows > 1 || numTabs > 1) {
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setAlertStyle:NSWarningAlertStyle];
+            [alert addButtonWithTitle:NSLocalizedString(@"Quit",
+            @"Dialog button")];
+            [alert addButtonWithTitle:NSLocalizedString(@"Cancel",
+            @"Dialog button")];
+            [alert setMessageText:NSLocalizedString(
+            @"Are you sure you want to quit MacVim?",
+            @"Quit dialog with no changed buffers, title")];
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+            [alert setShowsSuppressionButton:YES];
+#endif
+
+            NSString *info = nil;
+            if (numWindows > 1) {
+                if (numTabs > numWindows)
+                    info = [NSString stringWithFormat:NSLocalizedString(
+                                                      @"There are %d windows open in MacVim, with a "
+                                                              "total of %d tabs. Do you want to quit anyway?",
+                                                      @"Quit dialog with no changed buffers, text"),
+                                                      numWindows, numTabs];
+                else
+                    info = [NSString stringWithFormat:NSLocalizedString(
+                                                      @"There are %d windows open in MacVim. "
+                                                              "Do you want to quit anyway?",
+                                                      @"Quit dialog with no changed buffers, text"),
+                                                      numWindows];
+
+            } else {
+                info = [NSString stringWithFormat:NSLocalizedString(
+                                                  @"There are %d tabs open in MacVim. "
+                                                          "Do you want to quit anyway?",
+                                                  @"Quit dialog with no changed buffers, text"),
+                                                  numTabs];
+            }
+
+            [alert setInformativeText:info];
+
+            if ([alert runModal] != NSAlertFirstButtonReturn)
+                reply = NSTerminateCancel;
+
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+            if ([[alert suppressionButton] state] == NSOnState) {
+                [[NSUserDefaults standardUserDefaults]
+                        setBool:YES forKey:MMSuppressTerminationAlertKey];
+            }
+#endif
+
+            [alert release];
+        }
+    }
+
+
+    // Tell all Vim processes to terminate now (otherwise they'll leave swap
+    // files behind).
+    if (NSTerminateNow == reply) {
+        [vimManager terminateAllVimProcesses];
+    }
+
+    return (NSApplicationTerminateReply) reply;
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification
+{
+    ASLogInfo(@"Terminating MacVim...");
+
+#if MM_HANDLE_XCODE_MOD_EVENT
+    [[NSAppleEventManager sharedAppleEventManager]
+            removeEventHandlerForEventClass:'KAHL'
+                                 andEventID:'MOD '];
+#endif
+
+    [vimManager cleanUp];
+    [NSApp setDelegate:nil];
 }
 
 #pragma mark MMVimManagerProtocol
