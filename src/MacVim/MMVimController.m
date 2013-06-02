@@ -12,10 +12,10 @@
 #import "MMVimControllerDelegate.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
-#import "MMWindowController.h"
 #import "MMUserDefaults.h"
 #import "MMUtils.h"
 #import "MMTextViewProtocol.h"
+#import "MMVimManager.h"
 
 
 // NOTE: By default a message sent to the backend will be dropped if it cannot
@@ -64,19 +64,14 @@ static BOOL isUnsafeMessage(int msgid);
 @implementation MMVimController
 
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier {
+    ASLogInfo(@"initing vim controller");
     if (!(self = [super init]))
         return nil;
 
     // TODO: Come up with a better way of creating an identifier.
     identifier = identifierCounter++;
 
-    windowController = [[MMWindowController alloc] initWithVimController:self];
-
-    // TODO: Tae: this should not be done here, but somewhere higher
-    _delegate = windowController;
-
-    // TODO: Tae: should be instantiated here, not in the window controller (and retained then)
-    _vimView = [windowController vimView];
+    _vimView = [[MMVimView alloc] initWithFrame:NSMakeRect(0, 0, 640, 480) vimController:self];
 
     backendProxy = [backend retain];
     popupMenuItems = [[NSMutableArray alloc] init];
@@ -120,31 +115,21 @@ static BOOL isUnsafeMessage(int msgid);
     isInitialized = NO;
 
     [serverName release];
-    serverName = nil;
     [backendProxy release];
-    backendProxy = nil;
 
     [popupMenuItems release];
-    popupMenuItems = nil;
-    [windowController release];
-    windowController = nil;
 
     [vimState release];
-    vimState = nil;
     [mainMenu release];
-    mainMenu = nil;
     [creationDate release];
-    creationDate = nil;
+
+    [_vimView release];
 
     [super dealloc];
 }
 
 - (unsigned)vimControllerId {
     return identifier;
-}
-
-- (MMWindowController *)windowController {
-    return windowController;
 }
 
 - (NSDictionary *)vimState {
@@ -353,9 +338,6 @@ static BOOL isUnsafeMessage(int msgid);
 
     isInitialized = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    //[[backendProxy connectionForProxy] invalidate];
-    //[windowController close];
-    [windowController cleanup];
 }
 
 - (void)processInputQueue:(NSArray *)queue {
@@ -365,7 +347,7 @@ static BOOL isUnsafeMessage(int msgid);
     // calling method).
     @try {
         [self doProcessInputQueue:queue];
-        [windowController processInputQueueDidFinish];
+        [self.delegate processInputQueueDidFinish];
     }
     @catch (NSException *ex) {
         ASLogDebug(@"Exception: pid=%d id=%d reason=%@", pid, identifier, ex);
@@ -728,6 +710,7 @@ static BOOL isUnsafeMessage(int msgid);
     if (ShowPopupMenuMsgID == msgid) {
         NSDictionary *attrs = [NSDictionary dictionaryWithData:data];
 
+        ASLogInfo(@"show popup");
         // The popup menu enters a modal loop so delay this call so that we
         // don't block inside processInputQueue:.
         [self performSelector:@selector(popupMenuWithAttributes:)
@@ -1171,7 +1154,7 @@ static BOOL isUnsafeMessage(int msgid);
     NSMenu *menu = [[self menuItemForDescriptor:desc] submenu];
     if (!menu) return;
 
-    id textView = [[windowController vimView] textView];
+    id textView = [[self vimView] textView];
     NSPoint pt;
     if (row && col) {
         // TODO: Let textView convert (row,col) to NSPoint.
@@ -1181,14 +1164,14 @@ static BOOL isUnsafeMessage(int msgid);
         pt = NSMakePoint((c + 1) * cellSize.width, (r + 1) * cellSize.height);
         pt = [textView convertPoint:pt toView:nil];
     } else {
-        pt = [[windowController window] mouseLocationOutsideOfEventStream];
+        pt = [[self.vimView window] mouseLocationOutsideOfEventStream];
     }
 
     NSEvent *event = [NSEvent mouseEventWithType:NSRightMouseDown
                                         location:pt
                                    modifierFlags:0
                                        timestamp:0
-                                    windowNumber:[[windowController window] windowNumber]
+                                    windowNumber:[[self.vimView window] windowNumber]
                                          context:nil
                                      eventNumber:0
                                       clickCount:0
@@ -1223,7 +1206,7 @@ static BOOL isUnsafeMessage(int msgid);
     // Also, since the app may be multithreaded (e.g. as a result of showing
     // the open panel) we have to ensure this call happens on the main thread,
     // else there is a race condition that may lead to a crash.
-    [[MMAppController sharedInstance]
+    [[MMVimManager sharedManager]
             performSelectorOnMainThread:@selector(removeVimController:)
                              withObject:self
                           waitUntilDone:NO

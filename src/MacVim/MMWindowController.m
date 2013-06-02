@@ -139,7 +139,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
 
 @implementation MMWindowController
 
-- (id)initWithVimController:(MMVimController *)controller
+- (id)initWithVimController:(MMVimController *)controller vimView:(MMVimView *)aVimView;
 {
     unsigned styleMask = NSTitledWindowMask | NSClosableWindowMask
             | NSMiniaturizableWindowMask | NSResizableWindowMask
@@ -192,8 +192,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     NSView *contentView = [win contentView];
     [contentView setAutoresizesSubviews:YES];
 
-    vimView = [[MMVimView alloc] initWithFrame:[contentView frame]
-                                 vimController:vimController];
+    vimView = aVimView;
     [vimView setAutoresizingMask:NSViewNotSizable];
     [contentView addSubview:vimView];
 
@@ -253,7 +252,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
 
     [decoratedWindow release];  decoratedWindow = nil;
     [windowAutosaveKey release];  windowAutosaveKey = nil;
-    [vimView release];  vimView = nil;
     [toolbar release];  toolbar = nil;
 
     [toolbarItemDict release];
@@ -560,72 +558,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
 - (void)setWideFont:(NSFont *)font
 {
     [[vimView textView] setWideFont:font];
-}
-
-- (void)processInputQueueDidFinish
-{
-    // NOTE: Resizing is delayed until after all commands have been processed
-    // since it often happens that more than one command will cause a resize.
-    // If we were to immediately resize then the vim view size would jitter
-    // (e.g.  hiding/showing scrollbars often happens several time in one
-    // update).
-    // Also delay toggling the toolbar until after scrollbars otherwise
-    // problems arise when showing toolbar and scrollbar at the same time, i.e.
-    // on "set go+=rT".
-
-    // Update toolbar before resizing, since showing the toolbar may require
-    // the view size to become smaller.
-    if (updateToolbarFlag != 0)
-        [self updateToolbar];
-
-    // NOTE: If the window has not been presented then we must avoid resizing
-    // the views since it will cause them to be constrained to the screen which
-    // has not yet been set!
-    if (windowPresented && shouldResizeVimView) {
-        shouldResizeVimView = NO;
-
-        // Make sure full-screen window stays maximized (e.g. when scrollbar or
-        // tabline is hidden) according to 'fuopt'.
-
-        BOOL didMaximize = NO;
-        if (shouldMaximizeWindow && fullScreenEnabled &&
-                (fullScreenOptions & (FUOPT_MAXVERT|FUOPT_MAXHORZ)) != 0)
-            didMaximize = [self maximizeWindow:fullScreenOptions];
-
-        shouldMaximizeWindow = NO;
-
-        // Resize Vim view and window, but don't do this now if the window was
-        // just reszied because this would make the window "jump" unpleasantly.
-        // Instead wait for Vim to respond to the resize message and do the
-        // resizing then.
-        // TODO: What if the resize message fails to make it back?
-        if (!didMaximize) {
-            NSSize originalSize = [vimView frame].size;
-            NSSize contentSize = [vimView desiredSize];
-            contentSize = [self constrainContentSizeToScreenSize:contentSize];
-            int rows = 0, cols = 0;
-            contentSize = [vimView constrainRows:&rows columns:&cols
-                                          toSize:contentSize];
-            [vimView setFrameSize:contentSize];
-
-            if (fullScreenWindow) {
-                // NOTE! Don't mark the full-screen content view as needing an
-                // update unless absolutely necessary since when it is updated
-                // the entire screen is cleared.  This may cause some parts of
-                // the Vim view to be cleared but not redrawn since Vim does
-                // not realize that we've erased part of the view.
-                if (!NSEqualSizes(originalSize, contentSize)) {
-                    [[fullScreenWindow contentView] setNeedsDisplay:YES];
-                    [fullScreenWindow centerView];
-                }
-            } else {
-                [self resizeWindowToFitContentSize:contentSize
-                                      keepOnScreen:keepOnScreen];
-            }
-        }
-
-        keepOnScreen = NO;
-    }
 }
 
 - (void)showTabBar:(BOOL)on
@@ -1567,6 +1499,72 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
         [[TTM sharedToolTipManager] setInitialToolTipDelay:seconds];
     } else {
         ASLogNotice(@"Failed to get NSToolTipManager");
+    }
+}
+
+- (void)processInputQueueDidFinish
+{
+    // NOTE: Resizing is delayed until after all commands have been processed
+    // since it often happens that more than one command will cause a resize.
+    // If we were to immediately resize then the vim view size would jitter
+    // (e.g.  hiding/showing scrollbars often happens several time in one
+    // update).
+    // Also delay toggling the toolbar until after scrollbars otherwise
+    // problems arise when showing toolbar and scrollbar at the same time, i.e.
+    // on "set go+=rT".
+
+    // Update toolbar before resizing, since showing the toolbar may require
+    // the view size to become smaller.
+    if (updateToolbarFlag != 0)
+        [self updateToolbar];
+
+    // NOTE: If the window has not been presented then we must avoid resizing
+    // the views since it will cause them to be constrained to the screen which
+    // has not yet been set!
+    if (windowPresented && shouldResizeVimView) {
+        shouldResizeVimView = NO;
+
+        // Make sure full-screen window stays maximized (e.g. when scrollbar or
+        // tabline is hidden) according to 'fuopt'.
+
+        BOOL didMaximize = NO;
+        if (shouldMaximizeWindow && fullScreenEnabled &&
+                (fullScreenOptions & (FUOPT_MAXVERT|FUOPT_MAXHORZ)) != 0)
+            didMaximize = [self maximizeWindow:fullScreenOptions];
+
+        shouldMaximizeWindow = NO;
+
+        // Resize Vim view and window, but don't do this now if the window was
+        // just reszied because this would make the window "jump" unpleasantly.
+        // Instead wait for Vim to respond to the resize message and do the
+        // resizing then.
+        // TODO: What if the resize message fails to make it back?
+        if (!didMaximize) {
+            NSSize originalSize = [vimView frame].size;
+            NSSize contentSize = [vimView desiredSize];
+            contentSize = [self constrainContentSizeToScreenSize:contentSize];
+            int rows = 0, cols = 0;
+            contentSize = [vimView constrainRows:&rows columns:&cols
+                                          toSize:contentSize];
+            [vimView setFrameSize:contentSize];
+
+            if (fullScreenWindow) {
+                // NOTE! Don't mark the full-screen content view as needing an
+                // update unless absolutely necessary since when it is updated
+                // the entire screen is cleared.  This may cause some parts of
+                // the Vim view to be cleared but not redrawn since Vim does
+                // not realize that we've erased part of the view.
+                if (!NSEqualSizes(originalSize, contentSize)) {
+                    [[fullScreenWindow contentView] setNeedsDisplay:YES];
+                    [fullScreenWindow centerView];
+                }
+            } else {
+                [self resizeWindowToFitContentSize:contentSize
+                                      keepOnScreen:keepOnScreen];
+            }
+        }
+
+        keepOnScreen = NO;
     }
 }
 

@@ -37,7 +37,6 @@
 @interface MMVimController : NSObject {
     unsigned            identifier;
     BOOL                isInitialized;
-    MMWindowController  *windowController;
     id                  backendProxy;
     NSMenu              *mainMenu;
     NSMutableArray      *popupMenuItems;
@@ -51,7 +50,7 @@
 }
 
 @property (assign) id <MMVimControllerDelegate> delegate;
-@property (assign) MMVimView *vimView;
+@property (readonly) MMVimView *vimView;
 
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier;
 - (unsigned)vimControllerId;
@@ -59,7 +58,6 @@
 - (int)pid;
 - (void)setServerName:(NSString *)name;
 - (NSString *)serverName;
-- (MMWindowController *)windowController;
 - (NSDictionary *)vimState;
 - (id)objectForVimStateKey:(NSString *)key;
 - (NSMenu *)mainMenu;

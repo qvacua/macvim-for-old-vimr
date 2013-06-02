@@ -82,6 +82,9 @@ typedef struct
 
 
 @interface MMAppController (Private)
+
+- (MMWindowController *)addWindowControllerWithController:(MMVimController *)controller;
+- (MMWindowController *)topmostWindowController;
 - (MMVimController *)topmostVimController;
 - (NSArray *)filterFilesAndNotify:(NSArray *)files;
 - (NSArray *)filterOpenFiles:(NSArray *)filenames
@@ -94,12 +97,16 @@ typedef struct
                replyEvent:(NSAppleEventDescriptor *)reply;
 - (NSMutableDictionary *)extractArgumentsFromOdocEvent:
     (NSAppleEventDescriptor *)desc;
-- (MMVimController *)takeVimControllerFromCache;
 - (BOOL)openVimControllerWithArguments:(NSDictionary *)arguments;
 - (void)activateWhenNextWindowOpens;
 - (NSScreen *)screenContainingTopLeftPoint:(NSPoint)pt;
 @end
 
+@interface MMAppController ()
+
+@property (retain, readonly) NSMutableDictionary *windowControllers;
+
+@end
 
 @implementation MMAppController
 
@@ -171,6 +178,8 @@ typedef struct
 #endif
 
     vimManager = [MMVimManager sharedManager];
+    vimManager.delegate = self;
+    _windowControllers = [[NSMutableDictionary alloc] initWithCapacity:4];
 
     return self;
 }
@@ -183,6 +192,8 @@ typedef struct
     [recentFilesMenuItem release];  recentFilesMenuItem = nil;
     [defaultMainMenu release];  defaultMainMenu = nil;
     [appMenuItemTemplate release];  appMenuItemTemplate = nil;
+
+    [_windowControllers release];
 
     [super dealloc];
 }
@@ -484,28 +495,10 @@ typedef struct
     return appMenuItemTemplate;
 }
 
-- (void)removeVimController:(id)controller
-{
-    [vimManager removeVimController:controller];
-
-    if (![vimManager countOfVimControllers]) {
-        // The last editor window just closed so restore the main menu back to
-        // its default state (which is defined in MainMenu.nib).
-        [self setMainMenu:defaultMainMenu];
-
-        BOOL hide = (MMHideWhenLastWindowClosed ==
-                    [[NSUserDefaults standardUserDefaults]
-                        integerForKey:MMLastWindowClosedBehaviorKey]);
-        if (hide)
-            [NSApp hide:self];
-    }
-}
-
 - (void)windowControllerWillOpen:(MMWindowController *)windowController
 {
     NSPoint topLeft = NSZeroPoint;
-    NSWindow *cascadeFrom = [[[self topmostVimController] windowController]
-                                                                    window];
+    NSWindow *cascadeFrom = [[self topmostWindowController] window];
     NSWindow *win = [windowController window];
 
     if (!win) return;
@@ -755,9 +748,10 @@ typedef struct
     [arguments setObject:[NSNumber numberWithBool:NO] forKey:@"dontOpen"];
 
     MMVimController *vc;
-    if (openInCurrentWindow && (vc = [self topmostVimController])) {
+    MMWindowController *windowController;
+    if (openInCurrentWindow && (windowController = [self topmostWindowController])) {
         // Open files in an already open window.
-        [[[vc windowController] window] makeKeyAndOrderFront:self];
+        [[windowController window] makeKeyAndOrderFront:self];
         [vc passArguments:arguments];
         return YES;
     }
@@ -807,17 +801,9 @@ typedef struct
 
 - (IBAction)newWindow:(id)sender
 {
-    ASLogDebug(@"Open new window");
+    ASLogInfo(@"Open new window");
 
-    // A cached controller requires no loading times and results in the new
-    // window popping up instantaneously.  If the cache is empty it may take
-    // 1-2 seconds to start a new Vim process.
-    MMVimController *vc = [self takeVimControllerFromCache];
-    if (vc) {
-        [[vc backendProxy] acknowledgeConnection];
-    } else {
-        [vimManager launchVimProcessWithArguments:nil workingDirectory:nil];
-    }
+    [self openVimControllerWithArguments:nil];
 }
 
 - (IBAction)newWindowAndActivate:(id)sender
@@ -887,7 +873,7 @@ typedef struct
     NSWindow *keyWindow = [NSApp keyWindow];
     for (i = 0; i < count; ++i) {
         MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-        if ([[[vc windowController] window] isEqual:keyWindow])
+        if ([[self.windowControllers[@([vc vimControllerId])] window] isEqual:keyWindow])
             break;
     }
 
@@ -895,7 +881,7 @@ typedef struct
         if (++i >= count)
             i = 0;
         MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-        [[vc windowController] showWindow:self];
+        [self.windowControllers[@([vc vimControllerId])] showWindow:self];
     }
 }
 
@@ -909,7 +895,7 @@ typedef struct
     NSWindow *keyWindow = [NSApp keyWindow];
     for (i = 0; i < count; ++i) {
         MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-        if ([[[vc windowController] window] isEqual:keyWindow])
+        if ([[self.windowControllers[@([vc vimControllerId])] window] isEqual:keyWindow])
             break;
     }
 
@@ -920,7 +906,7 @@ typedef struct
             i = count - 1;
         }
         MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-        [[vc windowController] showWindow:self];
+        [self.windowControllers[@([vc vimControllerId])] showWindow:self];
     }
 }
 
@@ -998,12 +984,35 @@ typedef struct
         unsigned i, count = [vimManager countOfVimControllers];
         for (i = 0; i < count; ++i) {
             MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-            if ([[[vc windowController] window] isEqual:keyWindow])
+            if ([[self.windowControllers[@([vc vimControllerId])] window] isEqual:keyWindow])
                 return vc;
         }
     }
 
     return nil;
+}
+
+#pragma mark MMVimManagerProtocol
+- (void)manager:(MMVimManager *)manager vimControllerCreated:(MMVimController *)controller {
+    [self addWindowControllerWithController:controller];
+}
+
+- (void)manager:(MMVimManager *)manager vimControllerRemovedWithIdentifier:(unsigned int)identifier{
+    NSNumber *idKey = @(identifier);
+    [self.windowControllers[idKey] cleanup];
+    [self.windowControllers removeObjectForKey:idKey];
+
+    if (![vimManager countOfVimControllers]) {
+        // The last editor window just closed so restore the main menu back to
+        // its default state (which is defined in MainMenu.nib).
+        [self setMainMenu:defaultMainMenu];
+
+        BOOL hide = (MMHideWhenLastWindowClosed ==
+                [[NSUserDefaults standardUserDefaults]
+                        integerForKey:MMLastWindowClosedBehaviorKey]);
+        if (hide)
+            [NSApp hide:self];
+    }
 }
 
 @end // MMAppController
@@ -1118,8 +1127,16 @@ typedef struct
 
 @implementation MMAppController (Private)
 
-- (MMVimController *)topmostVimController
-{
+- (MMWindowController *)addWindowControllerWithController:(MMVimController *)controller {
+    MMWindowController *wc = [[MMWindowController alloc] initWithVimController:controller vimView:[controller vimView]];
+    controller.delegate = wc;
+
+    self.windowControllers[@(controller.vimControllerId)] = wc;
+
+    return [wc autorelease];
+}
+
+- (MMWindowController *)topmostWindowController {
     // Find the topmost visible window which has an associated vim controller
     // as follows:
     //
@@ -1133,23 +1150,25 @@ typedef struct
     NSEnumerator *e = [[NSApp orderedWindows] objectEnumerator];
     id window;
     while ((window = [e nextObject]) && [window isVisible]) {
-        unsigned i, count = [vimManager countOfVimControllers];
-        for (i = 0; i < count; ++i) {
-            MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-            if ([[[vc windowController] window] isEqual:window])
-                return vc;
+        for (MMWindowController *wc in [self.windowControllers objectEnumerator]) {
+            if ([[wc window] isEqual:window]) {
+                return wc;
+            }
         }
     }
 
-    unsigned i, count = [vimManager countOfVimControllers];
-    for (i = 0; i < count; ++i) {
-        MMVimController *vc = [vimManager objectInVimControllersAtIndex:i];
-        if ([[[vc windowController] window] isVisible]) {
-            return vc;
+    for (MMWindowController *wc in [self.windowControllers objectEnumerator]) {
+        if([[wc window] isVisible]) {
+            return wc;
         }
     }
 
     return nil;
+}
+
+- (MMVimController *)topmostVimController
+{
+    return [[self topmostWindowController] vimController];
 }
 
 - (NSArray *)filterFilesAndNotify:(NSArray *)filenames
@@ -1443,21 +1462,17 @@ typedef struct
     return dict;
 }
 
-- (MMVimController *)takeVimControllerFromCache
+- (BOOL)openVimControllerWithArguments:(NSDictionary *)arguments
 {
     MMVimController *vc = [vimManager getVimController];
+
+    // TODO: Tae: we should create a window controller also here, when vc != nil
+    MMWindowController *windowController = [self addWindowControllerWithController:vc];
 
     // If the Vim process has finished loading then the window will displayed
     // now, otherwise it will be displayed when the OpenWindowMsgID message is
     // received.
-    [[vc windowController] presentWindow:nil];
-
-    return vc;
-}
-
-- (BOOL)openVimControllerWithArguments:(NSDictionary *)arguments
-{
-    MMVimController *vc = [self takeVimControllerFromCache];
+    [windowController presentWindow:nil];
 
     return [vimManager openVimController:vc withArguments:arguments];
 }

@@ -13,10 +13,12 @@
 
 
 @class MMVimController;
+@protocol MMVimManagerDelegateProtocol;
 
 
 @interface MMVimManager : NSObject <MMAppProtocol>
 
+@property (assign) id <MMVimManagerDelegateProtocol> delegate;
 @property (readonly) NSArray *vimControllers;
 @property (readonly) NSArray *cachedVimControllers;
 

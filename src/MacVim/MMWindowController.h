@@ -45,7 +45,7 @@
     NSMutableDictionary *toolbarItemDict;
 }
 
-- (id)initWithVimController:(MMVimController *)controller;
+- (id)initWithVimController:(MMVimController *)controller vimView:(MMVimView *)aVimView;
 - (MMVimController *)vimController;
 - (MMVimView *)vimView;
 - (NSString *)windowAutosaveKey;
@@ -70,7 +70,6 @@
 - (void)setDefaultColorsBackground:(NSColor *)back foreground:(NSColor *)fore;
 - (void)setFont:(NSFont *)font;
 - (void)setWideFont:(NSFont *)font;
-- (void)processInputQueueDidFinish;
 - (void)showTabBar:(BOOL)on;
 - (void)showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode;
 - (void)setMouseShape:(int)shape;
