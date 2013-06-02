@@ -2494,7 +2494,7 @@ objects/MMTypes.o: MacVim/MMTypes.m
 	$(CCC) -o $@ MacVim/MMTypes.m
 
 objects/MMCocoaCategories.o: MacVim/MMCocoaCategories.m
-	$(CCC) -o $@ MacVim/MMCocoaCategories.m
+	$(CCC) -fobjc-arc -o $@ MacVim/MMCocoaCategories.m
 
 objects/MacVim.o: MacVim/MacVim.m
 	$(CCC) -o $@ MacVim/MacVim.m

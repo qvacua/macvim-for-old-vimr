@@ -14,7 +14,7 @@
 @interface NSString (MMExtras)
 
 - (NSString *)stringByEscapingSpecialFilenameCharacters;
-- (NSString *)stringByRemovingFindPatterns;
+- (NSString *)stringByRemovingFindPatterns __unused;
 - (NSString *)stringBySanitizingSpotlightSearch;
 
 @end

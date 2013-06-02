@@ -8,9 +8,11 @@
  * See README.txt for an overview of the Vim source code.
  */
 
+#import <sys/cdefs.h>
 #import "MMCocoaCategories.h"
 
 
+#pragma mark ARC
 @implementation NSString (MMExtras)
 
 - (NSString *)stringByEscapingSpecialFilenameCharacters {
@@ -46,10 +48,11 @@
                                options:NSLiteralSearch
                                  range:NSMakeRange(0, [string length])];
 
-    return [string autorelease];
+    return string;
 }
 
-- (NSString *)stringByRemovingFindPatterns {
+// Used by the backend code, but not in the Xcode project. Using __unused to suppress warning.
+- (NSString *)stringByRemovingFindPatterns __unused {
     // Remove some common patterns added to search strings that other apps are
     // not aware of.
 
@@ -75,7 +78,7 @@
                                options:NSCaseInsensitiveSearch | NSLiteralSearch
                                  range:NSMakeRange(0, [string length])];
 
-    return [string autorelease];
+    return string;
 }
 
 - (NSString *)stringBySanitizingSpotlightSearch {
@@ -84,8 +87,7 @@
     if (len > 1024) len = 1024;
     else if (len == 0) return self;
 
-    NSMutableString *string = [[[self substringToIndex:len] mutableCopy]
-            autorelease];
+    NSMutableString *string = [[self substringToIndex:len] mutableCopy];
 
     // Ignore strings with control characters
     NSCharacterSet *controlChars = [NSCharacterSet controlCharacterSet];
