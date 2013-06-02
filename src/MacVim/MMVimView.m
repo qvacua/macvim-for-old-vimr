@@ -202,7 +202,7 @@
     }
 }
 
-- (MMTextView *)textView
+- (NSView <MMTextViewProtocol> *)textView
 {
     return textView;
 }

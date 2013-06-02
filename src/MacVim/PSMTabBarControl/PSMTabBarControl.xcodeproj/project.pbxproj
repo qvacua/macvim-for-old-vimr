@@ -41,7 +41,7 @@
 		A2082A9109EAEB34009AC8BE /* PSMTabDragAssistant.m in Sources */ = {isa = PBXBuildFile; fileRef = A2082A8E09EAEB33009AC8BE /* PSMTabDragAssistant.m */; };
 		A2129BB209AEB58F00724E6C /* PSMProgressIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = A2129BAF09AEB58F00724E6C /* PSMProgressIndicator.h */; };
 		A2129BB309AEB58F00724E6C /* PSMProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A2129BB009AEB58F00724E6C /* PSMProgressIndicator.m */; };
-		A251BE850959A1B90058BC7F /* PSMOverflowPopUpButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A251BE810959A1B90058BC7F /* PSMOverflowPopUpButton.h */; };
+		A251BE850959A1B90058BC7F /* PSMOverflowPopUpButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A251BE810959A1B90058BC7F /* PSMOverflowPopUpButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A251BE860959A1B90058BC7F /* PSMOverflowPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A251BE820959A1B90058BC7F /* PSMOverflowPopUpButton.m */; };
 		A251BE870959A1B90058BC7F /* PSMTabBarCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A251BE830959A1B90058BC7F /* PSMTabBarCell.h */; };
 		A251BE880959A1B90058BC7F /* PSMTabBarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A251BE840959A1B90058BC7F /* PSMTabBarCell.m */; };
@@ -51,7 +51,7 @@
 		A268E80709A9822A00E082AA /* TabNewMetal.png in Resources */ = {isa = PBXBuildFile; fileRef = A268E7FB09A9822900E082AA /* TabNewMetal.png */; };
 		A268E80809A9822A00E082AA /* TabNewMetalPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A268E7FC09A9822900E082AA /* TabNewMetalPressed.png */; };
 		A268E80909A9822A00E082AA /* TabNewMetalRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = A268E7FD09A9822900E082AA /* TabNewMetalRollover.png */; };
-		A268EA6209A9831800E082AA /* PSMRolloverButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A268EA5F09A9831800E082AA /* PSMRolloverButton.h */; };
+		A268EA6209A9831800E082AA /* PSMRolloverButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A268EA5F09A9831800E082AA /* PSMRolloverButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A268EA6309A9831800E082AA /* PSMRolloverButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A268EA6009A9831800E082AA /* PSMRolloverButton.m */; };
 		A27E47850A28EE76007BA395 /* TabIcon.tif in Resources */ = {isa = PBXBuildFile; fileRef = A20822F00959F6AA00C5F5A4 /* TabIcon.tif */; };
 		A27E47880A28EE7C007BA395 /* TabControlRep.tif in Resources */ = {isa = PBXBuildFile; fileRef = A20822EF0959F6AA00C5F5A4 /* TabControlRep.tif */; };
@@ -401,11 +401,11 @@
 			files = (
 				546DEAF2067F630E0098DCC4 /* PSMTabBarControl.h in Headers */,
 				A251BE850959A1B90058BC7F /* PSMOverflowPopUpButton.h in Headers */,
+				A268EA6209A9831800E082AA /* PSMRolloverButton.h in Headers */,
 				A251BE870959A1B90058BC7F /* PSMTabBarCell.h in Headers */,
 				A2D32EDC09A634C900EC8662 /* PSMTabStyle.h in Headers */,
 				A2D32EE809A6399300EC8662 /* PSMAquaTabStyle.h in Headers */,
 				A2D32F0009A63D7A00EC8662 /* PSMMetalTabStyle.h in Headers */,
-				A268EA6209A9831800E082AA /* PSMRolloverButton.h in Headers */,
 				A2129BB209AEB58F00724E6C /* PSMProgressIndicator.h in Headers */,
 				A2082A9009EAEB34009AC8BE /* PSMTabDragAssistant.h in Headers */,
 				A2D98B0A0A2B432C0064C6F8 /* PSMUnifiedTabStyle.h in Headers */,

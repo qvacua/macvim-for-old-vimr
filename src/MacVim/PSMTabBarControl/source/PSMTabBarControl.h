@@ -11,6 +11,8 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "PSMRolloverButton.h"
+#import "PSMOverflowPopUpButton.h"
 
 #ifndef NSINTEGER_DEFINED
 // NSInteger was introduced in 10.5
