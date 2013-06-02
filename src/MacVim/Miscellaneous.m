@@ -14,10 +14,6 @@
 
 
 // NSUserDefaults keys
-NSString *MMTabMinWidthKey              = @"MMTabMinWidth";
-NSString *MMTabMaxWidthKey              = @"MMTabMaxWidth";
-NSString *MMTabOptimumWidthKey          = @"MMTabOptimumWidth";
-NSString *MMShowAddTabButtonKey         = @"MMShowAddTabButton";
 NSString *MMTopLeftPointKey             = @"MMTopLeftPoint";
 NSString *MMOpenInCurrentWindowKey      = @"MMOpenInCurrentWindow";
 NSString *MMUntitledWindowKey           = @"MMUntitledWindow";
@@ -217,25 +213,6 @@ NSString *MMNativeFullScreenKey         = @"MMNativeFullScreen";
 }
 
 @end // NSToolbar (MMExtras)
-
-
-
-
-@implementation NSTabView (MMExtras)
-
-- (void)removeAllTabViewItems
-{
-    NSArray *existingItems = [self tabViewItems];
-    NSEnumerator *e = [existingItems objectEnumerator];
-    NSTabViewItem *item;
-    while ((item = [e nextObject])) {
-        [self removeTabViewItem:item];
-    }
-}
-
-@end // NSTabView (MMExtras)
-
-
 
 
 @implementation NSNumber (MMExtras)

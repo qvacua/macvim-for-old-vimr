@@ -27,3 +27,7 @@ NSString *MMTypesetterKey = @"MMTypesetter";
 NSString *MMOpenLayoutKey = @"MMOpenLayout";
 NSString *MMVerticalSplitKey = @"MMVerticalSplit";
 NSString *MMDialogsTrackPwdKey = @"MMDialogsTrackPwd";
+NSString *MMTabMinWidthKey = @"MMTabMinWidth";
+NSString *MMTabMaxWidthKey = @"MMTabMaxWidth";
+NSString *MMTabOptimumWidthKey = @"MMTabOptimumWidth";
+NSString *MMShowAddTabButtonKey = @"MMShowAddTabButton";

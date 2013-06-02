@@ -7,18 +7,7 @@
  * Do ":help credits" in Vim to see a list of people who contributed.
  * See README.txt for an overview of the Vim source code.
  */
-/*
- * MMVimView
- *
- * A view class with a tabline, scrollbars, and a text view.  The tabline may
- * appear at the top of the view in which case it fills up the view from left
- * to right edge.  Any number of scrollbars may appear adjacent to all other
- * edges of the view (there may be more than one scrollbar per edge and
- * scrollbars may also be placed on the left edge of the view).  The rest of
- * the view is filled by the text view.
- */
 
-#import "Miscellaneous.h"   // Defines MM_ENABLE_ATSUI
 
 #import "MMCoreTextView.h"
 #import "MMTextView.h"
@@ -26,8 +15,8 @@
 #import "MMVimView.h"
 #import "MMWindowController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
-
 #import "MMScroller.h"
+#import "MMUserDefaults.h"
 
 
 @interface MMVimView (Private)
@@ -167,7 +156,7 @@
             || !([[self window] styleMask] & NSTexturedBackgroundWindowMask))
         return;
 
-    int sw = [NSScroller scrollerWidth];
+    int sw = (int) [NSScroller scrollerWidth];
 
     // add .5 to the pixel locations to put the lines on a pixel boundary.
     // the top and right edges of the rect will be outside of the bounds rect
@@ -293,7 +282,7 @@
                 continue;
 
             NSString *val = [[NSString alloc]
-                    initWithBytes:(void*)p length:length
+                    initWithBytes:(void*)p length:(NSUInteger) length
                          encoding:NSUTF8StringEncoding];
             p += length;
 
@@ -302,7 +291,7 @@
                     // Set the label of the tab, adding a new tab when needed.
                     tvi = [[self tabView] numberOfTabViewItems] <= tabIdx
                             ? [self addNewTabViewItem]
-                            : [tabViewItems objectAtIndex:tabIdx];
+                            : [tabViewItems objectAtIndex:(NSUInteger) tabIdx];
                     [tvi setLabel:val];
                     ++tabIdx;
                     break;
@@ -326,7 +315,7 @@
     vimTaskSelectedTab = YES;
     int i, count = [[self tabView] numberOfTabViewItems];
     for (i = count-1; i >= tabIdx; --i) {
-        id tvi = [tabViewItems objectAtIndex:i];
+        id tvi = [tabViewItems objectAtIndex:(NSUInteger) i];
         [[self tabView] removeTabViewItem:tvi];
     }
     vimTaskSelectedTab = NO;
@@ -343,7 +332,7 @@
     }
 
     // Do not try to select a tab if already selected.
-    NSTabViewItem *tvi = [tabViewItems objectAtIndex:idx];
+    NSTabViewItem *tvi = [tabViewItems objectAtIndex:(NSUInteger) idx];
     if (tvi != [[self tabView] selectedTabViewItem]) {
         vimTaskSelectedTab = YES;
         [[self tabView] selectTabViewItem:tvi];
@@ -442,7 +431,7 @@
 - (void)setScrollbarPosition:(int)pos length:(int)len identifier:(int32_t)ident
 {
     MMScroller *scroller = [self scrollbarForIdentifier:ident index:NULL];
-    NSRange range = NSMakeRange(pos, len);
+    NSRange range = NSMakeRange((NSUInteger) pos, (NSUInteger) len);
     if (!NSEqualRanges(range, [scroller range])) {
         [scroller setRange:range];
         // TODO!  Should only do this once per update.
@@ -676,7 +665,7 @@
             // HACK!  Make sure the horizontal scrollbar covers the text view
             // all the way to the right, otherwise it looks ugly when the user
             // drags the window to resize.
-            float w = NSMaxX(textViewFrame) - NSMaxX(rect);
+            CGFloat w = NSMaxX(textViewFrame) - NSMaxX(rect);
             if (w > 0)
                 rect.size.width += w;
 
@@ -709,7 +698,7 @@
             // region next to the command line.
             // TODO!  Find a nicer way to do this.
             if (i == lowestLeftSbIdx || i == lowestRightSbIdx) {
-                float h = rect.origin.y + rect.size.height
+                CGFloat h = rect.origin.y + rect.size.height
                           - textViewFrame.origin.y;
                 if (rect.size.height < h) {
                     rect.origin.y = textViewFrame.origin.y;

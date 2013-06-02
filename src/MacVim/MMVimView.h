@@ -17,6 +17,16 @@
 @protocol MMTextViewProtocol;
 
 
+/*
+ * MMVimView
+ *
+ * A view class with a tabline, scrollbars, and a text view.  The tabline may
+ * appear at the top of the view in which case it fills up the view from left
+ * to right edge.  Any number of scrollbars may appear adjacent to all other
+ * edges of the view (there may be more than one scrollbar per edge and
+ * scrollbars may also be placed on the left edge of the view).  The rest of
+ * the view is filled by the text view.
+ */
 @interface MMVimView : NSView {
     PSMTabBarControl    *tabBarControl;
     NSTabView           *tabView;

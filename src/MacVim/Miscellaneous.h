@@ -21,10 +21,6 @@
 
 
 // NSUserDefaults keys
-extern NSString *MMTabMinWidthKey;
-extern NSString *MMTabMaxWidthKey;
-extern NSString *MMTabOptimumWidthKey;
-extern NSString *MMShowAddTabButtonKey;
 extern NSString *MMTopLeftPointKey;
 extern NSString *MMOpenInCurrentWindowKey;
 extern NSString *MMUntitledWindowKey;
@@ -91,11 +87,6 @@ enum {
 - (NSUInteger)indexOfItemWithItemIdentifier:(NSString *)identifier;
 - (NSToolbarItem *)itemAtIndex:(NSUInteger)idx;
 - (NSToolbarItem *)itemWithItemIdentifier:(NSString *)identifier;
-@end
-
-
-@interface NSTabView (MMExtras)
-- (void)removeAllTabViewItems;
 @end
 
 

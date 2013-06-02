@@ -191,3 +191,17 @@
 }
 
 @end
+
+
+@implementation NSTabView (MMExtras)
+
+- (void)removeAllTabViewItems {
+    NSArray *existingItems = [self tabViewItems];
+    NSEnumerator *e = [existingItems objectEnumerator];
+    NSTabViewItem *item;
+    while ((item = [e nextObject])) {
+        [self removeTabViewItem:item];
+    }
+}
+
+@end

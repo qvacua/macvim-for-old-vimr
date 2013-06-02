@@ -48,3 +48,10 @@
 - (NSData *)descriptorAsDataForVim;
 
 @end
+
+
+@interface NSTabView (MMExtras)
+
+- (void)removeAllTabViewItems;
+
+@end
