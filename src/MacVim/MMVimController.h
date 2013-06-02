@@ -74,12 +74,12 @@
 - (void)dropString:(NSString *)string;
 - (void)passArguments:(NSDictionary *)args;
 - (void)sendMessage:(int)msgid data:(NSData *)data;
-- (BOOL)sendMessageNow:(int)msgid data:(NSData *)data
-               timeout:(NSTimeInterval)timeout;
+- (BOOL)sendMessageNow:(int)msgid data:(NSData *)data timeout:(NSTimeInterval)timeout;
 - (void)addVimInput:(NSString *)string;
 - (NSString *)evaluateVimExpression:(NSString *)expr;
 - (void)processInputQueue:(NSArray *)queue;
 
 - (BOOL)tellBackend:(id)obj;
 - (BOOL)sendDialogReturnToBackend:(id)obj;
+
 @end

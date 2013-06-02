@@ -13,6 +13,7 @@
 
 NSString *MMLogLevelKey = @"MMLogLevel";
 NSString *MMLogToStdErrKey = @"MMLogToStdErr";
+NSString *MMLogToStdOutKey = @"MMLogToStdOut";
 
 int ASLogLevel = ASL_LEVEL_NOTICE;
 
@@ -40,5 +41,9 @@ ASLInit() {
     // contrary to how "vanilla" ASL works.
     BOOL logToStdErr = [ud boolForKey:MMLogToStdErrKey];
     if (logToStdErr)
-        asl_add_log_file(NULL, 2);  // The file descriptor for stderr is 2
+        asl_add_log_file(NULL, STDERR_FILENO);
+
+    BOOL logToStdOut = [ud boolForKey:MMLogToStdOutKey];
+    if (logToStdOut)
+        asl_add_log_file(NULL, STDOUT_FILENO);
 }

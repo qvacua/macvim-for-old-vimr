@@ -862,8 +862,8 @@ static void fsEventCallback(
     ASLogDebug(@"Add Vim controller pid=%d id=%d", [vc pid], [vc vimControllerId]);
 
     int pid = [vc pid];
-    NSNumber *pidKey = [NSNumber numberWithInt:pid];
-    id args = [pidArguments objectForKey:pidKey];
+    NSNumber *pidKey = @(pid);
+    id args = pidArguments[pidKey];
 
     if (preloadPid == pid) {
         // This controller was preloaded, so add it to the cache and
