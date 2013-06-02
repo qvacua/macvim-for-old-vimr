@@ -16,7 +16,7 @@
 		1929B49BB6E21C16B5B9875D /* MMVimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B94F86FADCAA67D6701A /* MMVimView.m */; };
 		1929B4BDEE229E19573C9D95 /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B58A376B99D12870C813 /* MMLog.m */; };
 		1929B4F993797DF58FC10D1E /* MMTextViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B1BC05F90BBED8EE5F08 /* MMTextViewHelper.m */; };
-		1929B50FC4967594B0126D20 /* MMAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BA3609EDDC45308A1A16 /* MMAlert.m */; };
+		1929B50FC4967594B0126D20 /* MMAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BA3609EDDC45308A1A16 /* MMAlert.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		1929B5D219627B604C220160 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */; };
 		1929B68FC43BB073E60EDC7A /* MMVimManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B07DA0688CDD8A96FD70 /* MMVimManager.m */; };
 		1929B7E1AD8BCE8E0B2AEB71 /* MMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B00017509F3629F72B87 /* MMTextView.m */; };

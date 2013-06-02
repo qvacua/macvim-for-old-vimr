@@ -11,11 +11,8 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface MMAlert : NSAlert {
-    NSTextField *textField;
-}
+@interface MMAlert : NSAlert
 
 - (void)setTextFieldString:(NSString *)textFieldString;
-- (NSTextField *)textField;
 
 @end
