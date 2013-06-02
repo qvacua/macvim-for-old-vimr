@@ -9,7 +9,7 @@
  */
 
 #import "MacVim.h"
-
+#import "MMVimControllerDelegate.h"
 
 
 @class MMWindow;
@@ -17,11 +17,7 @@
 @class MMVimController;
 @class MMVimView;
 
-@interface MMWindowController : NSWindowController
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
-    // 10.6 has turned delegate messages into formal protocols
-    <NSWindowDelegate>
-#endif
+@interface MMWindowController : NSWindowController <NSWindowDelegate, MMVimControllerDelegate, NSOpenSavePanelDelegate, NSToolbarDelegate>
 {
     MMVimController     *vimController;
     MMVimView           *vimView;
@@ -44,10 +40,12 @@
     int                 userCols;
     NSPoint             userTopLeft;
     NSPoint             defaultTopLeft;
+
     NSToolbar           *toolbar;
+    NSMutableDictionary *toolbarItemDict;
 }
 
-- (id)initWithVimController:(MMVimController *)controller;
+- (id)initWithVimController:(MMVimController *)controller vimView:(MMVimView *)aVimView;
 - (MMVimController *)vimController;
 - (MMVimView *)vimView;
 - (NSString *)windowAutosaveKey;
@@ -72,9 +70,8 @@
 - (void)setDefaultColorsBackground:(NSColor *)back foreground:(NSColor *)fore;
 - (void)setFont:(NSFont *)font;
 - (void)setWideFont:(NSFont *)font;
-- (void)processInputQueueDidFinish;
 - (void)showTabBar:(BOOL)on;
-- (void)showToolbar:(BOOL)on size:(int)size mode:(int)mode;
+- (void)showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode;
 - (void)setMouseShape:(int)shape;
 - (void)adjustLinespace:(int)linespace;
 - (void)liveResizeWillStart;

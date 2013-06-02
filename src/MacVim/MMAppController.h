@@ -10,6 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MacVim.h"
+#import "MMVimManagerDelegateProtocol.h"
 
 
 @class MMWindowController;
@@ -17,7 +18,7 @@
 @class MMVimManager;
 
 
-@interface MMAppController : NSObject {
+@interface MMAppController : NSObject <NSApplicationDelegate, MMVimManagerDelegateProtocol> {
     NSString            *openSelectionString;
     NSMenu              *defaultMainMenu;
     NSMenuItem          *appMenuItemTemplate;
@@ -30,7 +31,6 @@
 - (NSMenu *)defaultMainMenu;
 - (NSMenuItem *)appMenuItemTemplate;
 - (MMVimController *)keyVimController;
-- (void)removeVimController:(id)controller;
 - (void)windowControllerWillOpen:(MMWindowController *)windowController;
 - (void)setMainMenu:(NSMenu *)mainMenu;
 - (NSArray *)filterOpenFiles:(NSArray *)filenames;

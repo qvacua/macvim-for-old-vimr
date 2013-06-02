@@ -65,12 +65,12 @@
 #import "MMFindReplaceController.h"
 #import "MMFullScreenWindow.h"
 #import "MMTextView.h"
-#import "MMTypesetter.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
 #import "MMWindow.h"
 #import "MMWindowController.h"
 #import "Miscellaneous.h"
+#import "MMAlert.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 
 
@@ -80,8 +80,24 @@
 #define FUOPT_BGCOLOR_HLGROUP 0x004
 
 
+static NSString *MMDefaultToolbarImageName = @"Attention";
+
+
+// HACK! AppKit private methods from NSToolTipManager.  As an alternative to
+// using private methods, it would be possible to set the user default
+// NSInitialToolTipDelay (in ms) on app startup, but then it is impossible to
+// change the balloon delay without closing/reopening a window.
+@interface NSObject (NSToolTipManagerPrivateAPI)
++ (id)sharedToolTipManager;
+- (void)setInitialToolTipDelay:(double)arg1;
+@end
+
 
 @interface MMWindowController (Private)
+
+- (void)addToolbarItemToDictionaryWithLabel:(NSString *)title toolTip:(NSString *)tip icon:(NSString *)icon;
+- (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)context;
+- (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller;
 - (NSSize)contentSize;
 - (void)resizeWindowToFitContentSize:(NSSize)contentSize
                         keepOnScreen:(BOOL)onScreen;
@@ -123,7 +139,7 @@
 
 @implementation MMWindowController
 
-- (id)initWithVimController:(MMVimController *)controller
+- (id)initWithVimController:(MMVimController *)controller vimView:(MMVimView *)aVimView;
 {
     unsigned styleMask = NSTitledWindowMask | NSClosableWindowMask
             | NSMiniaturizableWindowMask | NSResizableWindowMask
@@ -152,6 +168,20 @@
     vimController = controller;
     decoratedWindow = [win retain];
 
+    toolbarItemDict = [[NSMutableDictionary alloc] init];
+
+    // NOTE! Each toolbar must have a unique identifier, else each
+    // window will have the same toolbar.
+    NSString *ident = [NSString stringWithFormat:@"%d", [vimController vimControllerId]];
+    toolbar = [[NSToolbar alloc] initWithIdentifier:ident];
+
+    [toolbar setShowsBaselineSeparator:NO];
+    [toolbar setDelegate:self];
+    [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
+    [toolbar setSizeMode:NSToolbarSizeModeSmall];
+
+    [self setToolbar:toolbar];
+
     // Window cascading is handled by MMAppController.
     [self setShouldCascadeWindows:NO];
 
@@ -162,8 +192,7 @@
     NSView *contentView = [win contentView];
     [contentView setAutoresizesSubviews:YES];
 
-    vimView = [[MMVimView alloc] initWithFrame:[contentView frame]
-                                 vimController:vimController];
+    vimView = aVimView;
     [vimView setAutoresizingMask:NSViewNotSizable];
     [contentView addSubview:vimView];
 
@@ -223,9 +252,9 @@
 
     [decoratedWindow release];  decoratedWindow = nil;
     [windowAutosaveKey release];  windowAutosaveKey = nil;
-    [vimView release];  vimView = nil;
     [toolbar release];  toolbar = nil;
 
+    [toolbarItemDict release];
     [super dealloc];
 }
 
@@ -531,72 +560,6 @@
     [[vimView textView] setWideFont:font];
 }
 
-- (void)processInputQueueDidFinish
-{
-    // NOTE: Resizing is delayed until after all commands have been processed
-    // since it often happens that more than one command will cause a resize.
-    // If we were to immediately resize then the vim view size would jitter
-    // (e.g.  hiding/showing scrollbars often happens several time in one
-    // update).
-    // Also delay toggling the toolbar until after scrollbars otherwise
-    // problems arise when showing toolbar and scrollbar at the same time, i.e.
-    // on "set go+=rT".
-
-    // Update toolbar before resizing, since showing the toolbar may require
-    // the view size to become smaller.
-    if (updateToolbarFlag != 0)
-        [self updateToolbar];
-
-    // NOTE: If the window has not been presented then we must avoid resizing
-    // the views since it will cause them to be constrained to the screen which
-    // has not yet been set!
-    if (windowPresented && shouldResizeVimView) {
-        shouldResizeVimView = NO;
-
-        // Make sure full-screen window stays maximized (e.g. when scrollbar or
-        // tabline is hidden) according to 'fuopt'.
-
-        BOOL didMaximize = NO;
-        if (shouldMaximizeWindow && fullScreenEnabled &&
-                (fullScreenOptions & (FUOPT_MAXVERT|FUOPT_MAXHORZ)) != 0)
-            didMaximize = [self maximizeWindow:fullScreenOptions];
-
-        shouldMaximizeWindow = NO;
-
-        // Resize Vim view and window, but don't do this now if the window was
-        // just reszied because this would make the window "jump" unpleasantly.
-        // Instead wait for Vim to respond to the resize message and do the
-        // resizing then.
-        // TODO: What if the resize message fails to make it back?
-        if (!didMaximize) {
-            NSSize originalSize = [vimView frame].size;
-            NSSize contentSize = [vimView desiredSize];
-            contentSize = [self constrainContentSizeToScreenSize:contentSize];
-            int rows = 0, cols = 0;
-            contentSize = [vimView constrainRows:&rows columns:&cols
-                                          toSize:contentSize];
-            [vimView setFrameSize:contentSize];
-
-            if (fullScreenWindow) {
-                // NOTE! Don't mark the full-screen content view as needing an
-                // update unless absolutely necessary since when it is updated
-                // the entire screen is cleared.  This may cause some parts of
-                // the Vim view to be cleared but not redrawn since Vim does
-                // not realize that we've erased part of the view.
-                if (!NSEqualSizes(originalSize, contentSize)) {
-                    [[fullScreenWindow contentView] setNeedsDisplay:YES];
-                    [fullScreenWindow centerView];
-                }
-            } else {
-                [self resizeWindowToFitContentSize:contentSize
-                                      keepOnScreen:keepOnScreen];
-            }
-        }
-
-        keepOnScreen = NO;
-    }
-}
-
 - (void)showTabBar:(BOOL)on
 {
     [[vimView tabBarControl] setHidden:!on];
@@ -604,7 +567,7 @@
     shouldMaximizeWindow = YES;
 }
 
-- (void)showToolbar:(BOOL)on size:(int)size mode:(int)mode
+- (void)showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode
 {
     if (!toolbar) return;
 
@@ -1229,11 +1192,507 @@
 
 #endif // (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
 
+#pragma mark MMVimControllerDelegate
+- (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data {
+    [self openWindow];
+
+    // HACK: Delay actually presenting the window onscreen until after
+    // processing the queue since it contains drawing commands that need to
+    // be issued before presentation; otherwise the window may flash white
+    // just as it opens.
+    if (![controller isPreloading]) {
+        [self performSelector:@selector(presentWindow:) withObject:nil afterDelay:0];
+    }
+}
+
+- (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data {
+    [self updateTabsWithData:data];
+}
+
+- (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {
+    [self showTabBar:YES];
+}
+
+- (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data {
+    [self showTabBar:NO];
+}
+
+- (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data {
+    [self setTextDimensionsWithRows:rows columns:columns isLive:live keepOnScreen:keepOnScreen];
+}
+
+- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
+    // While in live resize the window title displays the dimensions of the
+    // window so don't clobber this with a spurious "set title" message
+    // from Vim.
+    if (![[self vimView] inLiveResize]) {
+        [self setTitle:title];
+    }
+}
+
+- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
+    [self setDocumentFilename:filename];
+}
+
+- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode data:(NSData *)data {
+    [self showToolbar:on size:size mode:mode];
+}
+
+- (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
+    [self createScrollbarWithIdentifier:identifier type:type];
+}
+
+- (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data {
+    [self destroyScrollbarWithIdentifier:identifier];
+}
+
+- (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data {
+    [self showScrollbarWithIdentifier:identifier state:state];
+}
+
+- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
+    [self setScrollbarPosition:position length:length identifier:identifier];
+}
+
+- (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
+    [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
+}
+
+- (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data {
+    [self setFont:font];
+}
+
+- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
+    [self setWideFont:font];
+}
+
+- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data {
+    [self setDefaultColorsBackground:background foreground:foreground];
+}
+
+- (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
+    [self setMouseShape:shape];
+}
+
+- (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data {
+    [self adjustLinespace:linespace];
+}
+
+- (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data {
+    [NSApp activateIgnoringOtherApps:YES];
+    [[self window] makeKeyAndOrderFront:self];
+}
+
+- (void)vimController:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data {
+    [self enterFullScreen:screen backgroundColor:color];
+}
+
+- (void)vimController:(MMVimController *)controller leaveFullScreenWithData:(NSData *)data {
+    [self leaveFullScreen];
+}
+
+- (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data {
+    [self setBufferModified:modified];
+}
+
+- (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
+    [[[self vimView] textView] setPreEditRow:row column:column];
+}
+
+- (void)vimController:(MMVimController *)controller setAntialias:(BOOL)antialias data:(NSData *)data {
+    [[[self vimView] textView] setAntialias:antialias];
+}
+
+- (void)vimController:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data {
+    [self setFullScreenBackgroundColor:color];
+}
+
+- (void)vimController:(MMVimController *)controller showFindReplaceDialogWithText:(id)text flags:(int)flags data:(NSData *)data {
+    [[MMFindReplaceController sharedInstance] showWithText:text flags:flags];
+}
+
+- (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data {
+    [[[self vimView] textView] activateIm:activate];
+}
+
+- (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data {
+    [[[self vimView] textView] setImControl:control];
+}
+
+- (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data {
+    [self zoomWithRows:rows columns:columns state:state];
+}
+
+- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data {
+    // NOTE: Vim measures Y-coordinates from top of screen.
+    NSRect frame = [[[self window] screen] frame];
+    position.y = NSMaxY(frame) - position.y;
+
+    [self setTopLeft:position];
+}
+
+- (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data {
+    [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
+}
+
+- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data {
+    if (saving) {
+        NSSavePanel *panel = [NSSavePanel savePanel];
+
+        // The delegate will be notified when the panel is expanded at which
+        // time we may hide/show the "show hidden files" button (this button is
+        // always visible for the open panel since it is always expanded).
+        [panel setDelegate:controller];
+        if ([panel isExpanded])
+            [panel setAccessoryView:showHiddenFilesView()];
+        // NOTE: -[NSSavePanel beginSheetForDirectory::::::] is deprecated on
+        // 10.6 but -[NSSavePanel setDirectoryURL:] requires 10.6 so jump
+        // through the following hoops on 10.6+.
+        if (url)
+            [panel setDirectoryURL:url];
+
+        [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+            [self savePanelDidEnd:panel code:result controller:controller];
+        }];
+
+        return;
+    }
+
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setAccessoryView:showHiddenFilesView()];
+
+    if (dir) {
+        [panel setCanChooseDirectories:YES];
+        [panel setCanChooseFiles:NO];
+    }
+
+    // NOTE: -[NSOpenPanel beginSheetForDirectory:::::::] is deprecated on
+    // 10.6 but -[NSOpenPanel setDirectoryURL:] requires 10.6 so jump
+    // through the following hoops on 10.6+.
+    if (url)
+        [panel setDirectoryURL:url];
+
+    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+        [self savePanelDidEnd:panel code:result controller:controller];
+    }];
+}
+
+- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)textFieldString data:(NSData *)data {
+    MMAlert *alert = [[MMAlert alloc] init];
+
+    // NOTE! This has to be done before setting the informative text.
+    if (textFieldString)
+        [alert setTextFieldString:textFieldString];
+
+    [alert setAlertStyle:style];
+
+    if (message) {
+        [alert setMessageText:message];
+    } else {
+        // If no message text is specified 'Alert' is used, which we don't
+        // want, so set an empty string as message text.
+        [alert setMessageText:@""];
+    }
+
+    if (text) {
+        [alert setInformativeText:text];
+    } else if (textFieldString) {
+        // Make sure there is always room for the input text field.
+        [alert setInformativeText:@""];
+    }
+
+    unsigned i, count = [buttonTitles count];
+    for (i = 0; i < count; ++i) {
+        NSString *title = [buttonTitles objectAtIndex:i];
+        // NOTE: The title of the button may contain the character '&' to
+        // indicate that the following letter should be the key equivalent
+        // associated with the button.  Extract this letter and lowercase it.
+        NSString *keyEquivalent = nil;
+        NSRange hotkeyRange = [title rangeOfString:@"&"];
+        if (NSNotFound != hotkeyRange.location) {
+            if ([title length] > NSMaxRange(hotkeyRange)) {
+                NSRange keyEquivRange = NSMakeRange(hotkeyRange.location+1, 1);
+                keyEquivalent = [[title substringWithRange:keyEquivRange]
+                        lowercaseString];
+            }
+
+            NSMutableString *string = [NSMutableString stringWithString:title];
+            [string deleteCharactersInRange:hotkeyRange];
+            title = string;
+        }
+
+        [alert addButtonWithTitle:title];
+
+        // Set key equivalent for the button, but only if NSAlert hasn't
+        // already done so.  (Check the documentation for
+        // - [NSAlert addButtonWithTitle:] to see what key equivalents are
+        // automatically assigned.)
+        NSButton *btn = [[alert buttons] lastObject];
+        if ([[btn keyEquivalent] length] == 0 && keyEquivalent) {
+            [btn setKeyEquivalent:keyEquivalent];
+        }
+    }
+
+    [alert beginSheetModalForWindow:[self window]
+                      modalDelegate:self
+                     didEndSelector:@selector(alertDidEnd:code:context:)
+                        contextInfo:controller];
+
+    [alert release];
+}
+
+- (void)vimController:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force {
+    // Add dropped files to the "Recent Files" menu.
+    [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
+}
+
+- (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
+    if (!toolbar) return;
+
+    // Check for separator items.
+    if (!label) {
+        label = NSToolbarSeparatorItemIdentifier;
+    } else if ([label length] >= 2 && [label hasPrefix:@"-"]
+            && [label hasSuffix:@"-"]) {
+        // The label begins and ends with '-'; decided which kind of separator
+        // item it is by looking at the prefix.
+        if ([label hasPrefix:@"-space"]) {
+            label = NSToolbarSpaceItemIdentifier;
+        } else if ([label hasPrefix:@"-flexspace"]) {
+            label = NSToolbarFlexibleSpaceItemIdentifier;
+        } else {
+            label = NSToolbarSeparatorItemIdentifier;
+        }
+    }
+
+    [self addToolbarItemToDictionaryWithLabel:label toolTip:tip icon:icon];
+
+    int maxIdx = [[toolbar items] count];
+    if (maxIdx < idx) idx = maxIdx;
+
+    [toolbar insertItemWithItemIdentifier:label atIndex:idx];
+}
+
+- (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier {
+    // Only remove toolbar items, never actually remove the toolbar
+    // itself or strange things may happen.
+    NSUInteger idx = [toolbar indexOfItemWithItemIdentifier:identifier];
+    if (idx != NSNotFound)
+        [toolbar removeItemAtIndex:idx];
+}
+
+- (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state {
+    [[toolbar itemWithItemIdentifier:identifier] setEnabled:state];
+}
+
+- (void)vimController:(MMVimController *)controller setTooltipDelay:(float)seconds {
+    // HACK! NSToolTipManager is an AppKit private class.
+    static Class TTM = nil;
+    if (!TTM)
+        TTM = NSClassFromString(@"NSToolTipManager");
+
+    if (seconds < 0)
+        seconds = 0;
+
+    if (TTM) {
+        [[TTM sharedToolTipManager] setInitialToolTipDelay:seconds];
+    } else {
+        ASLogNotice(@"Failed to get NSToolTipManager");
+    }
+}
+
+- (void)processInputQueueDidFinish
+{
+    // NOTE: Resizing is delayed until after all commands have been processed
+    // since it often happens that more than one command will cause a resize.
+    // If we were to immediately resize then the vim view size would jitter
+    // (e.g.  hiding/showing scrollbars often happens several time in one
+    // update).
+    // Also delay toggling the toolbar until after scrollbars otherwise
+    // problems arise when showing toolbar and scrollbar at the same time, i.e.
+    // on "set go+=rT".
+
+    // Update toolbar before resizing, since showing the toolbar may require
+    // the view size to become smaller.
+    if (updateToolbarFlag != 0)
+        [self updateToolbar];
+
+    // NOTE: If the window has not been presented then we must avoid resizing
+    // the views since it will cause them to be constrained to the screen which
+    // has not yet been set!
+    if (windowPresented && shouldResizeVimView) {
+        shouldResizeVimView = NO;
+
+        // Make sure full-screen window stays maximized (e.g. when scrollbar or
+        // tabline is hidden) according to 'fuopt'.
+
+        BOOL didMaximize = NO;
+        if (shouldMaximizeWindow && fullScreenEnabled &&
+                (fullScreenOptions & (FUOPT_MAXVERT|FUOPT_MAXHORZ)) != 0)
+            didMaximize = [self maximizeWindow:fullScreenOptions];
+
+        shouldMaximizeWindow = NO;
+
+        // Resize Vim view and window, but don't do this now if the window was
+        // just reszied because this would make the window "jump" unpleasantly.
+        // Instead wait for Vim to respond to the resize message and do the
+        // resizing then.
+        // TODO: What if the resize message fails to make it back?
+        if (!didMaximize) {
+            NSSize originalSize = [vimView frame].size;
+            NSSize contentSize = [vimView desiredSize];
+            contentSize = [self constrainContentSizeToScreenSize:contentSize];
+            int rows = 0, cols = 0;
+            contentSize = [vimView constrainRows:&rows columns:&cols
+                                          toSize:contentSize];
+            [vimView setFrameSize:contentSize];
+
+            if (fullScreenWindow) {
+                // NOTE! Don't mark the full-screen content view as needing an
+                // update unless absolutely necessary since when it is updated
+                // the entire screen is cleared.  This may cause some parts of
+                // the Vim view to be cleared but not redrawn since Vim does
+                // not realize that we've erased part of the view.
+                if (!NSEqualSizes(originalSize, contentSize)) {
+                    [[fullScreenWindow contentView] setNeedsDisplay:YES];
+                    [fullScreenWindow centerView];
+                }
+            } else {
+                [self resizeWindowToFitContentSize:contentSize
+                                      keepOnScreen:keepOnScreen];
+            }
+        }
+
+        keepOnScreen = NO;
+    }
+}
+
+#pragma mark NSOpenSavePanelDelegate
+- (void)panel:(id)sender willExpand:(BOOL)expanding
+{
+    // Show or hide the "show hidden files" button
+    if (expanding) {
+        [sender setAccessoryView:showHiddenFilesView()];
+    } else {
+        [sender setShowsHiddenFiles:NO];
+        [sender setAccessoryView:nil];
+    }
+}
+
+#pragma mark NSToolbarDelegate
+- (NSToolbarItem *)toolbar:(NSToolbar *)theToolbar itemForItemIdentifier:(NSString *)itemId willBeInsertedIntoToolbar:(BOOL)flag {
+    NSToolbarItem *item = [toolbarItemDict objectForKey:itemId];
+    if (!item) {
+        ASLogWarn(@"No toolbar item with id '%@'", itemId);
+    }
+
+    return item;
+}
+
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)theToolbar {
+    return nil;
+}
+
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)theToolbar {
+    return nil;
+}
+
 @end // MMWindowController
 
 
 
 @implementation MMWindowController (Private)
+
+- (void)addToolbarItemToDictionaryWithLabel:(NSString *)title
+                                    toolTip:(NSString *)tip
+                                       icon:(NSString *)icon
+{
+    // If the item corresponds to a separator then do nothing, since it is
+    // already defined by Cocoa.
+    if (!title || [title isEqual:NSToolbarSeparatorItemIdentifier]
+            || [title isEqual:NSToolbarSpaceItemIdentifier]
+            || [title isEqual:NSToolbarFlexibleSpaceItemIdentifier])
+        return;
+
+    NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:title];
+    [item setLabel:title];
+    [item setToolTip:tip];
+    [item setAction:@selector(vimToolbarItemAction:)];
+    [item setAutovalidates:NO];
+
+    NSImage *img = [NSImage imageNamed:icon];
+    if (!img) {
+        img = [[[NSImage alloc] initByReferencingFile:icon] autorelease];
+        if (!(img && [img isValid]))
+            img = nil;
+    }
+    if (!img) {
+        ASLogNotice(@"Could not find image with name '%@' to use as toolbar"
+                " image for identifier '%@';"
+                " using default toolbar icon '%@' instead.",
+        icon, title, MMDefaultToolbarImageName);
+
+        img = [NSImage imageNamed:MMDefaultToolbarImageName];
+    }
+
+    [item setImage:img];
+
+    [toolbarItemDict setObject:item forKey:title];
+
+    [item release];
+}
+
+- (void)alertDidEnd:(MMAlert *)alert code:(int)code context:(void *)controllerContext
+{
+    MMVimController *controller = (MMVimController *) controllerContext;
+    NSArray *ret = nil;
+    code = code - NSAlertFirstButtonReturn + 1;
+
+    if ([alert isKindOfClass:[MMAlert class]] && [alert textField]) {
+        ret = @[@(code), [[alert textField] stringValue]];
+    } else {
+        ret = @[@(code)];
+    }
+
+    ASLogDebug(@"Alert return=%@", ret);
+
+    // NOTE!  This causes the sheet animation to run its course BEFORE the rest
+    // of this function is executed.  If we do not wait for the sheet to
+    // disappear before continuing it can happen that the controller is
+    // released from under us (i.e. we'll crash and burn) because this
+    // animation is otherwise performed in the default run loop mode!
+    [[alert window] orderOut:self];
+
+    // TODO: Tae: shouldn't we use [controller sendDialogReturnToBackend:ret]?
+    [controller tellBackend:ret];
+}
+
+- (void)savePanelDidEnd:(NSSavePanel *)panel code:(int)code controller:(MMVimController *)controller {
+    NSString *path = nil;
+    if (code == NSOKButton) {
+        NSURL *url = [panel URL];
+        if ([url isFileURL])
+            path = [url path];
+    }
+    ASLogDebug(@"Open/save panel path=%@", path);
+
+    // NOTE!  This causes the sheet animation to run its course BEFORE the rest
+    // of this function is executed.  If we do not wait for the sheet to
+    // disappear before continuing it can happen that the controller is
+    // released from under us (i.e. we'll crash and burn) because this
+    // animation is otherwise performed in the default run loop mode!
+    [panel orderOut:self];
+
+    if (![controller sendDialogReturnToBackend:path]) {
+        return;
+    }
+
+    // Add file to the "Recent Files" menu (this ensures that files that
+    // are opened/saved from a :browse command are added to this menu).
+    if (path)
+        [[NSDocumentController sharedDocumentController] noteNewRecentFilePath:path];
+}
 
 - (NSSize)contentSize
 {

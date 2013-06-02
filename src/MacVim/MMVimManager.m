@@ -15,6 +15,7 @@
 #import "MMLog.h"
 #import "MMVimController.h"
 #import "MMUserDefaults.h"
+#import "MMVimManagerDelegateProtocol.h"
 
 
 // Default timeout intervals on all connections.
@@ -194,6 +195,7 @@ static void fsEventCallback(
 - (void)removeVimController:(MMVimController *)controller {
     ASLogDebug(@"Remove Vim controller pid=%d id=%d (processingFlag=%d)", controller.pid, controller.vimControllerId, processingFlag);
 
+    unsigned int controllerId = [controller vimControllerId];
     NSUInteger idx = [self.vimControllers indexOfObject:controller];
     if (NSNotFound == idx) {
         ASLogDebug(@"Controller not found, probably due to duplicate removal");
@@ -210,6 +212,8 @@ static void fsEventCallback(
     // hasn't exited after this wait it won't be reaped until the next time
     // reapChildProcesses: is called (but this should be harmless).
     [self performSelector:@selector(reapChildProcesses:) withObject:nil afterDelay:0.1];
+
+    [self.delegate manager:self vimControllerRemovedWithIdentifier:controllerId];
 }
 
 - (void)cleanUp {
@@ -391,6 +395,7 @@ static void fsEventCallback(
     // the open panel) we have to ensure this call happens on the main thread,
     // else there is a race condition that may lead to a crash.
     MMVimController *vc = [[MMVimController alloc] initWithBackend:proxy pid:pid];
+    [self.delegate manager:self vimControllerCreated:vc];
 
     [self performSelectorOnMainThread:@selector(addVimController:)
                            withObject:vc
@@ -862,8 +867,8 @@ static void fsEventCallback(
     ASLogDebug(@"Add Vim controller pid=%d id=%d", [vc pid], [vc vimControllerId]);
 
     int pid = [vc pid];
-    NSNumber *pidKey = [NSNumber numberWithInt:pid];
-    id args = [pidArguments objectForKey:pidKey];
+    NSNumber *pidKey = @(pid);
+    id args = pidArguments[pidKey];
 
     if (preloadPid == pid) {
         // This controller was preloaded, so add it to the cache and

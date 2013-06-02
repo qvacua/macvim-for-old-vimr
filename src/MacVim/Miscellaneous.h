@@ -31,9 +31,6 @@ extern NSString *MMUntitledWindowKey;
 extern NSString *MMTexturedWindowKey;
 extern NSString *MMZoomBothKey;
 extern NSString *MMCurrentPreferencePaneKey;
-extern NSString *MMDialogsTrackPwdKey;
-extern NSString *MMOpenLayoutKey;
-extern NSString *MMVerticalSplitKey;
 extern NSString *MMLastWindowClosedBehaviorKey;
 #ifdef INCLUDE_OLD_IM_CODE
 extern NSString *MMUseInlineImKey;
@@ -114,13 +111,3 @@ enum {
 // release it.
 NSView *showHiddenFilesView();
 
-
-// Convert filenames (which are in a variant of decomposed form, NFD, on HFS+)
-// to normalization form C (NFC).  (This is necessary because Vim does not
-// automatically compose NFD.)  For more information see:
-//     http://developer.apple.com/technotes/tn/tn1150.html
-//     http://developer.apple.com/technotes/tn/tn1150table.html
-//     http://developer.apple.com/qa/qa2001/qa1235.html
-//     http://www.unicode.org/reports/tr15/
-NSString *normalizeFilename(NSString *filename);
-NSArray *normalizeFilenames(NSArray *filenames);

@@ -44,6 +44,7 @@
 
 extern NSString *MMLogLevelKey;
 extern NSString *MMLogToStdErrKey;
+extern NSString *MMLogToStdOutKey;
 
 extern int ASLogLevel;
 

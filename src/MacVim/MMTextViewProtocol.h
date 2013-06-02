@@ -70,6 +70,8 @@
 
 - (MMVimController *)vimController;
 
+- (void)setToolTipAtMousePoint:(NSString *)string;
+
 /**
 * The text view has got a weak reference on the vim controller
 */
