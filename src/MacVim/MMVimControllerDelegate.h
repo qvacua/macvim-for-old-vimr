@@ -17,6 +17,10 @@
 @protocol MMVimControllerDelegate <NSObject>
 
 @optional
+/**
+* Vim measures Y-coordinates from top of screen.
+*/
+- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
@@ -54,11 +58,7 @@
 - (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier;
 - (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state;
 - (void)vimController:(MMVimController *)controller setTooltipDelay:(float)delay;
-- (void)processInputQueueDidFinish;
 
-/**
-* Vim measures Y-coordinates from top of screen.
-*/
-- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data;
+- (void)processInputQueueDidFinishVimController:(MMVimController *)controller;
 
 @end

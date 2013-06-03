@@ -337,7 +337,7 @@ static BOOL isUnsafeMessage(int msgid);
     // calling method).
     @try {
         [self doProcessInputQueue:queue];
-        [self.delegate processInputQueueDidFinish];
+        [self.delegate processInputQueueDidFinishVimController:self];
     }
     @catch (NSException *ex) {
         ASLogDebug(@"Exception: pid=%d id=%d reason=%@", pid, identifier, ex);

@@ -714,7 +714,7 @@ typedef struct
     return nil;
 }
 
-- (NSMenuItem *)menuItemTemplate {
+- (NSMenuItem *)menuItemTemplateForManager:(MMVimManager *)manager {
     NSMenuItem *appMenuItem = [self appMenuItemTemplate];
     appMenuItem = [appMenuItem copy];
 

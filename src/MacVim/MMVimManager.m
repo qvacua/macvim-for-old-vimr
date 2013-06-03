@@ -73,7 +73,7 @@ static void fsEventCallback(
 - (NSMenuItem *)menuItemTemplate {
     @synchronized (self) {
         if (_menuItemTemplate == nil) {
-            _menuItemTemplate = [[self.delegate menuItemTemplate] retain];
+            _menuItemTemplate = [[self.delegate menuItemTemplateForManager:self] retain];
         }
 
         return _menuItemTemplate;

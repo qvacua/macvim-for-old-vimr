@@ -1502,7 +1502,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)processInputQueueDidFinish
+- (void)processInputQueueDidFinishVimController:(MMVimController *)controller
 {
     // NOTE: Resizing is delayed until after all commands have been processed
     // since it often happens that more than one command will cause a resize.
