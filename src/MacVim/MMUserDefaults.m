@@ -31,3 +31,4 @@ NSString *MMTabMinWidthKey = @"MMTabMinWidth";
 NSString *MMTabMaxWidthKey = @"MMTabMaxWidth";
 NSString *MMTabOptimumWidthKey = @"MMTabOptimumWidth";
 NSString *MMShowAddTabButtonKey = @"MMShowAddTabButton";
+NSString *MMRendererKey = @"MMRenderer";
