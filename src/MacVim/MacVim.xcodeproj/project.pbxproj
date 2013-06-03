@@ -72,6 +72,55 @@
 		1DE9B9500D341AB8008FEDD4 /* MMWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE9B94E0D341AB8008FEDD4 /* MMWindow.m */; };
 		1DED78600C6DE43D0079945F /* vimrc in Copy Vim Runtime Files */ = {isa = PBXBuildFile; fileRef = 1DED785F0C6DE43D0079945F /* vimrc */; };
 		1DFE25A50C527BC4003000F7 /* PSMTabBarControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D493DB90C52533B00AB718C /* PSMTabBarControl.framework */; };
+		4B00FE84175D1DD800773FB5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00FE83175D1DD800773FB5 /* Cocoa.framework */; };
+		4B00FE8B175D1DD900773FB5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B00FE89175D1DD900773FB5 /* InfoPlist.strings */; };
+		4B00FE94175D1E1800773FB5 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B1D28FEA476210E3D4EC /* MMUtils.m */; };
+		4B00FE95175D1E1800773FB5 /* MMLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B58A376B99D12870C813 /* MMLog.m */; };
+		4B00FE96175D1E1800773FB5 /* MMCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9D29F87B2B05BDBD3BB /* MMCocoaCategories.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4B00FE97175D1E1800773FB5 /* MMTypesetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B6531565968BA52786D1 /* MMTypesetter.m */; };
+		4B00FE98175D1E1800773FB5 /* MMTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B4ED52B39898B3B30FC1 /* MMTextStorage.m */; };
+		4B00FE99175D1E1800773FB5 /* MMUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B9B60F9CC5A37791BC4C /* MMUserDefaults.m */; };
+		4B00FE9A175D1E1800773FB5 /* MMCoreTextView+ToolTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B7208057E1506C134B8D /* MMCoreTextView+ToolTip.m */; };
+		4B00FE9B175D1E1800773FB5 /* MMTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B11839EF061D23763730 /* MMTypes.m */; };
+		4B00FE9C175D1E1800773FB5 /* MMVimManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B07DA0688CDD8A96FD70 /* MMVimManager.m */; };
+		4B00FE9D175D1E1800773FB5 /* MMTextViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B1BC05F90BBED8EE5F08 /* MMTextViewHelper.m */; };
+		4B00FE9E175D1E1800773FB5 /* MMCoreTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B08DC15089B43AB00F00 /* MMCoreTextView.m */; };
+		4B00FE9F175D1E1800773FB5 /* MMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B00017509F3629F72B87 /* MMTextView.m */; };
+		4B00FEA0175D1E1800773FB5 /* MMAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BA3609EDDC45308A1A16 /* MMAlert.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4B00FEA1175D1E1800773FB5 /* MMVimController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B7ED04835FAC17D7B892 /* MMVimController.m */; };
+		4B00FEA2175D1E1800773FB5 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BCF859B6A68C22CB7DDB /* MMScroller.m */; };
+		4B00FEA3175D1E1800773FB5 /* MMVimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B94F86FADCAA67D6701A /* MMVimView.m */; };
+		4B00FEA6175D1E3400773FB5 /* PSMTabBarControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D493DB90C52533B00AB718C /* PSMTabBarControl.framework */; };
+		4B00FEA7175D1E3D00773FB5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D8B5A52104AF9FF002E59D5 /* Carbon.framework */; };
+		4B00FEA8175D1E4700773FB5 /* MMUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BB3FC34756B00107CAE7 /* MMUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEA9175D1E4700773FB5 /* MMLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BE8B27300F523B780922 /* MMLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEAA175D1E4700773FB5 /* MMCocoaCategories.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BAD0443D1B9CC4E2A49B /* MMCocoaCategories.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEAB175D1E4700773FB5 /* MMVimBackendProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B5BD46EA06AB1307693F /* MMVimBackendProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEAC175D1E4700773FB5 /* MMTypesetter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B46919352EC8D4758980 /* MMTypesetter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEAD175D1E4700773FB5 /* MMTextStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B3B00D503E4F74BA6F8D /* MMTextStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEAE175D1E4700773FB5 /* MMUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B2D8B87C35724865DD16 /* MMUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEAF175D1E4700773FB5 /* MMTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B02DD9159EF8FE00DAEF /* MMTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB0175D1E4700773FB5 /* MMCoreTextView+Tooltip.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BE12A2D0D834156ECB31 /* MMCoreTextView+Tooltip.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB1175D1E4700773FB5 /* MMTextViewProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B8EDACCF4F448F93E2D2 /* MMTextViewProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB2175D1E4700773FB5 /* MMAppProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BBDFE0CA71561D431866 /* MMAppProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB3175D1E4700773FB5 /* MMVimManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B10DAA1DD1D375D4C7A1 /* MMVimManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB4175D1E4700773FB5 /* MMTextViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BD1891388962DBD186E2 /* MMTextViewHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB5175D1E4700773FB5 /* MMCoreTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B5FF5D83F7E9C603FE50 /* MMCoreTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB6175D1E4700773FB5 /* MMTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B207A5C5510FD89A2598 /* MMTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB7175D1E4700773FB5 /* MMVimControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BC541E3F8F18D2C52BD7 /* MMVimControllerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB8175D1E4700773FB5 /* MMAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BCDCEE13E8448007E9EA /* MMAlert.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEB9175D1E4700773FB5 /* MMVimManagerDelegateProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BE6E3F5720F246256F21 /* MMVimManagerDelegateProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEBA175D1E4700773FB5 /* MMVimController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BC3F1B88DDA75DBAAE97 /* MMVimController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEBB175D1E4700773FB5 /* MMScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929BC255E2CDAD25BE9999B /* MMScroller.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEBC175D1E4700773FB5 /* MMVimView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B15503FEBA575E6FCCA7 /* MMVimView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B00FEBF175D1E6700773FB5 /* KeyBinding.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D384A0D100D671700D3C22F /* KeyBinding.plist */; };
+		4B00FEC0175D1E6700773FB5 /* SystemColors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1DD9F5E40C85D60500E8D5A5 /* SystemColors.plist */; };
+		4B00FEC1175D1E6700773FB5 /* Actions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1DE8CC610C5E2AAD003F56E3 /* Actions.plist */; };
+		4B00FEC2175D1E6700773FB5 /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D0E051B0BA5F83800B6049E /* Colors.plist */; };
+		4B00FEC4175D1E7300773FB5 /* Vim in copy vim exec */ = {isa = PBXBuildFile; fileRef = 1D493D570C5247BF00AB718C /* Vim */; };
+		4B00FEC6175D1E8400773FB5 /* vimrc in copy vim runtime */ = {isa = PBXBuildFile; fileRef = 1DED785F0C6DE43D0079945F /* vimrc */; };
+		4B00FEC7175D1E8400773FB5 /* gvimrc in copy vim runtime */ = {isa = PBXBuildFile; fileRef = 1DD0C20A0C60FF9A008CD84A /* gvimrc */; };
+		4B00FEC8175D1E8400773FB5 /* runtime in copy vim runtime */ = {isa = PBXBuildFile; fileRef = 1DE602470C587FD10055263D /* runtime */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -87,6 +136,13 @@
 			remoteInfo = PSMTabBarControlFramework;
 		};
 		1D493DCC0C5254A400AB718C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D493DB30C52533B00AB718C /* PSMTabBarControl.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53DF68FC067E5B5A0090B5B0;
+			remoteInfo = PSMTabBarControlFramework;
+		};
+		4B00FEA4175D1E3000773FB5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1D493DB30C52533B00AB718C /* PSMTabBarControl.xcodeproj */;
 			proxyType = 1;
@@ -129,6 +185,30 @@
 				1DE608B40C587FDA0055263D /* runtime in Copy Vim Runtime Files */,
 			);
 			name = "Copy Vim Runtime Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B00FEC3175D1E6D00773FB5 /* copy vim exec */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				4B00FEC4175D1E7300773FB5 /* Vim in copy vim exec */,
+			);
+			name = "copy vim exec";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B00FEC5175D1E7500773FB5 /* copy vim runtime */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = vim;
+			dstSubfolderSpec = 7;
+			files = (
+				4B00FEC6175D1E8400773FB5 /* vimrc in copy vim runtime */,
+				4B00FEC7175D1E8400773FB5 /* gvimrc in copy vim runtime */,
+				4B00FEC8175D1E8400773FB5 /* runtime in copy vim runtime */,
+			);
+			name = "copy vim runtime";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -236,11 +316,27 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* MacVim_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacVim_Prefix.pch; sourceTree = "<group>"; };
+		4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacVimFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B00FE83175D1DD800773FB5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4B00FE85175D1DD800773FB5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4B00FE88175D1DD900773FB5 /* MacVimFramework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacVimFramework-Info.plist"; sourceTree = "<group>"; };
+		4B00FE8A175D1DD900773FB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4B00FE8C175D1DD900773FB5 /* MacVimFramework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacVimFramework-Prefix.pch"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MacVim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4B00FE7E175D1DD800773FB5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FEA6175D1E3400773FB5 /* PSMTabBarControl.framework in Frameworks */,
+				4B00FE84175D1DD800773FB5 /* Cocoa.framework in Frameworks */,
+				4B00FEA7175D1E3D00773FB5 /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072E0486CEB800E47090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -297,6 +393,7 @@
 			children = (
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				4B00FE85175D1DD800773FB5 /* CoreData.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -349,6 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* MacVim.app */,
+				4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -421,6 +519,7 @@
 				080E96DDFE201D6D7F000001 /* MacVim Source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				1DE602460C587F760055263D /* Vim Resources */,
+				4B00FE86175D1DD900773FB5 /* MacVimFramework */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -456,14 +555,85 @@
 				1D8B5A52104AF9FF002E59D5 /* Carbon.framework */,
 				1D493DB30C52533B00AB718C /* PSMTabBarControl.xcodeproj */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				4B00FE83175D1DD800773FB5 /* Cocoa.framework */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4B00FE86175D1DD900773FB5 /* MacVimFramework */ = {
+			isa = PBXGroup;
+			children = (
+				4B00FE87175D1DD900773FB5 /* Supporting Files */,
+			);
+			path = MacVimFramework;
+			sourceTree = "<group>";
+		};
+		4B00FE87175D1DD900773FB5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4B00FE88175D1DD900773FB5 /* MacVimFramework-Info.plist */,
+				4B00FE89175D1DD900773FB5 /* InfoPlist.strings */,
+				4B00FE8C175D1DD900773FB5 /* MacVimFramework-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		4B00FE7F175D1DD800773FB5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FEA8175D1E4700773FB5 /* MMUtils.h in Headers */,
+				4B00FEA9175D1E4700773FB5 /* MMLog.h in Headers */,
+				4B00FEAA175D1E4700773FB5 /* MMCocoaCategories.h in Headers */,
+				4B00FEAB175D1E4700773FB5 /* MMVimBackendProtocol.h in Headers */,
+				4B00FEAC175D1E4700773FB5 /* MMTypesetter.h in Headers */,
+				4B00FEAD175D1E4700773FB5 /* MMTextStorage.h in Headers */,
+				4B00FEAE175D1E4700773FB5 /* MMUserDefaults.h in Headers */,
+				4B00FEAF175D1E4700773FB5 /* MMTypes.h in Headers */,
+				4B00FEB0175D1E4700773FB5 /* MMCoreTextView+Tooltip.h in Headers */,
+				4B00FEB1175D1E4700773FB5 /* MMTextViewProtocol.h in Headers */,
+				4B00FEB2175D1E4700773FB5 /* MMAppProtocol.h in Headers */,
+				4B00FEB3175D1E4700773FB5 /* MMVimManager.h in Headers */,
+				4B00FEB4175D1E4700773FB5 /* MMTextViewHelper.h in Headers */,
+				4B00FEB5175D1E4700773FB5 /* MMCoreTextView.h in Headers */,
+				4B00FEB6175D1E4700773FB5 /* MMTextView.h in Headers */,
+				4B00FEB7175D1E4700773FB5 /* MMVimControllerDelegate.h in Headers */,
+				4B00FEB8175D1E4700773FB5 /* MMAlert.h in Headers */,
+				4B00FEB9175D1E4700773FB5 /* MMVimManagerDelegateProtocol.h in Headers */,
+				4B00FEBA175D1E4700773FB5 /* MMVimController.h in Headers */,
+				4B00FEBB175D1E4700773FB5 /* MMScroller.h in Headers */,
+				4B00FEBC175D1E4700773FB5 /* MMVimView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		4B00FE81175D1DD800773FB5 /* MacVimFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B00FE93175D1DD900773FB5 /* Build configuration list for PBXNativeTarget "MacVimFramework" */;
+			buildPhases = (
+				4B00FE7D175D1DD800773FB5 /* Sources */,
+				4B00FE7E175D1DD800773FB5 /* Frameworks */,
+				4B00FE7F175D1DD800773FB5 /* Headers */,
+				4B00FE80175D1DD800773FB5 /* Resources */,
+				4B00FEC3175D1E6D00773FB5 /* copy vim exec */,
+				4B00FEC5175D1E7500773FB5 /* copy vim runtime */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4B00FEA5175D1E3000773FB5 /* PBXTargetDependency */,
+			);
+			name = MacVimFramework;
+			productName = MacVimFramework;
+			productReference = 4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		8D1107260486CEB800E47090 /* MacVim */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MacVim" */;
@@ -502,6 +672,7 @@
 				French,
 				German,
 				Swedish,
+				en,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* MacVim */;
 			projectDirPath = "";
@@ -514,6 +685,7 @@
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* MacVim */,
+				4B00FE81175D1DD800773FB5 /* MacVimFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -529,6 +701,18 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4B00FE80175D1DD800773FB5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FEBF175D1E6700773FB5 /* KeyBinding.plist in Resources */,
+				4B00FEC0175D1E6700773FB5 /* SystemColors.plist in Resources */,
+				4B00FEC1175D1E6700773FB5 /* Actions.plist in Resources */,
+				4B00FEC2175D1E6700773FB5 /* Colors.plist in Resources */,
+				4B00FE8B175D1DD900773FB5 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D1107290486CEB800E47090 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -591,6 +775,29 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4B00FE7D175D1DD800773FB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FE94175D1E1800773FB5 /* MMUtils.m in Sources */,
+				4B00FE95175D1E1800773FB5 /* MMLog.m in Sources */,
+				4B00FE96175D1E1800773FB5 /* MMCocoaCategories.m in Sources */,
+				4B00FE97175D1E1800773FB5 /* MMTypesetter.m in Sources */,
+				4B00FE98175D1E1800773FB5 /* MMTextStorage.m in Sources */,
+				4B00FE99175D1E1800773FB5 /* MMUserDefaults.m in Sources */,
+				4B00FE9A175D1E1800773FB5 /* MMCoreTextView+ToolTip.m in Sources */,
+				4B00FE9B175D1E1800773FB5 /* MMTypes.m in Sources */,
+				4B00FE9C175D1E1800773FB5 /* MMVimManager.m in Sources */,
+				4B00FE9D175D1E1800773FB5 /* MMTextViewHelper.m in Sources */,
+				4B00FE9E175D1E1800773FB5 /* MMCoreTextView.m in Sources */,
+				4B00FE9F175D1E1800773FB5 /* MMTextView.m in Sources */,
+				4B00FEA0175D1E1800773FB5 /* MMAlert.m in Sources */,
+				4B00FEA1175D1E1800773FB5 /* MMVimController.m in Sources */,
+				4B00FEA2175D1E1800773FB5 /* MMScroller.m in Sources */,
+				4B00FEA3175D1E1800773FB5 /* MMVimView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072C0486CEB800E47090 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -633,6 +840,11 @@
 			name = PSMTabBarControlFramework;
 			targetProxy = 1D493DCC0C5254A400AB718C /* PBXContainerItemProxy */;
 		};
+		4B00FEA5175D1E3000773FB5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PSMTabBarControlFramework;
+			targetProxy = 4B00FEA4175D1E3000773FB5 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -668,9 +880,89 @@
 			name = MainMenu.nib;
 			sourceTree = "<group>";
 		};
+		4B00FE89175D1DD900773FB5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B00FE8A175D1DD900773FB5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4B00FE90175D1DD900773FB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MacVimFramework/MacVimFramework-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "MacVimFramework/MacVimFramework-Info.plist";
+				INSTALL_PATH = "@rpath";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		4B00FE91175D1DD900773FB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MacVimFramework/MacVimFramework-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "MacVimFramework/MacVimFramework-Info.plist";
+				INSTALL_PATH = "@rpath";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -760,6 +1052,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4B00FE93175D1DD900773FB5 /* Build configuration list for PBXNativeTarget "MacVimFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B00FE90175D1DD900773FB5 /* Debug */,
+				4B00FE91175D1DD900773FB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MacVim" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
