@@ -61,12 +61,25 @@ static void fsEventCallback(
 
     FSEventStreamRef fsEventStream;
     BOOL lastVimControllerHasArgs;
+
+    NSMenuItem *_menuItemTemplate;
 }
 
 @dynamic mutableVimControllers;
 @dynamic mutableCachedVimControllers;
+@dynamic menuItemTemplate;
 
 #pragma mark Public
+- (NSMenuItem *)menuItemTemplate {
+    @synchronized (self) {
+        if (_menuItemTemplate == nil) {
+            _menuItemTemplate = [[self.delegate menuItemTemplate] retain];
+        }
+
+        return _menuItemTemplate;
+    }
+}
+
 - (void)handleFSEvent {
     [self clearPreloadCacheWithCount:-1];
 
@@ -375,6 +388,7 @@ static void fsEventCallback(
     [_cachedVimControllers release];
     [pidArguments release];
 
+    [_menuItemTemplate release];
     [super dealloc];
 }
 

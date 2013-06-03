@@ -35,6 +35,7 @@
 - (void)setMainMenu:(NSMenu *)mainMenu;
 - (NSArray *)filterOpenFiles:(NSArray *)filenames;
 - (BOOL)openFiles:(NSArray *)filenames withArguments:(NSDictionary *)args;
+- (NSMenuItem *)menuItemTemplate;
 
 - (IBAction)newWindow:(id)sender;
 - (IBAction)newWindowAndActivate:(id)sender;

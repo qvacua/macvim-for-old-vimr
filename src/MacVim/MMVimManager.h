@@ -8,7 +8,7 @@
  * See README.txt for an overview of the Vim source code.
  */
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 #import "MMAppProtocol.h"
 
 
@@ -21,6 +21,7 @@
 @property (assign) id <MMVimManagerDelegateProtocol> delegate;
 @property (readonly) NSArray *vimControllers;
 @property (readonly) NSArray *cachedVimControllers;
+@property (readonly, retain) NSMenuItem *menuItemTemplate;
 
 - (BOOL)processesAboutToLaunch;
 - (void)terminateAllVimProcesses;

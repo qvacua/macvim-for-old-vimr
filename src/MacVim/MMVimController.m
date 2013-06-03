@@ -8,7 +8,6 @@
  * See README.txt for an overview of the Vim source code.
  */
 
-#import "MMAppController.h"
 #import "MMVimControllerDelegate.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
@@ -91,17 +90,8 @@ static BOOL isUnsafeMessage(int msgid);
     // which itself is set up in MainMenu.nib).  The main menu is populated
     // by Vim later on.
     mainMenu = [[NSMenu alloc] initWithTitle:@"MainMenu"];
-    NSMenuItem *appMenuItem = [[MMAppController sharedInstance] appMenuItemTemplate];
+    NSMenuItem *appMenuItem = [MMVimManager sharedManager].menuItemTemplate;
     appMenuItem = [[appMenuItem copy] autorelease];
-
-    // Note: If the title of the application menu is anything but what
-    // CFBundleName says then the application menu will not be typeset in
-    // boldface for some reason.  (It should already be set when we copy
-    // from the default main menu, but this is not the case for some
-    // reason.)
-    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
-    [appMenuItem setTitle:appName];
-
     [mainMenu addItem:appMenuItem];
 
     isInitialized = YES;
