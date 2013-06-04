@@ -728,8 +728,6 @@ static void fsEventCallback(
     NSString *frameworkPath = [[bundle.executablePath stringByResolvingSymlinksInPath] stringByDeletingLastPathComponent];
     NSString *path = [frameworkPath stringByAppendingPathComponent:@"Vim"];
 
-    NSLog(@"Vim exec path: %@", path);
-
     if (!path) {
         ASLogCrit(@"Vim executable could not be found inside app bundle!");
         return -1;
