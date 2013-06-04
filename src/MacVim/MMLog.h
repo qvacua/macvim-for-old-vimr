@@ -48,7 +48,7 @@ extern NSString *MMLogToStdOutKey;
 
 extern int ASLogLevel;
 
-void ASLInit();
+extern void ASLInit();
 
 #define ASLog(level, fmt, ...) \
     if (level <= ASLogLevel) { \

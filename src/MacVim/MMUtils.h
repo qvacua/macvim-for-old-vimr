@@ -60,10 +60,10 @@
 //     http://developer.apple.com/technotes/tn/tn1150table.html
 //     http://developer.apple.com/qa/qa2001/qa1235.html
 //     http://www.unicode.org/reports/tr15/
-NSString *normalizeFilename(NSString *filename);
-NSArray *normalizeFilenames(NSArray *filenames);
+extern NSString *normalizeFilename(NSString *filename);
+extern NSArray *normalizeFilenames(NSArray *filenames);
 
 // Create a string holding the labels of all messages in message queue for
 // debugging purposes (condense some messages since there may typically be LOTS
 // of them on a queue).
-NSString *debugStringForMessageQueue(NSArray *queue);
+extern NSString *debugStringForMessageQueue(NSArray *queue);

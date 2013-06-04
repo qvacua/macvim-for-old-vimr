@@ -121,6 +121,52 @@
 		4B00FEC6175D1E8400773FB5 /* vimrc in copy vim runtime */ = {isa = PBXBuildFile; fileRef = 1DED785F0C6DE43D0079945F /* vimrc */; };
 		4B00FEC7175D1E8400773FB5 /* gvimrc in copy vim runtime */ = {isa = PBXBuildFile; fileRef = 1DD0C20A0C60FF9A008CD84A /* gvimrc */; };
 		4B00FEC8175D1E8400773FB5 /* runtime in copy vim runtime */ = {isa = PBXBuildFile; fileRef = 1DE602470C587FD10055263D /* runtime */; };
+		4B00FECF175D221400773FB5 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		4B00FED0175D221400773FB5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		4B00FED2175D221400773FB5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 1DD04DEB0C529C5E006CDC2B /* Credits.rtf */; };
+		4B00FED5175D221400773FB5 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1DE3F8E50D50F80500052B9E /* Preferences.nib */; };
+		4B00FED6175D221400773FB5 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
+		4B00FED8175D221400773FB5 /* Advanced.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D22374A0E45DF4800E6FFFF /* Advanced.png */; };
+		4B00FED9175D221400773FB5 /* Attention.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AA0E50B2B700460166 /* Attention.png */; };
+		4B00FEDA175D221400773FB5 /* Copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AB0E50B2B700460166 /* Copy.png */; };
+		4B00FEDB175D221400773FB5 /* Cut.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AC0E50B2B700460166 /* Cut.png */; };
+		4B00FEDC175D221400773FB5 /* FindHelp.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AD0E50B2B700460166 /* FindHelp.png */; };
+		4B00FEDD175D221400773FB5 /* FindNext.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AE0E50B2B700460166 /* FindNext.png */; };
+		4B00FEDE175D221400773FB5 /* FindPrev.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00AF0E50B2B700460166 /* FindPrev.png */; };
+		4B00FEDF175D221400773FB5 /* Help.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B00E50B2B700460166 /* Help.png */; };
+		4B00FEE0175D221400773FB5 /* LoadSesn.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B10E50B2B700460166 /* LoadSesn.png */; };
+		4B00FEE1175D221400773FB5 /* Make.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B20E50B2B700460166 /* Make.png */; };
+		4B00FEE2175D221400773FB5 /* Open.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B30E50B2B700460166 /* Open.png */; };
+		4B00FEE3175D221400773FB5 /* Paste.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B40E50B2B700460166 /* Paste.png */; };
+		4B00FEE4175D221400773FB5 /* Print.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B50E50B2B700460166 /* Print.png */; };
+		4B00FEE5175D221400773FB5 /* Redo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B60E50B2B700460166 /* Redo.png */; };
+		4B00FEE6175D221400773FB5 /* Replace.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B70E50B2B700460166 /* Replace.png */; };
+		4B00FEE7175D221400773FB5 /* RunCtags.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B80E50B2B700460166 /* RunCtags.png */; };
+		4B00FEE8175D221400773FB5 /* RunScript.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00B90E50B2B700460166 /* RunScript.png */; };
+		4B00FEE9175D221400773FB5 /* Save.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00BA0E50B2B700460166 /* Save.png */; };
+		4B00FEEA175D221400773FB5 /* SaveAll.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00BB0E50B2B700460166 /* SaveAll.png */; };
+		4B00FEEB175D221400773FB5 /* SaveSesn.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00BC0E50B2B700460166 /* SaveSesn.png */; };
+		4B00FEEC175D221400773FB5 /* TagJump.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00BD0E50B2B700460166 /* TagJump.png */; };
+		4B00FEED175D221400773FB5 /* Undo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DCD00BE0E50B2B700460166 /* Undo.png */; };
+		4B00FEEE175D221400773FB5 /* FindAndReplace.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1D8BEA73104992290069B072 /* FindAndReplace.nib */; };
+		4B00FEEF175D221400773FB5 /* MacVim.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1D9C602E0EF79C0C0034AD44 /* MacVim.icns */; };
+		4B00FF0F175D221400773FB5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		4B00FF10175D221400773FB5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D8B5A52104AF9FF002E59D5 /* Carbon.framework */; };
+		4B00FF1F175D225800773FB5 /* MMFindReplaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60088A0E96A0B2003763F0 /* MMFindReplaceController.m */; };
+		4B00FF20175D225800773FB5 /* Miscellaneous.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D80591D0E1185EA001699D1 /* Miscellaneous.m */; };
+		4B00FF21175D225800773FB5 /* DBPrefsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0395A8320D71ED7800881434 /* DBPrefsWindowController.m */; };
+		4B00FF22175D225800773FB5 /* MMPreferenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE3F8E90D50F84600052B9E /* MMPreferenceController.m */; };
+		4B00FF23175D225800773FB5 /* MMWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE9B94E0D341AB8008FEDD4 /* MMWindow.m */; };
+		4B00FF24175D225800773FB5 /* MMFullScreenWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D80FBD00CBBD3B700102A1C /* MMFullScreenWindow.m */; };
+		4B00FF25175D225800773FB5 /* MMApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD66ECC0C803D3600EBDAB3 /* MMApplication.m */; };
+		4B00FF26175D225800773FB5 /* MMWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474BA0C567A910038FA2B /* MMWindowController.m */; };
+		4B00FF27175D225800773FB5 /* MMAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D14749E0C5673AE0038FA2B /* MMAppController.m */; };
+		4B00FF28175D225800773FB5 /* MacVim.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1474960C56703C0038FA2B /* MacVim.m */; };
+		4B00FF29175D225800773FB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		4B00FF2A175D22C700773FB5 /* ibeam.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD3D51D0D82D4C9006E4320 /* ibeam.png */; };
+		4B00FF2B175D22E700773FB5 /* MacVimFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */; };
+		4B00FF2E175D24CE00773FB5 /* MacVimFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */; };
+		4B00FF31175D333C00773FB5 /* PSMTabBarControl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1D493DB90C52533B00AB718C /* PSMTabBarControl.framework */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -148,6 +194,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 53DF68FC067E5B5A0090B5B0;
 			remoteInfo = PSMTabBarControlFramework;
+		};
+		4B00FF2C175D22EB00773FB5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4B00FE81175D1DD800773FB5;
+			remoteInfo = MacVimFramework;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -209,6 +262,18 @@
 				4B00FEC8175D1E8400773FB5 /* runtime in copy vim runtime */,
 			);
 			name = "copy vim runtime";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B00FF13175D221400773FB5 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4B00FF31175D333C00773FB5 /* PSMTabBarControl.framework in Copy Frameworks */,
+				4B00FF2B175D22E700773FB5 /* MacVimFramework.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -322,6 +387,8 @@
 		4B00FE88175D1DD900773FB5 /* MacVimFramework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacVimFramework-Info.plist"; sourceTree = "<group>"; };
 		4B00FE8A175D1DD900773FB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4B00FE8C175D1DD900773FB5 /* MacVimFramework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacVimFramework-Prefix.pch"; sourceTree = "<group>"; };
+		4B00FF1D175D221400773FB5 /* MacVimWithFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVimWithFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B00FF1E175D221400773FB5 /* MacVim copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MacVim copy-Info.plist"; path = "/Volumes/Data/Projects/macvim/src/MacVim/MacVim copy-Info.plist"; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MacVim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -334,6 +401,16 @@
 				4B00FEA6175D1E3400773FB5 /* PSMTabBarControl.framework in Frameworks */,
 				4B00FE84175D1DD800773FB5 /* Cocoa.framework in Frameworks */,
 				4B00FEA7175D1E3D00773FB5 /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B00FF0D175D221400773FB5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FF0F175D221400773FB5 /* Cocoa.framework in Frameworks */,
+				4B00FF10175D221400773FB5 /* Carbon.framework in Frameworks */,
+				4B00FF2E175D24CE00773FB5 /* MacVimFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +524,7 @@
 			children = (
 				8D1107320486CEB800E47090 /* MacVim.app */,
 				4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */,
+				4B00FF1D175D221400773FB5 /* MacVimWithFramework.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -522,6 +600,7 @@
 				4B00FE86175D1DD900773FB5 /* MacVimFramework */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				4B00FF1E175D221400773FB5 /* MacVim copy-Info.plist */,
 			);
 			name = MacVim;
 			sourceTree = "<group>";
@@ -634,6 +713,27 @@
 			productReference = 4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		4B00FECB175D221400773FB5 /* MacVimWithFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B00FF1A175D221400773FB5 /* Build configuration list for PBXNativeTarget "MacVimWithFramework" */;
+			buildPhases = (
+				4B00FECE175D221400773FB5 /* Resources */,
+				4B00FEF1175D221400773FB5 /* Sources */,
+				4B00FF0D175D221400773FB5 /* Frameworks */,
+				4B00FF13175D221400773FB5 /* Copy Frameworks */,
+				4B00FF19175D221400773FB5 /* Make Document Icons */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4B00FF2D175D22EB00773FB5 /* PBXTargetDependency */,
+			);
+			name = MacVimWithFramework;
+			productInstallPath = "$(HOME)/Applications";
+			productName = MacVim;
+			productReference = 4B00FF1D175D221400773FB5 /* MacVimWithFramework.app */;
+			productType = "com.apple.product-type.application";
+		};
 		8D1107260486CEB800E47090 /* MacVim */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MacVim" */;
@@ -686,6 +786,7 @@
 			targets = (
 				8D1107260486CEB800E47090 /* MacVim */,
 				4B00FE81175D1DD800773FB5 /* MacVimFramework */,
+				4B00FECB175D221400773FB5 /* MacVimWithFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -705,11 +806,48 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B00FF2A175D22C700773FB5 /* ibeam.png in Resources */,
 				4B00FEBF175D1E6700773FB5 /* KeyBinding.plist in Resources */,
 				4B00FEC0175D1E6700773FB5 /* SystemColors.plist in Resources */,
 				4B00FEC1175D1E6700773FB5 /* Actions.plist in Resources */,
 				4B00FEC2175D1E6700773FB5 /* Colors.plist in Resources */,
 				4B00FE8B175D1DD900773FB5 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B00FECE175D221400773FB5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FECF175D221400773FB5 /* MainMenu.nib in Resources */,
+				4B00FED0175D221400773FB5 /* InfoPlist.strings in Resources */,
+				4B00FED2175D221400773FB5 /* Credits.rtf in Resources */,
+				4B00FED5175D221400773FB5 /* Preferences.nib in Resources */,
+				4B00FED6175D221400773FB5 /* General.png in Resources */,
+				4B00FED8175D221400773FB5 /* Advanced.png in Resources */,
+				4B00FED9175D221400773FB5 /* Attention.png in Resources */,
+				4B00FEDA175D221400773FB5 /* Copy.png in Resources */,
+				4B00FEDB175D221400773FB5 /* Cut.png in Resources */,
+				4B00FEDC175D221400773FB5 /* FindHelp.png in Resources */,
+				4B00FEDD175D221400773FB5 /* FindNext.png in Resources */,
+				4B00FEDE175D221400773FB5 /* FindPrev.png in Resources */,
+				4B00FEDF175D221400773FB5 /* Help.png in Resources */,
+				4B00FEE0175D221400773FB5 /* LoadSesn.png in Resources */,
+				4B00FEE1175D221400773FB5 /* Make.png in Resources */,
+				4B00FEE2175D221400773FB5 /* Open.png in Resources */,
+				4B00FEE3175D221400773FB5 /* Paste.png in Resources */,
+				4B00FEE4175D221400773FB5 /* Print.png in Resources */,
+				4B00FEE5175D221400773FB5 /* Redo.png in Resources */,
+				4B00FEE6175D221400773FB5 /* Replace.png in Resources */,
+				4B00FEE7175D221400773FB5 /* RunCtags.png in Resources */,
+				4B00FEE8175D221400773FB5 /* RunScript.png in Resources */,
+				4B00FEE9175D221400773FB5 /* Save.png in Resources */,
+				4B00FEEA175D221400773FB5 /* SaveAll.png in Resources */,
+				4B00FEEB175D221400773FB5 /* SaveSesn.png in Resources */,
+				4B00FEEC175D221400773FB5 /* TagJump.png in Resources */,
+				4B00FEED175D221400773FB5 /* Undo.png in Resources */,
+				4B00FEEE175D221400773FB5 /* FindAndReplace.nib in Resources */,
+				4B00FEEF175D221400773FB5 /* MacVim.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,6 +910,21 @@
 			shellScript = "# Clear deployment target, else the python script always thinks we're building on Tiger\nunset MACOSX_DEPLOYMENT_TARGET\n\n# Generate the icons (redirect stderr to ignore warnings)\ncd \"$PROJECT_DIR\"/icons/\nmake OUTDIR=\"$TARGET_BUILD_DIR\"/$UNLOCALIZED_RESOURCES_FOLDER_PATH 2> /dev/null\n";
 			showEnvVarsInLog = 0;
 		};
+		4B00FF19175D221400773FB5 /* Make Document Icons */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Make Document Icons";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Clear deployment target, else the python script always thinks we're building on Tiger\nunset MACOSX_DEPLOYMENT_TARGET\n\n# Generate the icons (redirect stderr to ignore warnings)\ncd \"$PROJECT_DIR\"/icons/\nmake OUTDIR=\"$TARGET_BUILD_DIR\"/$UNLOCALIZED_RESOURCES_FOLDER_PATH 2> /dev/null\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -795,6 +948,24 @@
 				4B00FEA1175D1E1800773FB5 /* MMVimController.m in Sources */,
 				4B00FEA2175D1E1800773FB5 /* MMScroller.m in Sources */,
 				4B00FEA3175D1E1800773FB5 /* MMVimView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B00FEF1175D221400773FB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B00FF1F175D225800773FB5 /* MMFindReplaceController.m in Sources */,
+				4B00FF20175D225800773FB5 /* Miscellaneous.m in Sources */,
+				4B00FF21175D225800773FB5 /* DBPrefsWindowController.m in Sources */,
+				4B00FF22175D225800773FB5 /* MMPreferenceController.m in Sources */,
+				4B00FF23175D225800773FB5 /* MMWindow.m in Sources */,
+				4B00FF24175D225800773FB5 /* MMFullScreenWindow.m in Sources */,
+				4B00FF25175D225800773FB5 /* MMApplication.m in Sources */,
+				4B00FF26175D225800773FB5 /* MMWindowController.m in Sources */,
+				4B00FF27175D225800773FB5 /* MMAppController.m in Sources */,
+				4B00FF28175D225800773FB5 /* MacVim.m in Sources */,
+				4B00FF29175D225800773FB5 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,6 +1015,11 @@
 			isa = PBXTargetDependency;
 			name = PSMTabBarControlFramework;
 			targetProxy = 4B00FEA4175D1E3000773FB5 /* PBXContainerItemProxy */;
+		};
+		4B00FF2D175D22EB00773FB5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4B00FE81175D1DD800773FB5 /* MacVimFramework */;
+			targetProxy = 4B00FF2C175D22EB00773FB5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -895,7 +1071,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -907,6 +1083,7 @@
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -923,10 +1100,11 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "MacVimFramework/MacVimFramework-Info.plist";
-				INSTALL_PATH = "@rpath";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -935,7 +1113,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -948,6 +1126,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -957,11 +1136,74 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "MacVimFramework/MacVimFramework-Info.plist";
-				INSTALL_PATH = "@rpath";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		4B00FF1B175D221400773FB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 66;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				GCC_WARN_PEDANTIC = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "MacVim copy-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = MacVimWithFramework;
+				VALID_ARCHS = x86_64;
+				VERSIONING_SYSTEM = "apple-generic";
+				WARNING_CFLAGS = "-Wall";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		4B00FF1C175D221400773FB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 66;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "MacVim copy-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = MacVimWithFramework;
+				VALID_ARCHS = x86_64;
+				VERSIONING_SYSTEM = "apple-generic";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -1059,6 +1301,15 @@
 			buildConfigurations = (
 				4B00FE90175D1DD900773FB5 /* Debug */,
 				4B00FE91175D1DD900773FB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B00FF1A175D221400773FB5 /* Build configuration list for PBXNativeTarget "MacVimWithFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B00FF1B175D221400773FB5 /* Debug */,
+				4B00FF1C175D221400773FB5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

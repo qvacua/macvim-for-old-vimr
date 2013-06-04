@@ -370,7 +370,8 @@ static void fsEventCallback(
 
         // NOTE!  If the name of the connection changes here it must also be
         // updated in MMBackend.m.
-        NSString *name = [NSString stringWithFormat:@"%@-connection", [[NSBundle mainBundle] bundlePath]];
+        NSString *executablePath = [[NSBundle bundleForClass:[self class]] executablePath];
+        NSString *name = [NSString stringWithFormat:@"%@-connection", executablePath.stringByResolvingSymlinksInPath.stringByDeletingLastPathComponent];
         if (![connection registerName:name]) {
             ASLogCrit(@"Failed to register connection with name '%@'", name);
             [connection release];
@@ -723,7 +724,11 @@ static void fsEventCallback(
 }
 
 - (int)launchVimProcessWithArguments:(NSArray *)args workingDirectory:(NSString *)cwd {
-    NSString *path = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@"Vim"];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *frameworkPath = [[bundle.executablePath stringByResolvingSymlinksInPath] stringByDeletingLastPathComponent];
+    NSString *path = [frameworkPath stringByAppendingPathComponent:@"Vim"];
+
+    NSLog(@"Vim exec path: %@", path);
 
     if (!path) {
         ASLogCrit(@"Vim executable could not be found inside app bundle!");

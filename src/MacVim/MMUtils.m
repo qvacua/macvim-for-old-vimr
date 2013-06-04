@@ -57,7 +57,7 @@
 
 + (void)setVimKeybindings {
     NSKeyBindingManager *mgr = [NSKeyBindingManager sharedKeyBindingManager];
-    NSBundle *mainBundle = [NSBundle mainBundle];
+    NSBundle *mainBundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [mainBundle pathForResource:@"KeyBinding"
                                           ofType:@"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];

@@ -1062,7 +1062,7 @@ KeyboardInputSourcesEqual(TISInputSourceRef a, TISInputSourceRef b)
         // Use a custom Ibeam cursor that has better contrast against dark
         // backgrounds.
         // TODO: Is the hotspot ok?
-        NSImage *ibeamImage = [NSImage imageNamed:@"ibeam"];
+        NSImage *ibeamImage = [[NSBundle bundleForClass:[self class]] imageForResource:@"ibeam.png"];
         if (ibeamImage) {
             NSSize size = [ibeamImage size];
             NSPoint hotSpot = { size.width*.5f, size.height*.5f };
