@@ -13,10 +13,8 @@
 #import "MMTextView.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
-#import "MMWindowController.h"
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import "MMScroller.h"
-#import "MMUserDefaults.h"
 
 
 @interface MMVimView (Private)

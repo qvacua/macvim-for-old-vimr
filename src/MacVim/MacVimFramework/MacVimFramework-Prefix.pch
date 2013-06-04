@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'MacVimFramework' target in the 'MacVimFramework' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

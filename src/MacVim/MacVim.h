@@ -16,6 +16,8 @@
 #import "MMCocoaCategories.h"
 #import "MMVimBackendProtocol.h"
 #import "MMAppProtocol.h"
+#import "MMUserDefaults.h"
+#import "MMUtils.h"
 
 // Taken from /usr/include/AvailabilityMacros.h
 #ifndef MAC_OS_X_VERSION_10_4
@@ -74,12 +76,6 @@ enum {
 };
 
 
-// Create a string holding the labels of all messages in message queue for
-// debugging purposes (condense some messages since there may typically be LOTS
-// of them on a queue).
-NSString *debugStringForMessageQueue(NSArray *queue);
-
-
 // Shared user defaults (most user defaults are in Miscellaneous.h).
 // Contrary to the user defaults in Miscellaneous.h these defaults are not
 // intitialized to any default values.  That is, unless the user sets them
@@ -91,7 +87,6 @@ extern NSString *MMNoWindowKey;
 
 extern NSString *MMAutosaveRowsKey;
 extern NSString *MMAutosaveColumnsKey;
-extern NSString *MMRendererKey;
 
 enum {
     MMRendererDefault = 0,

@@ -61,12 +61,25 @@ static void fsEventCallback(
 
     FSEventStreamRef fsEventStream;
     BOOL lastVimControllerHasArgs;
+
+    NSMenuItem *_menuItemTemplate;
 }
 
 @dynamic mutableVimControllers;
 @dynamic mutableCachedVimControllers;
+@dynamic menuItemTemplate;
 
 #pragma mark Public
+- (NSMenuItem *)menuItemTemplate {
+    @synchronized (self) {
+        if (_menuItemTemplate == nil) {
+            _menuItemTemplate = [[self.delegate menuItemTemplateForManager:self] retain];
+        }
+
+        return _menuItemTemplate;
+    }
+}
+
 - (void)handleFSEvent {
     [self clearPreloadCacheWithCount:-1];
 
@@ -357,7 +370,8 @@ static void fsEventCallback(
 
         // NOTE!  If the name of the connection changes here it must also be
         // updated in MMBackend.m.
-        NSString *name = [NSString stringWithFormat:@"%@-connection", [[NSBundle mainBundle] bundlePath]];
+        NSString *executablePath = [[NSBundle bundleForClass:[self class]] executablePath];
+        NSString *name = [NSString stringWithFormat:@"%@-connection", executablePath.stringByResolvingSymlinksInPath.stringByDeletingLastPathComponent];
         if (![connection registerName:name]) {
             ASLogCrit(@"Failed to register connection with name '%@'", name);
             [connection release];
@@ -375,6 +389,7 @@ static void fsEventCallback(
     [_cachedVimControllers release];
     [pidArguments release];
 
+    [_menuItemTemplate release];
     [super dealloc];
 }
 
@@ -709,7 +724,9 @@ static void fsEventCallback(
 }
 
 - (int)launchVimProcessWithArguments:(NSArray *)args workingDirectory:(NSString *)cwd {
-    NSString *path = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@"Vim"];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *frameworkPath = [[bundle.executablePath stringByResolvingSymlinksInPath] stringByDeletingLastPathComponent];
+    NSString *path = [frameworkPath stringByAppendingPathComponent:@"Vim"];
 
     if (!path) {
         ASLogCrit(@"Vim executable could not be found inside app bundle!");

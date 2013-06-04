@@ -179,6 +179,7 @@ typedef struct
 
     vimManager = [MMVimManager sharedManager];
     vimManager.delegate = self;
+
     _windowControllers = [[NSMutableDictionary alloc] initWithCapacity:4];
 
     return self;
@@ -711,6 +712,21 @@ typedef struct
     }
 
     return nil;
+}
+
+- (NSMenuItem *)menuItemTemplateForManager:(MMVimManager *)manager {
+    NSMenuItem *appMenuItem = [self appMenuItemTemplate];
+    appMenuItem = [appMenuItem copy];
+
+    // Note: If the title of the application menu is anything but what
+    // CFBundleName says then the application menu will not be typeset in
+    // boldface for some reason.  (It should already be set when we copy
+    // from the default main menu, but this is not the case for some
+    // reason.)
+    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    [appMenuItem setTitle:appName];
+
+    return [appMenuItem autorelease];
 }
 
 #pragma mark NSApplicationDelegate
