@@ -388,7 +388,7 @@
 		4B00FE8A175D1DD900773FB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4B00FE8C175D1DD900773FB5 /* MacVimFramework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacVimFramework-Prefix.pch"; sourceTree = "<group>"; };
 		4B00FF1D175D221400773FB5 /* MacVimWithFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVimWithFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B00FF1E175D221400773FB5 /* MacVim copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MacVim copy-Info.plist"; path = "/Volumes/Data/Projects/macvim/src/MacVim/MacVim copy-Info.plist"; sourceTree = "<absolute>"; };
+		4B00FF1E175D221400773FB5 /* MacVim copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacVim copy-Info.plist"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MacVim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
