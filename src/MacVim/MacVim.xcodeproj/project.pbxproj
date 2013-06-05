@@ -1101,9 +1101,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "MacVimFramework/MacVimFramework-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1137,9 +1135,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "MacVimFramework/MacVimFramework-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1166,8 +1162,6 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "MacVim copy-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = "";
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = MacVimWithFramework;
 				VALID_ARCHS = x86_64;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1197,8 +1191,6 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "MacVim copy-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = "";
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = MacVimWithFramework;
 				VALID_ARCHS = x86_64;
 				VERSIONING_SYSTEM = "apple-generic";
