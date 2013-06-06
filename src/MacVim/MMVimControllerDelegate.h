@@ -22,7 +22,6 @@
 */
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data;
-- (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data;

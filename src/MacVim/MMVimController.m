@@ -449,7 +449,7 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (UpdateTabBarMsgID == msgid) {
-        [self.delegate vimController:self updateTabsWithData:data];
+        [self.vimView updateTabsWithData:data];
         return;
     }
 

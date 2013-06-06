@@ -375,11 +375,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     return YES;
 }
 
-- (void)updateTabsWithData:(NSData *)data
-{
-    [vimView updateTabsWithData:data];
-}
-
 - (void)selectTabWithIndex:(int)idx
 {
     [vimView selectTabWithIndex:idx];
@@ -1203,10 +1198,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     if (![controller isPreloading]) {
         [self performSelector:@selector(presentWindow:) withObject:nil afterDelay:0];
     }
-}
-
-- (void)vimController:(MMVimController *)controller updateTabsWithData:(NSData *)data {
-    [self updateTabsWithData:data];
 }
 
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {
