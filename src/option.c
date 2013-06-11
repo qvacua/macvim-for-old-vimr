@@ -7578,7 +7578,7 @@ check_clipboard_option()
 	clip_autoselect_plus = new_autoselect_plus;
 	clip_autoselectml = new_autoselectml;
 	clip_html = new_html;
-	vim_free(clip_exclude_prog);
+	vim_regfree(clip_exclude_prog);
 	clip_exclude_prog = new_exclude_prog;
 #ifdef FEAT_GUI_GTK
 	if (gui.in_use)
@@ -7589,7 +7589,7 @@ check_clipboard_option()
 #endif
     }
     else
-	vim_free(new_exclude_prog);
+	vim_regfree(new_exclude_prog);
 
     return errmsg;
 }
@@ -7616,16 +7616,16 @@ compile_cap_prog(synblock)
 	if (re != NULL)
 	{
 	    synblock->b_cap_prog = vim_regcomp(re, RE_MAGIC);
+	    vim_free(re);
 	    if (synblock->b_cap_prog == NULL)
 	    {
 		synblock->b_cap_prog = rp; /* restore the previous program */
 		return e_invarg;
 	    }
-	    vim_free(re);
 	}
     }
 
-    vim_free(rp);
+    vim_regfree(rp);
     return NULL;
 }
 #endif
@@ -7733,35 +7733,6 @@ set_bool_option(opt_idx, varp, value, opt_flags)
 	}
     }
 #endif
-
-    /* If 'number' is set, reset 'relativenumber'. */
-    /* If 'relativenumber' is set, reset 'number'. */
-    else if ((int *)varp == &curwin->w_p_nu && curwin->w_p_nu)
-    {
-	curwin->w_p_rnu = FALSE;
-
-	/* Only reset the global value if the own value is set globally. */
-	if (((opt_flags & (OPT_LOCAL | OPT_GLOBAL)) == 0))
-	    curwin->w_allbuf_opt.wo_rnu = FALSE;
-    }
-    else if ((int *)varp == &curwin->w_p_rnu && curwin->w_p_rnu)
-    {
-	curwin->w_p_nu = FALSE;
-
-	/* Only reset the global value if the own value is set globally. */
-	if (((opt_flags & (OPT_LOCAL | OPT_GLOBAL)) == 0))
-	    curwin->w_allbuf_opt.wo_nu = FALSE;
-    }
-    else if ((int *)varp == &curwin->w_allbuf_opt.wo_nu
-						&& curwin->w_allbuf_opt.wo_nu)
-    {
-        curwin->w_allbuf_opt.wo_rnu = FALSE;
-    }
-    else if ((int *)varp == &curwin->w_allbuf_opt.wo_rnu
-					       && curwin->w_allbuf_opt.wo_rnu)
-    {
-        curwin->w_allbuf_opt.wo_nu = FALSE;
-    }
 
     else if ((int *)varp == &curbuf->b_p_ro)
     {
