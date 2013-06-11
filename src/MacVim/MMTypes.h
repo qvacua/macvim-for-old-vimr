@@ -99,6 +99,7 @@ enum {
     SetTooltipDelayMsgID,
     GestureMsgID,
     AddToMRUMsgID,
+    BackingPropertiesChangedMsgID,
     LastMsgID   // NOTE: MUST BE LAST MESSAGE IN ENUM!
 };
 

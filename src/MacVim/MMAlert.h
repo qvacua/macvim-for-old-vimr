@@ -13,6 +13,8 @@
 
 @interface MMAlert : NSAlert
 
+@property (readonly) NSTextField *textField;
+
 - (void)setTextFieldString:(NSString *)textFieldString;
 
 @end

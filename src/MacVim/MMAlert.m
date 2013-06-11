@@ -14,13 +14,6 @@
 static int MMAlertTextFieldHeight = 22;
 
 
-@interface MMAlert ()
-
-@property(readonly) NSTextField *textField;
-
-@end
-
-
 #pragma mark ARC
 @implementation MMAlert
 
