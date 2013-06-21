@@ -175,6 +175,7 @@
 # define PyObject_HasAttrString py3_PyObject_HasAttrString
 # define PyObject_SetAttrString py3_PyObject_SetAttrString
 # define PyObject_CallFunctionObjArgs py3_PyObject_CallFunctionObjArgs
+# define _PyObject_CallFunction_SizeT py3__PyObject_CallFunction_SizeT
 # define PyObject_Call py3_PyObject_Call
 # define PyEval_GetLocals py3_PyEval_GetLocals
 # define PyEval_GetGlobals py3_PyEval_GetGlobals
@@ -296,6 +297,7 @@ static PyObject* (*py3_PyObject_GetAttrString)(PyObject *, const char *);
 static int (*py3_PyObject_HasAttrString)(PyObject *, const char *);
 static PyObject* (*py3_PyObject_SetAttrString)(PyObject *, const char *, PyObject *);
 static PyObject* (*py3_PyObject_CallFunctionObjArgs)(PyObject *, ...);
+static PyObject* (*py3__PyObject_CallFunction_SizeT)(PyObject *, char *, ...);
 static PyObject* (*py3_PyObject_Call)(PyObject *, PyObject *, PyObject *);
 static PyObject* (*py3_PyEval_GetGlobals)();
 static PyObject* (*py3_PyEval_GetLocals)();
@@ -423,13 +425,8 @@ static struct
     {"PySys_SetArgv", (PYTHON_PROC*)&py3_PySys_SetArgv},
     {"Py_SetPythonHome", (PYTHON_PROC*)&py3_Py_SetPythonHome},
     {"Py_Initialize", (PYTHON_PROC*)&py3_Py_Initialize},
-# ifndef PY_SSIZE_T_CLEAN
-    {"PyArg_ParseTuple", (PYTHON_PROC*)&py3_PyArg_ParseTuple},
-    {"Py_BuildValue", (PYTHON_PROC*)&py3_Py_BuildValue},
-# else
     {"_PyArg_ParseTuple_SizeT", (PYTHON_PROC*)&py3_PyArg_ParseTuple},
     {"_Py_BuildValue_SizeT", (PYTHON_PROC*)&py3_Py_BuildValue},
-# endif
     {"PyMem_Free", (PYTHON_PROC*)&py3_PyMem_Free},
     {"PyMem_Malloc", (PYTHON_PROC*)&py3_PyMem_Malloc},
     {"PyList_New", (PYTHON_PROC*)&py3_PyList_New},
@@ -458,6 +455,7 @@ static struct
     {"PyObject_HasAttrString", (PYTHON_PROC*)&py3_PyObject_HasAttrString},
     {"PyObject_SetAttrString", (PYTHON_PROC*)&py3_PyObject_SetAttrString},
     {"PyObject_CallFunctionObjArgs", (PYTHON_PROC*)&py3_PyObject_CallFunctionObjArgs},
+    {"_PyObject_CallFunction_SizeT", (PYTHON_PROC*)&py3__PyObject_CallFunction_SizeT},
     {"PyObject_Call", (PYTHON_PROC*)&py3_PyObject_Call},
     {"PyEval_GetGlobals", (PYTHON_PROC*)&py3_PyEval_GetGlobals},
     {"PyEval_GetLocals", (PYTHON_PROC*)&py3_PyEval_GetLocals},
@@ -485,7 +483,7 @@ static struct
     {"PyEval_InitThreads", (PYTHON_PROC*)&py3_PyEval_InitThreads},
     {"PyEval_RestoreThread", (PYTHON_PROC*)&py3_PyEval_RestoreThread},
     {"PyEval_SaveThread", (PYTHON_PROC*)&py3_PyEval_SaveThread},
-    {"PyArg_Parse", (PYTHON_PROC*)&py3_PyArg_Parse},
+    {"_PyArg_Parse_SizeT", (PYTHON_PROC*)&py3_PyArg_Parse},
     {"Py_IsInitialized", (PYTHON_PROC*)&py3_Py_IsInitialized},
     {"_PyObject_NextNotImplemented", (PYTHON_PROC*)&py3__PyObject_NextNotImplemented},
     {"_Py_NoneStruct", (PYTHON_PROC*)&py3__Py_NoneStruct},
@@ -739,9 +737,6 @@ static PyObject *FunctionGetattro(PyObject *, PyObject *);
 static PyObject *VimPathHook(PyObject *, PyObject *);
 
 static struct PyModuleDef vimmodule;
-
-static PyObject *path_finder;
-static PyObject *py_find_module = NULL;
 
 #define PY_CAN_RECURSE
 
@@ -1603,70 +1598,10 @@ python3_tabpage_free(tabpage_T *tab)
 #endif
 
     static PyObject *
-VimPathHook(PyObject *self UNUSED, PyObject *args)
-{
-    char	*path;
-
-    if (PyArg_ParseTuple(args, "s", &path)
-	    && STRCMP(path, vim_special_path) == 0)
-    {
-	Py_INCREF(&FinderType);
-	return (PyObject *) &FinderType;
-    }
-
-    PyErr_Clear();
-    PyErr_SetNone(PyExc_ImportError);
-    return NULL;
-}
-
-    static PyObject *
-FinderFindModule(PyObject *cls UNUSED, PyObject *fullname)
-{
-    PyObject	*new_path;
-    PyObject	*r;
-
-    if (!(new_path = Vim_GetPaths(NULL)))
-	return NULL;
-
-    /* call find_module of the super() class */
-    r = PyObject_CallFunctionObjArgs(py_find_module, fullname, new_path, NULL);
-
-    Py_DECREF(new_path);
-
-    return r;
-}
-
-static struct PyMethodDef FinderMethods[] = {
-    {"find_module",	FinderFindModule,	METH_CLASS|METH_O,	""},
-    {NULL,		NULL,			0,			NULL}
-};
-
-    static PyObject *
 Py3Init_vim(void)
 {
     /* The special value is removed from sys.path in Python3_Init(). */
     static wchar_t *(argv[2]) = {L"/must>not&exist/foo", NULL};
-    PyObject	*importlib_machinery;
-
-    if (!(importlib_machinery = PyImport_ImportModule("importlib.machinery")))
-	return NULL;
-
-    if (!(path_finder = PyObject_GetAttrString(importlib_machinery,
-					       "PathFinder")))
-    {
-	Py_DECREF(importlib_machinery);
-	return NULL;
-    }
-
-    Py_DECREF(importlib_machinery);
-
-    vim_memset(&FinderType, 0, sizeof(FinderObject));
-    FinderType.tp_name = "vim.Finder";
-    FinderType.tp_basicsize = sizeof(FinderObject);
-    FinderType.tp_base = (PyTypeObject *) path_finder;
-    FinderType.tp_flags = Py_TPFLAGS_DEFAULT;
-    FinderType.tp_doc = "Vim finder class, for use with path hook";
-    FinderType.tp_methods = FinderMethods;
 
     if (init_types())
 	return NULL;

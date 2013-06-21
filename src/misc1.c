@@ -16,6 +16,9 @@
 
 static char_u *vim_version_dir __ARGS((char_u *vimdir));
 static char_u *remove_tail __ARGS((char_u *p, char_u *pend, char_u *name));
+#if defined(FEAT_CMDL_COMPL)
+static void init_users __ARGS((void));
+#endif
 static int copy_indent __ARGS((int size, char_u	*src));
 
 /* All user names (for ~user completion as done by shell). */
@@ -4493,7 +4496,8 @@ get_env_name(xp, idx)
  * Done only once and then cached.
  */
     static void
-init_users() {
+init_users()
+{
     static int	lazy_init_done = FALSE;
 
     if (lazy_init_done)
