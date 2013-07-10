@@ -2100,7 +2100,7 @@ ListNew(PyTypeObject *subtype, list_T *list)
 }
 
     static list_T *
-py_list_alloc()
+py_list_alloc(void)
 {
     list_T	*ret;
 
@@ -5103,14 +5103,17 @@ run_eval(const char *cmd, typval_T *rettv
     run_ret = PyRun_String((char *)cmd, Py_eval_input, globals, globals);
     if (run_ret == NULL)
     {
-	if (PyErr_ExceptionMatches(PyExc_SystemExit))
+	if (PyErr_Occurred() && PyErr_ExceptionMatches(PyExc_SystemExit))
 	{
 	    EMSG2(_(e_py_systemexit), "python");
 	    PyErr_Clear();
 	}
-	if (PyErr_Occurred() && !msg_silent)
-	    PyErr_PrintEx(0);
-	EMSG(_("E858: Eval did not return a valid python object"));
+	else
+	{
+	    if (PyErr_Occurred() && !msg_silent)
+		PyErr_PrintEx(0);
+	    EMSG(_("E858: Eval did not return a valid python object"));
+	}
     }
     else
     {
@@ -5854,7 +5857,7 @@ init_structs(void)
 	return -1;
 
     static int
-init_types()
+init_types(void)
 {
     PYTYPE_READY(IterType);
     PYTYPE_READY(BufferType);
