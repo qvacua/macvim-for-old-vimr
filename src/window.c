@@ -2177,8 +2177,9 @@ close_last_window_tabpage(win, free_buf, prev_curtab)
  * If "free_buf" is TRUE related buffer may be unloaded.
  *
  * Called by :quit, :close, :xit, :wq and findtag().
+ * Returns FAIL when the window was not closed.
  */
-    void
+    int
 win_close(win, free_buf)
     win_T	*win;
     int		free_buf;
@@ -2195,21 +2196,21 @@ win_close(win, free_buf)
     if (last_window())
     {
 	EMSG(_("E444: Cannot close last window"));
-	return;
+	return FAIL;
     }
 
 #ifdef FEAT_AUTOCMD
     if (win->w_closing || (win->w_buffer != NULL && win->w_buffer->b_closing))
-	return; /* window is already being closed */
+	return FAIL; /* window is already being closed */
     if (win == aucmd_win)
     {
 	EMSG(_("E813: Cannot close autocmd window"));
-	return;
+	return FAIL;
     }
     if ((firstwin == aucmd_win || lastwin == aucmd_win) && one_window())
     {
 	EMSG(_("E814: Cannot close window, only autocmd window would remain"));
-	return;
+	return FAIL;
     }
 #endif
 
@@ -2217,7 +2218,7 @@ win_close(win, free_buf)
      * and then close the window and the tab page to avoid that curwin and
      * curtab are invalid while we are freeing memory. */
     if (close_last_window_tabpage(win, free_buf, prev_curtab))
-      return;
+      return FAIL;
 
     /* When closing the help window, try restoring a snapshot after closing
      * the window.  Otherwise clear the snapshot, it's now invalid. */
@@ -2245,22 +2246,22 @@ win_close(win, free_buf)
 	    win->w_closing = TRUE;
 	    apply_autocmds(EVENT_BUFLEAVE, NULL, NULL, FALSE, curbuf);
 	    if (!win_valid(win))
-		return;
+		return FAIL;
 	    win->w_closing = FALSE;
 	    if (last_window())
-		return;
+		return FAIL;
 	}
 	win->w_closing = TRUE;
 	apply_autocmds(EVENT_WINLEAVE, NULL, NULL, FALSE, curbuf);
 	if (!win_valid(win))
-	    return;
+	    return FAIL;
 	win->w_closing = FALSE;
 	if (last_window())
-	    return;
+	    return FAIL;
 # ifdef FEAT_EVAL
 	/* autocmds may abort script processing */
 	if (aborting())
-	    return;
+	    return FAIL;
 # endif
     }
 #endif
@@ -2296,14 +2297,19 @@ win_close(win, free_buf)
     if (only_one_window() && win_valid(win) && win->w_buffer == NULL
 	    && (last_window() || curtab != prev_curtab
 		|| close_last_window_tabpage(win, free_buf, prev_curtab)))
-	/* Autocommands have close all windows, quit now. */
+    {
+	/* Autocommands have close all windows, quit now.  Restore
+	 * curwin->w_buffer, otherwise writing viminfo may fail. */
+	if (curwin->w_buffer == NULL)
+	    curwin->w_buffer = curbuf;
 	getout(0);
+    }
 
     /* Autocommands may have closed the window already, or closed the only
      * other window or moved to another tab page. */
     else if (!win_valid(win) || last_window() || curtab != prev_curtab
 	    || close_last_window_tabpage(win, free_buf, prev_curtab))
-	return;
+	return FAIL;
 
     /* Free the memory used for the window and get the window that received
      * the screen space. */
@@ -2383,6 +2389,7 @@ win_close(win, free_buf)
 #endif
 
     redraw_all_later(NOT_VALID);
+    return OK;
 }
 
 /*
@@ -4518,7 +4525,7 @@ win_alloc(after, hidden)
 #if defined(FEAT_WINDOWS) || defined(PROTO)
 
 /*
- * remove window 'wp' from the window list and free the structure
+ * Remove window 'wp' from the window list and free the structure.
  */
     static void
 win_free(wp, tp)
@@ -4526,6 +4533,8 @@ win_free(wp, tp)
     tabpage_T	*tp;		/* tab page "win" is in, NULL for current */
 {
     int		i;
+    buf_T	*buf;
+    wininfo_T	*wip;
 
 #ifdef FEAT_FOLDING
     clearFolding(wp);
@@ -4585,6 +4594,13 @@ win_free(wp, tp)
 	vim_free(wp->w_tagstack[i].tagname);
 
     vim_free(wp->w_localdir);
+
+    /* Remove the window from the b_wininfo lists, it may happen that the
+     * freed memory is re-used for another window. */
+    for (buf = firstbuf; buf != NULL; buf = buf->b_next)
+	for (wip = buf->b_wininfo; wip != NULL; wip = wip->wi_next)
+	    if (wip->wi_win == wp)
+		wip->wi_win = NULL;
 
 #ifdef FEAT_SEARCH_EXTRA
     clear_matches(wp);
@@ -6587,7 +6603,8 @@ restore_snapshot_rec(sn, fr)
 
 #endif
 
-#if defined(FEAT_EVAL) || defined(PROTO)
+#if defined(FEAT_EVAL) || defined(FEAT_PYTHON) || defined(FEAT_PYTHON3) \
+	|| defined(PROTO)
 /*
  * Set "win" to be the curwin and "tp" to be the current tab page.
  * restore_win() MUST be called to undo.
