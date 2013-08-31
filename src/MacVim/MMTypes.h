@@ -119,3 +119,42 @@ enum {
     MMLayoutTabs = 3,
     MMLayoutWindows = 4,
 };
+
+enum {
+    ClearAllDrawType = 1,
+    ClearBlockDrawType,
+    DeleteLinesDrawType,
+    DrawStringDrawType,
+    InsertLinesDrawType,
+    DrawCursorDrawType,
+    SetCursorPosDrawType,
+    DrawInvertedRectDrawType,
+    DrawSignDrawType,
+};
+
+enum {
+    MMInsertionPointBlock,
+    MMInsertionPointHorizontal,
+    MMInsertionPointVertical,
+    MMInsertionPointHollow,
+    MMInsertionPointVerticalRight,
+};
+
+enum {
+    MMGestureSwipeLeft,
+    MMGestureSwipeRight,
+    MMGestureSwipeUp,
+    MMGestureSwipeDown,
+};
+
+enum {
+    MMTabLabel = 0,
+    MMTabToolTip,
+    MMTabInfoCount
+};
+
+enum {
+    MMRendererDefault = 0,
+    MMRendererATSUI,
+    MMRendererCoreText
+};

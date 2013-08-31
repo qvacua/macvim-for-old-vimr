@@ -9,7 +9,8 @@
  */
 
 #import "MMUtils.h"
-#import "MacVim.h"
+#import "MMLog.h"
+#import "MMTypes.h"
 
 
 // This is a private AppKit API gleaned from class-dump.

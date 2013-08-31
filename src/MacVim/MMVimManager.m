@@ -16,6 +16,9 @@
 #import "MMVimController.h"
 #import "MMUserDefaults.h"
 #import "MMVimManagerDelegateProtocol.h"
+#import "MMTypes.h"
+#import "MMVimBackendProtocol.h"
+#import "MMUtils.h"
 
 
 // Default timeout intervals on all connections.

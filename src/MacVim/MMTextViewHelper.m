@@ -21,6 +21,10 @@
 
 #import "MMUserDefaults.h"
 #import "MMTextViewProtocol.h"
+#import "MMTypes.h"
+#import "MMLog.h"
+#import "MMCocoaCategories.h"
+
 
 // The max/min drag timer interval in seconds
 static NSTimeInterval MMDragTimerMaxInterval = 0.3;

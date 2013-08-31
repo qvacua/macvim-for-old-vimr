@@ -8,6 +8,7 @@
  * See README.txt for an overview of the Vim source code.
  */
 
+#import "MMLog.h"
 #import "MMVimControllerDelegate.h"
 #import "MMVimController.h"
 #import "MMVimView.h"
@@ -15,6 +16,9 @@
 #import "MMUtils.h"
 #import "MMTextViewProtocol.h"
 #import "MMVimManager.h"
+#import "MMTypes.h"
+#import "MMCocoaCategories.h"
+#import "MMVimBackendProtocol.h"
 
 
 // NOTE: By default a message sent to the backend will be dropped if it cannot
@@ -560,16 +564,7 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int flags = *((int *) bytes);
 
-        int mode = NSToolbarDisplayModeDefault;
-        if (flags & ToolbarLabelFlag) {
-            mode = flags & ToolbarIconFlag ? NSToolbarDisplayModeIconAndLabel : NSToolbarDisplayModeLabelOnly;
-        } else if (flags & ToolbarIconFlag) {
-            mode = NSToolbarDisplayModeIconOnly;
-        }
-
-        int size = flags & ToolbarSizeRegularFlag ? NSToolbarSizeModeRegular : NSToolbarSizeModeSmall;
-
-        [self.delegate vimController:self showToolbar:(BOOL) enable size:(NSToolbarSizeMode) size mode:(NSToolbarDisplayMode) mode data:data];
+        [self.delegate vimController:self showToolbar:(BOOL) enable flags:flags data:data];
         return;
     }
 

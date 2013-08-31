@@ -34,45 +34,11 @@
 #endif
 
 
-enum {
-    ClearAllDrawType = 1,
-    ClearBlockDrawType,
-    DeleteLinesDrawType,
-    DrawStringDrawType,
-    InsertLinesDrawType,
-    DrawCursorDrawType,
-    SetCursorPosDrawType,
-    DrawInvertedRectDrawType,
-    DrawSignDrawType,
-};
-
-enum {
-    MMInsertionPointBlock,
-    MMInsertionPointHorizontal,
-    MMInsertionPointVertical,
-    MMInsertionPointHollow,
-    MMInsertionPointVerticalRight,
-};
-
 
 enum {
     ToolbarLabelFlag = 1,
     ToolbarIconFlag = 2,
     ToolbarSizeRegularFlag = 4
-};
-
-
-enum {
-    MMTabLabel = 0,
-    MMTabToolTip,
-    MMTabInfoCount
-};
-
-enum {
-    MMGestureSwipeLeft,
-    MMGestureSwipeRight,
-    MMGestureSwipeUp,
-    MMGestureSwipeDown,
 };
 
 
@@ -87,12 +53,6 @@ extern NSString *MMNoWindowKey;
 
 extern NSString *MMAutosaveRowsKey;
 extern NSString *MMAutosaveColumnsKey;
-
-enum {
-    MMRendererDefault = 0,
-    MMRendererATSUI,
-    MMRendererCoreText
-};
 
 
 extern NSString *VimFindPboardType;

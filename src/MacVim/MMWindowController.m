@@ -1230,7 +1230,17 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setDocumentFilename:filename];
 }
 
-- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)on size:(NSToolbarSizeMode)size mode:(NSToolbarDisplayMode)mode data:(NSData *)data {
+- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)on flags:(int)flags data:(NSData *)data {
+    NSToolbarDisplayMode mode = NSToolbarDisplayModeDefault;
+
+    if (flags & ToolbarLabelFlag) {
+        mode = flags & ToolbarIconFlag ? NSToolbarDisplayModeIconAndLabel : NSToolbarDisplayModeLabelOnly;
+    } else if (flags & ToolbarIconFlag) {
+        mode = NSToolbarDisplayModeIconOnly;
+    }
+
+    NSToolbarSizeMode size = flags & ToolbarSizeRegularFlag ? NSToolbarSizeModeRegular : NSToolbarSizeModeSmall;
+
     [self showToolbar:on size:size mode:mode];
 }
 
