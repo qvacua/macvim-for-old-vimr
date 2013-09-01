@@ -119,40 +119,17 @@ typedef struct
     ASLInit();
 
     [MMUtils setKeyHandlingUserDefaults];
+    [MMUtils setInitialUserDefaults];
 
     NSDictionary *dict = @{
             MMNoWindowKey                 : @NO,
-            MMTabMinWidthKey              : @64,
-            MMTabMaxWidthKey              : @(6 * 64),
-            MMTabOptimumWidthKey          : @132,
-            MMShowAddTabButtonKey         : @YES,
-            MMTextInsetLeftKey            : @2,
-            MMTextInsetRightKey           : @1,
-            MMTextInsetTopKey             : @1,
-            MMTextInsetBottomKey          : @1,
-            MMTypesetterKey               : @"MMTypesetter",
-            MMCellWidthMultiplierKey      : @1,
-            MMBaselineOffsetKey           : @(-1),
-            MMTranslateCtrlClickKey       : @YES,
             MMOpenInCurrentWindowKey      : @0,
-            MMNoFontSubstitutionKey       : @NO,
-            MMLoginShellKey               : @YES,
-            MMRendererKey                 : @(MMRendererCoreText),
             MMUntitledWindowKey           : @(MMUntitledWindowAlways),
             MMTexturedWindowKey           : @NO,
             MMZoomBothKey                 : @NO,
-            MMLoginShellCommandKey        : @"",
-            MMLoginShellArgumentKey       : @"",
-            MMDialogsTrackPwdKey          : @YES,
-            MMOpenLayoutKey               : @3,
-            MMVerticalSplitKey            : @NO,
-            MMPreloadCacheSizeKey         : @0,
             MMLastWindowClosedBehaviorKey : @0,
             MMSuppressTerminationAlertKey : @NO,
             MMNativeFullScreenKey         : @YES,
-#ifdef INCLUDE_OLD_IM_CODE
-            MMUseInlineImKey              : @YES,
-#endif // INCLUDE_OLD_IM_CODE
     };
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:dict];

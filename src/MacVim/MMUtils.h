@@ -24,6 +24,7 @@
 */
 + (void)setKeyHandlingUserDefaults;
 
++ (void)setInitialUserDefaults;
 /**
 * Disable the default Cocoa "Key Bindings" since they interfere with the
 * way Vim handles keyboard input.  Cocoa reads bindings from

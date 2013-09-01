@@ -10,6 +10,11 @@
 
 #import <Foundation/Foundation.h>
 
+
+// TODO: Remove this when the inline IM code has been tested
+#define INCLUDE_OLD_IM_CODE
+
+
 extern NSString *MMCellWidthMultiplierKey;
 extern NSString *MMNoFontSubstitutionKey;
 extern NSString *MMBaselineOffsetKey;
@@ -31,3 +36,6 @@ extern NSString *MMTabMaxWidthKey;
 extern NSString *MMTabOptimumWidthKey;
 extern NSString *MMShowAddTabButtonKey;
 extern NSString *MMRendererKey;
+#ifdef INCLUDE_OLD_IM_CODE
+extern NSString *MMUseInlineImKey;
+#endif // INCLUDE_OLD_IM_CODE

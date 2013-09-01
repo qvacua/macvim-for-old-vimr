@@ -21,9 +21,6 @@ NSString *MMTexturedWindowKey           = @"MMTexturedWindow";
 NSString *MMZoomBothKey                 = @"MMZoomBoth";
 NSString *MMCurrentPreferencePaneKey    = @"MMCurrentPreferencePane";
 NSString *MMLastWindowClosedBehaviorKey = @"MMLastWindowClosedBehavior";
-#ifdef INCLUDE_OLD_IM_CODE
-NSString *MMUseInlineImKey              = @"MMUseInlineIm";
-#endif // INCLUDE_OLD_IM_CODE
 NSString *MMSuppressTerminationAlertKey = @"MMSuppressTerminationAlert";
 NSString *MMNativeFullScreenKey         = @"MMNativeFullScreen";
 

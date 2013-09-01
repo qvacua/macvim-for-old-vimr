@@ -11,6 +11,7 @@
 #import "MMUtils.h"
 #import "MMLog.h"
 #import "MMTypes.h"
+#import "MMUserDefaults.h"
 
 
 // This is a private AppKit API gleaned from class-dump.
@@ -54,6 +55,37 @@
     );
 
     prefSet = YES;
+}
+
++ (void)setInitialUserDefaults {
+    NSDictionary *dict = @{
+            MMTabMinWidthKey              : @64,
+            MMTabMaxWidthKey              : @(6 * 64),
+            MMTabOptimumWidthKey          : @132,
+            MMShowAddTabButtonKey         : @YES,
+            MMTextInsetLeftKey            : @2,
+            MMTextInsetRightKey           : @1,
+            MMTextInsetTopKey             : @1,
+            MMTextInsetBottomKey          : @1,
+            MMTypesetterKey               : @"MMTypesetter",
+            MMCellWidthMultiplierKey      : @1,
+            MMBaselineOffsetKey           : @(-1),
+            MMTranslateCtrlClickKey       : @YES,
+            MMNoFontSubstitutionKey       : @NO,
+            MMLoginShellKey               : @YES,
+            MMRendererKey                 : @(MMRendererCoreText),
+            MMLoginShellCommandKey        : @"",
+            MMLoginShellArgumentKey       : @"",
+            MMDialogsTrackPwdKey          : @YES,
+            MMOpenLayoutKey               : @3,
+            MMVerticalSplitKey            : @NO,
+            MMPreloadCacheSizeKey         : @0,
+#ifdef INCLUDE_OLD_IM_CODE
+            MMUseInlineImKey              : @YES,
+#endif // INCLUDE_OLD_IM_CODE
+    };
+
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dict];
 }
 
 + (void)setVimKeybindings {
