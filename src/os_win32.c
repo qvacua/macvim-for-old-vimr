@@ -78,16 +78,6 @@
 # endif
 #endif
 
-/*
- * Reparse Point
- */
-#ifndef FILE_ATTRIBUTE_REPARSE_POINT
-# define FILE_ATTRIBUTE_REPARSE_POINT	0x00000400
-#endif
-#ifndef IO_REPARSE_TAG_SYMLINK
-# define IO_REPARSE_TAG_SYMLINK		0xA000000C
-#endif
-
 /* Record all output and all keyboard & mouse input */
 /* #define MCH_WRITE_DUMP */
 
@@ -2851,18 +2841,20 @@ mch_dirname(
 }
 
 /*
- * get file permissions for `name'
- * -1 : error
- * else mode_t
+ * Get file permissions for "name".
+ * Return mode_t or -1 for error.
  */
     long
 mch_getperm(char_u *name)
 {
     struct stat st;
-    int n;
+    int		n;
 
+    if (name[0] == '\\' && name[1] == '\\')
+	/* UNC path */
+	return (long)win32_getattrs(name);
     n = mch_stat(name, &st);
-    return n == 0 ? (int)st.st_mode : -1;
+    return n == 0 ? (long)st.st_mode : -1L;
 }
 
 
@@ -3104,8 +3096,7 @@ win32_fileinfo(char_u *fname, BY_HANDLE_FILE_INFORMATION *info)
  * -1 : error
  * else FILE_ATTRIBUTE_* defined in winnt.h
  */
-    static
-    int
+    static int
 win32_getattrs(char_u *name)
 {
     int		attr;

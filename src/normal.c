@@ -5271,8 +5271,12 @@ dozet:
 		    {
 			pos_T	pos = curwin->w_cursor;
 
-			/* Find bad word under the cursor. */
+			/* Find bad word under the cursor.  When 'spell' is
+			 * off this fails and find_ident_under_cursor() is
+			 * used below. */
+			emsg_off++;
 			len = spell_move_to(curwin, FORWARD, TRUE, TRUE, NULL);
+			emsg_off--;
 			if (len != 0 && curwin->w_cursor.col <= pos.col)
 			    ptr = ml_get_pos(&curwin->w_cursor);
 			curwin->w_cursor = pos;
@@ -7066,6 +7070,13 @@ nv_replace(cap)
     {
 	if (got_int)
 	    reset_VIsual();
+	if (had_ctrl_v)
+	{
+	    if (cap->nchar == '\r')
+		cap->nchar = -1;
+	    else if (cap->nchar == '\n')
+		cap->nchar = -2;
+	}
 	nv_operator(cap);
 	return;
     }

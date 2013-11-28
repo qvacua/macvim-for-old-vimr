@@ -140,7 +140,7 @@ defaultAdvanceForFont(NSFont *font)
     [helper release];  helper = nil;
 
     if (glyphs) { free(glyphs); glyphs = NULL; }
-    if (advances) { free(advances); advances = NULL; }
+    if (positions) { free(positions); positions = NULL; }
 
     [super dealloc];
 }
@@ -987,25 +987,23 @@ lookupFont(NSMutableArray *fontCache, const unichar *chars,
 }
 
     static void
-recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
+recurseDraw(const unichar *chars, CGGlyph *glyphs, CGPoint *positions,
             UniCharCount length, CGContextRef context, CTFontRef fontRef,
-            float x, float y, NSMutableArray *fontCache)
+            NSMutableArray *fontCache)
 {
 
     if (CTFontGetGlyphsForCharacters(fontRef, chars, glyphs, length)) {
         // All chars were mapped to glyphs, so draw all at once and return.
         CGFontRef cgFontRef = CTFontCopyGraphicsFont(fontRef, NULL);
         CGContextSetFont(context, cgFontRef);
-        CGContextSetTextPosition(context, x, y);
-        CGContextShowGlyphsWithAdvances(context, glyphs, advances, length);
+        CGContextShowGlyphsAtPositions(context, glyphs, positions, length);
         CGFontRelease(cgFontRef);
         return;
     }
 
     CGGlyph *glyphsEnd = glyphs+length, *g = glyphs;
-    CGSize *a = advances;
+    CGPoint *p = positions;
     const unichar *c = chars;
-    float x0 = x;
     while (glyphs < glyphsEnd) {
         if (*g) {
             // Draw as many consecutive glyphs as possible in the current font
@@ -1014,15 +1012,13 @@ recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
             while (*g && g < glyphsEnd) {
                 ++g;
                 ++c;
-                x += a->width;
-                ++a;
+                ++p;
             }
 
             int count = g-glyphs;
             CGFontRef cgFontRef = CTFontCopyGraphicsFont(fontRef, NULL);
             CGContextSetFont(context, cgFontRef);
-            CGContextSetTextPosition(context, x0, y);
-            CGContextShowGlyphsWithAdvances(context, glyphs, advances, count);
+            CGContextShowGlyphsAtPositions(context, glyphs, positions, count);
             CGFontRelease(cgFontRef);
         } else {
             // Skip past as many consecutive chars as possible which cannot be
@@ -1030,8 +1026,7 @@ recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
             while (0 == *g && g < glyphsEnd) {
                 ++g;
                 ++c;
-                x += a->width;
-                ++a;
+                ++p;
             }
 
             // Figure out which font to draw these chars with.
@@ -1040,16 +1035,15 @@ recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
             if (!newFontRef)
                 return;
 
-            recurseDraw(chars, glyphs, advances, count, context, newFontRef,
-                        x0, y, fontCache);
+            recurseDraw(chars, glyphs, positions, count, context, newFontRef,
+                        fontCache);
 
             CFRelease(newFontRef);
         }
 
         chars = c;
         glyphs = g;
-        advances = a;
-        x0 = x;
+        positions = p;
     }
 }
 
@@ -1122,9 +1116,9 @@ recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
 
     if (length > maxlen) {
         if (glyphs) free(glyphs);
-        if (advances) free(advances);
+        if (positions) free(positions);
         glyphs = (CGGlyph*)malloc(length*sizeof(CGGlyph));
-        advances = (CGSize*)calloc(length, sizeof(CGSize));
+        positions = (CGPoint*)calloc(length, sizeof(CGPoint));
         maxlen = length;
     }
 
@@ -1133,9 +1127,13 @@ recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
     CGContextSetRGBFillColor(context, RED(fg), GREEN(fg), BLUE(fg), ALPHA(fg));
     CGContextSetFontSize(context, [font pointSize]);
 
+    // Calculate position of each glyph relative to (x,y).
     NSUInteger i;
-    for (i = 0; i < length; ++i)
-        advances[i].width = w;
+    float xrel = 0;
+    for (i = 0; i < length; ++i) {
+        positions[i].x = xrel;
+        xrel += w;
+    }
 
     CTFontRef fontRef = (CTFontRef)(flags & DRAW_WIDE ? [fontWide retain]
                                                       : [font retain]);
@@ -1154,8 +1152,8 @@ recurseDraw(const unichar *chars, CGGlyph *glyphs, CGSize *advances,
         }
     }
 
-    recurseDraw(chars, glyphs, advances, length, context, fontRef, x,
-                y+fontDescent, fontCache);
+    CGContextSetTextPosition(context, x, y+fontDescent);
+    recurseDraw(chars, glyphs, positions, length, context, fontRef, fontCache);
 
     CFRelease(fontRef);
     CGContextRestoreGState(context);

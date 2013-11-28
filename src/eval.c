@@ -356,6 +356,7 @@ static struct vimvar
     {VV_NAME("mouse_col",	 VAR_NUMBER), 0},
     {VV_NAME("operator",	 VAR_STRING), VV_RO},
     {VV_NAME("searchforward",	 VAR_NUMBER), 0},
+    {VV_NAME("hlsearch",	 VAR_NUMBER), 0},
     {VV_NAME("oldfiles",	 VAR_LIST), 0},
     {VV_NAME("windowid",	 VAR_NUMBER), VV_RO},
 };
@@ -474,7 +475,9 @@ static void f_bufname __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_bufnr __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_bufwinnr __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_byte2line __ARGS((typval_T *argvars, typval_T *rettv));
+static void byteidx __ARGS((typval_T *argvars, typval_T *rettv, int comp));
 static void f_byteidx __ARGS((typval_T *argvars, typval_T *rettv));
+static void f_byteidxcomp __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_call __ARGS((typval_T *argvars, typval_T *rettv));
 #ifdef FEAT_FLOAT
 static void f_ceil __ARGS((typval_T *argvars, typval_T *rettv));
@@ -869,6 +872,7 @@ eval_init()
 	    hash_add(&compat_hashtab, p->vv_di.di_key);
     }
     set_vim_var_nr(VV_SEARCHFORWARD, 1L);
+    set_vim_var_nr(VV_HLSEARCH, 1L);
     set_reg_var(0);  /* default for v:register is not 0 but '"' */
 
 #ifdef EBCDIC
@@ -915,12 +919,13 @@ eval_clear()
     /* autoloaded script names */
     ga_clear_strings(&ga_loaded);
 
-    /* script-local variables */
+    /* Script-local variables. First clear all the variables and in a second
+     * loop free the scriptvar_T, because a variable in one script might hold
+     * a reference to the whole scope of another script. */
     for (i = 1; i <= ga_scripts.ga_len; ++i)
-    {
 	vars_clear(&SCRIPT_VARS(i));
+    for (i = 1; i <= ga_scripts.ga_len; ++i)
 	vim_free(SCRIPT_SV(i));
-    }
     ga_clear(&ga_scripts);
 
     /* unreferenced lists and dicts */
@@ -7861,6 +7866,7 @@ static struct fst
     {"bufwinnr",	1, 1, f_bufwinnr},
     {"byte2line",	1, 1, f_byte2line},
     {"byteidx",		2, 2, f_byteidx},
+    {"byteidxcomp",	2, 2, f_byteidxcomp},
     {"call",		2, 3, f_call},
 #ifdef FEAT_FLOAT
     {"ceil",		1, 1, f_ceil},
@@ -9177,13 +9183,11 @@ f_byte2line(argvars, rettv)
 #endif
 }
 
-/*
- * "byteidx()" function
- */
     static void
-f_byteidx(argvars, rettv)
+byteidx(argvars, rettv, comp)
     typval_T	*argvars;
     typval_T	*rettv;
+    int		comp;
 {
 #ifdef FEAT_MBYTE
     char_u	*t;
@@ -9203,13 +9207,38 @@ f_byteidx(argvars, rettv)
     {
 	if (*t == NUL)		/* EOL reached */
 	    return;
-	t += (*mb_ptr2len)(t);
+	if (enc_utf8 && comp)
+	    t += utf_ptr2len(t);
+	else
+	    t += (*mb_ptr2len)(t);
     }
     rettv->vval.v_number = (varnumber_T)(t - str);
 #else
     if ((size_t)idx <= STRLEN(str))
 	rettv->vval.v_number = idx;
 #endif
+}
+
+/*
+ * "byteidx()" function
+ */
+    static void
+f_byteidx(argvars, rettv)
+    typval_T	*argvars;
+    typval_T	*rettv;
+{
+    byteidx(argvars, rettv, FALSE);
+}
+
+/*
+ * "byteidxcomp()" function
+ */
+    static void
+f_byteidxcomp(argvars, rettv)
+    typval_T	*argvars;
+    typval_T	*rettv;
+{
+    byteidx(argvars, rettv, TRUE);
 }
 
     int
@@ -13073,9 +13102,18 @@ get_user_input(argvars, rettv, inputdialog)
 	}
 
 	if (defstr != NULL)
+	{
+# ifdef FEAT_EX_EXTRA
+	    int save_ex_normal_busy = ex_normal_busy;
+	    ex_normal_busy = 0;
+# endif
 	    rettv->vval.v_string =
 		getcmdline_prompt(inputsecret_flag ? NUL : '@', p, echo_attr,
 				  xp_type, xp_arg);
+# ifdef FEAT_EX_EXTRA
+	    ex_normal_busy = save_ex_normal_busy;
+# endif
+	}
 	if (inputdialog && rettv->vval.v_string == NULL
 		&& argvars[1].v_type != VAR_UNKNOWN
 		&& argvars[2].v_type != VAR_UNKNOWN)
@@ -16926,7 +16964,7 @@ f_shiftwidth(argvars, rettv)
     typval_T	*argvars UNUSED;
     typval_T	*rettv;
 {
-    rettv->vval.v_number = get_sw_value();
+    rettv->vval.v_number = get_sw_value(curbuf);
 }
 
 /*
@@ -19835,24 +19873,30 @@ handle_subscript(arg, rettv, evaluate, verbose)
     while (ret == OK
 	    && (**arg == '['
 		|| (**arg == '.' && rettv->v_type == VAR_DICT)
-		|| (**arg == '(' && rettv->v_type == VAR_FUNC))
+		|| (**arg == '(' && (!evaluate || rettv->v_type == VAR_FUNC)))
 	    && !vim_iswhite(*(*arg - 1)))
     {
 	if (**arg == '(')
 	{
 	    /* need to copy the funcref so that we can clear rettv */
-	    functv = *rettv;
-	    rettv->v_type = VAR_UNKNOWN;
+	    if (evaluate)
+	    {
+		functv = *rettv;
+		rettv->v_type = VAR_UNKNOWN;
 
-	    /* Invoke the function.  Recursive! */
-	    s = functv.vval.v_string;
+		/* Invoke the function.  Recursive! */
+		s = functv.vval.v_string;
+	    }
+	    else
+		s = (char_u *)"";
 	    ret = get_func_tv(s, (int)STRLEN(s), rettv, arg,
 			curwin->w_cursor.lnum, curwin->w_cursor.lnum,
 			&len, evaluate, selfdict);
 
 	    /* Clear the funcref afterwards, so that deleting it while
 	     * evaluating the arguments is possible (see test55). */
-	    clear_tv(&functv);
+	    if (evaluate)
+		clear_tv(&functv);
 
 	    /* Stop the expression evaluation when immediately aborting on
 	     * error, or when an interrupt occurred or an exception was thrown
@@ -20605,6 +20649,13 @@ set_var(name, tv, copy)
 		v->di_tv.vval.v_number = get_tv_number(tv);
 		if (STRCMP(varname, "searchforward") == 0)
 		    set_search_direction(v->di_tv.vval.v_number ? '/' : '?');
+#ifdef FEAT_SEARCH_EXTRA
+		else if (STRCMP(varname, "hlsearch") == 0)
+		{
+		    no_hlsearch = !v->di_tv.vval.v_number;
+		    redraw_all_later(SOME_VALID);
+		}
+#endif
 	    }
 	    return;
 	}
@@ -24328,6 +24379,7 @@ do_string_sub(str, pat, sub, flags)
     garray_T	ga;
     char_u	*ret;
     char_u	*save_cpo;
+    int		zero_width;
 
     /* Make 'cpoptions' empty, so that the 'l' flag doesn't work here */
     save_cpo = p_cpo;
@@ -24366,19 +24418,16 @@ do_string_sub(str, pat, sub, flags)
 	    (void)vim_regsub(&regmatch, sub, (char_u *)ga.ga_data
 					  + ga.ga_len + i, TRUE, TRUE, FALSE);
 	    ga.ga_len += i + sublen - 1;
-	    /* avoid getting stuck on a match with an empty string */
-	    if (tail == regmatch.endp[0])
+	    zero_width = (tail == regmatch.endp[0]
+				    || regmatch.startp[0] == regmatch.endp[0]);
+	    tail = regmatch.endp[0];
+	    if (*tail == NUL)
+		break;
+	    if (zero_width)
 	    {
-		if (*tail == NUL)
-		    break;
+		/* avoid getting stuck on a match with an empty string */
 		*((char_u *)ga.ga_data + ga.ga_len) = *tail++;
 		++ga.ga_len;
-	    }
-	    else
-	    {
-		tail = regmatch.endp[0];
-		if (*tail == NUL)
-		    break;
 	    }
 	    if (!do_all)
 		break;

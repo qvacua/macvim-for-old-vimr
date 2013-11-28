@@ -62,6 +62,29 @@ if test "$GCC" = yes; then
   fi
 fi
 
+dnl clang-500.2.75 or around has abandoned -f[no-]strength-reduce and issues a
+dnl warning when that flag is passed to.  Accordingly, adjust CFLAGS based on
+dnl the version number of the clang in use.
+dnl Note that this does not work to get the version of clang 3.1 or 3.2.
+AC_MSG_CHECKING(for recent clang version)
+CLANG_VERSION_STRING=`"$CC" --version 2>/dev/null | sed  -n -e 's/^.*clang.*\([[0-9]][[0-9]]*\.[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*\).*$/\1/p'`
+if test x"$CLANG_VERSION_STRING" != x"" ; then
+  CLANG_MAJOR=`echo "$CLANG_VERSION_STRING" | sed -n -e 's/\([[0-9]][[0-9]]*\)\.[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*/\1/p'`
+  CLANG_MINOR=`echo "$CLANG_VERSION_STRING" | sed -n -e 's/[[0-9]][[0-9]]*\.\([[0-9]][[0-9]]*\)\.[[0-9]][[0-9]]*/\1/p'`
+  CLANG_REVISION=`echo "$CLANG_VERSION_STRING" | sed -n -e 's/[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*\.\([[0-9]][[0-9]]*\)/\1/p'`
+  CLANG_VERSION=`expr $CLANG_MAJOR '*' 1000000 '+' $CLANG_MINOR '*' 1000 '+' $CLANG_REVISION`
+  AC_MSG_RESULT($CLANG_VERSION)
+  dnl If you find the same issue with versions earlier than 500.2.75,
+  dnl change the constant 500002075 below appropriately.  To get the
+  dnl integer corresponding to a version number, refer to the
+  dnl definition of CLANG_VERSION above.
+  if test "$CLANG_VERSION" -ge 500002075 ; then
+    CFLAGS=`echo "$CFLAGS" | sed -n -e 's/-fno-strength-reduce/ /p'`
+  fi
+else
+  AC_MSG_RESULT(no)
+fi
+
 dnl If configure thinks we are cross compiling, there might be something
 dnl wrong with the CC or CFLAGS settings, give a useful warning message
 if test "$cross_compiling" = yes; then
@@ -194,7 +217,8 @@ if test "`(uname) 2>/dev/null`" = Darwin; then
     OS_EXTRA_SRC="os_macosx.m os_mac_conv.c";
     OS_EXTRA_OBJ="objects/os_macosx.o objects/os_mac_conv.o"
     dnl TODO: use -arch i386 on Intel machines
-    CPPFLAGS="$CPPFLAGS -DMACOS_X_UNIX -no-cpp-precomp"
+    dnl Removed -no-cpp-precomp, only for very old compilers.
+    CPPFLAGS="$CPPFLAGS -DMACOS_X_UNIX"
 
     dnl If Carbon or Cocoa is found, assume we don't want
     dnl X11 unless it was specifically asked for (--with-x)
@@ -218,6 +242,10 @@ if test "`(uname) 2>/dev/null`" = Darwin; then
 else
   AC_MSG_RESULT(no)
 fi
+
+dnl Mac OS X 10.9+ no longer include AvailabilityMacros.h in Carbon
+dnl so we need to include it to have access to version macros.
+AC_CHECK_HEADERS(AvailabilityMacros.h)
 
 AC_SUBST(OS_EXTRA_SRC)
 AC_SUBST(OS_EXTRA_OBJ)
@@ -249,8 +277,8 @@ if test "$cross_compiling" = no; then
   ])
   if test "$GCC" = yes -a "$local_dir" != no; then
     echo 'void f(){}' > conftest.c
-    dnl -no-cpp-precomp is needed for OS X 10.2 (Ben Fowler)
-    have_local_include=`${CC-cc} -no-cpp-precomp -c -v conftest.c 2>&1 | grep "${local_dir}/include"`
+    dnl Removed -no-cpp-precomp, only needed for OS X 10.2 (Ben Fowler)
+    have_local_include=`${CC-cc} -c -v conftest.c 2>&1 | grep "${local_dir}/include"`
     have_local_lib=`${CC-cc} -c -v conftest.c 2>&1 | grep "${local_dir}/lib"`
     rm -f conftest.c conftest.o
   fi
@@ -482,7 +510,7 @@ if test "$enable_luainterp" = "yes" -o "$enable_luainterp" = "dynamic"; then
       if test "X$vi_cv_path_luajit" != "X"; then
 	dnl -- find LuaJIT version
 	AC_CACHE_CHECK(LuaJIT version, vi_cv_version_luajit,
-	[ vi_cv_version_luajit=`${vi_cv_path_luajit} -v | sed 's/LuaJIT \([[0-9.]]*\)\.[[0-9]] .*/\1/'` ])
+	[ vi_cv_version_luajit=`${vi_cv_path_luajit} -v 2>&1 | sed 's/LuaJIT \([[0-9.]]*\)\.[[0-9]]\(-[[a-z0-9]]*\)* .*/\1/'` ])
 	AC_CACHE_CHECK(Lua version of LuaJIT, vi_cv_version_lua_luajit,
 	[ vi_cv_version_lua_luajit=`${vi_cv_path_luajit} -e "print(_VERSION)" | sed 's/.* //'` ])
 	vi_cv_path_lua="$vi_cv_path_luajit"
@@ -1711,7 +1739,7 @@ if test "$enable_rubyinterp" = "yes" -o "$enable_rubyinterp" = "dynamic"; then
             dnl On Mac OS X it is safer to just use the -framework flag
             RUBY_LIBS="-framework Ruby"
             dnl Don't include the -I flag when -framework is set
-            RUBY_CFLAGS=
+            RUBY_CFLAGS="-DRUBY_VERSION=$rubyversion"
             librubyarg=
 	fi
 
@@ -3757,6 +3785,9 @@ if test "$MANDEF" = "man -s"; then
 fi
 
 dnl Check if gettext() is working and if it needs -lintl
+dnl We take care to base this on an empty LIBS: on some systems libelf would be
+dnl in LIBS and implicitly take along libintl. The final LIBS would then not
+dnl contain libintl, and the link step would fail due to -Wl,--as-needed.
 AC_MSG_CHECKING(--disable-nls argument)
 AC_ARG_ENABLE(nls,
 	[  --disable-nls           Don't support NLS (gettext()).], ,
@@ -3775,16 +3806,18 @@ if test "$enable_nls" = "yes"; then
   if test -f po/Makefile; then
     have_gettext="no"
     if test -n "$MSGFMT"; then
+      olibs=$LIBS
+      LIBS=""
       AC_TRY_LINK(
 	[#include <libintl.h>],
 	[gettext("Test");],
-	AC_MSG_RESULT([gettext() works]); have_gettext="yes",
-	  olibs=$LIBS
-	  LIBS="$LIBS -lintl"
+	AC_MSG_RESULT([gettext() works]); have_gettext="yes"; LIBS=$olibs,
+	  LIBS="-lintl"
 	  AC_TRY_LINK(
 	      [#include <libintl.h>],
 	      [gettext("Test");],
-	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes",
+	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes";
+	      LIBS="$olibs -lintl",
 	      AC_MSG_RESULT([gettext() doesn't work]);
 	      LIBS=$olibs))
     else
