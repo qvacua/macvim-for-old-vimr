@@ -167,6 +167,7 @@
 		4B00FF2E175D24CE00773FB5 /* MacVimFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B00FE82175D1DD800773FB5 /* MacVimFramework.framework */; };
 		4B00FF31175D333C00773FB5 /* PSMTabBarControl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1D493DB90C52533B00AB718C /* PSMTabBarControl.framework */; };
 		4B3CC2CA17632DB2001D59E1 /* MMAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B2162CBD15E0C2132C0C /* MMAlert.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4B869E7618942112005BE383 /* MacVimFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B869E7518942112005BE383 /* MacVimFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -389,6 +390,7 @@
 		4B00FE8C175D1DD900773FB5 /* MacVimFramework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacVimFramework-Prefix.pch"; sourceTree = "<group>"; };
 		4B00FF1D175D221400773FB5 /* MacVimWithFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVimWithFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B00FF1E175D221400773FB5 /* MacVim copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacVim copy-Info.plist"; sourceTree = "<group>"; };
+		4B869E7518942112005BE383 /* MacVimFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacVimFramework.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MacVim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacVim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -480,6 +482,7 @@
 		1929BD6AF83DA11B8E0385BC /* VimTextView */ = {
 			isa = PBXGroup;
 			children = (
+				4B869E7518942112005BE383 /* MacVimFramework.h */,
 				1929BB3FC34756B00107CAE7 /* MMUtils.h */,
 				1929B1D28FEA476210E3D4EC /* MMUtils.m */,
 				1929B58A376B99D12870C813 /* MMLog.m */,
@@ -685,6 +688,7 @@
 				4B00FEBA175D1E4700773FB5 /* MMVimController.h in Headers */,
 				4B00FEBB175D1E4700773FB5 /* MMScroller.h in Headers */,
 				4B00FEBC175D1E4700773FB5 /* MMVimView.h in Headers */,
+				4B869E7618942112005BE383 /* MacVimFramework.h in Headers */,
 				1929B1FB6DF8BC56219E75C1 /* MMAlert.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -762,6 +766,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MacVim" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
