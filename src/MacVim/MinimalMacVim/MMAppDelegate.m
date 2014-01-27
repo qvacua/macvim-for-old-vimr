@@ -131,7 +131,7 @@
     log4Debug(@"%@: %@", identifier, @(state));
 }
 
-- (void)processInputQueueDidFinishVimController:(MMVimController *)controller {
+- (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue {
     // noop
     // this gets called very very often...
 }

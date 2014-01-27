@@ -1508,8 +1508,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)processInputQueueDidFinishVimController:(MMVimController *)controller
-{
+- (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue {
     // NOTE: Resizing is delayed until after all commands have been processed
     // since it often happens that more than one command will cause a resize.
     // If we were to immediately resize then the vim view size would jitter

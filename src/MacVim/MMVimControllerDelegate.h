@@ -59,6 +59,6 @@
 - (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state;
 - (void)vimController:(MMVimController *)controller setTooltipDelay:(float)delay;
 
-- (void)processInputQueueDidFinishVimController:(MMVimController *)controller;
+- (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue;
 
 @end
