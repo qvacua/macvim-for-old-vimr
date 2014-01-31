@@ -1,11 +1,3 @@
-//
-//  VTAppDelegate.m
-//  VoT
-//
-//  Created by Tae Won Ha on 24/01/14.
-//  Copyright (c) 2014 Tae Won Ha. All rights reserved.
-//
-
 #import <MacVimFramework/MacVimFramework.h>
 #import <PSMTabBarControl/PSMTabBarControl.h>
 #import "MMAppDelegate.h"
