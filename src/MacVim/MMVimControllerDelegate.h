@@ -17,6 +17,8 @@
 @protocol MMVimControllerDelegate <NSObject>
 
 @optional
+- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data;
+
 /**
 * Vim measures Y-coordinates from top of screen.
 */
@@ -36,7 +38,6 @@
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data;

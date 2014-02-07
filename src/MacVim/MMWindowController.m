@@ -1272,10 +1272,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setWideFont:font];
 }
 
-- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data {
-    [self setDefaultColorsBackground:background foreground:foreground];
-}
-
 - (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
     [self setMouseShape:shape];
 }

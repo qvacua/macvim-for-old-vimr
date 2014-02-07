@@ -673,7 +673,11 @@ static BOOL isUnsafeMessage(int msgid);
         NSColor *back = [NSColor colorWithArgbInt:bg];
         NSColor *fore = [NSColor colorWithRgbInt:fg];
 
-        [self.delegate vimController:self setDefaultColorsBackground:back foreground:fore data:data];
+        [self.vimView setDefaultColorsBackground:back foreground:fore];
+        if ([self.delegate respondsToSelector:@selector(vimController:setDefaultColorsBackground:foreground:data:)]) {
+            [self.delegate vimController:self setDefaultColorsBackground:back foreground:fore data:data];
+        }
+
         return;
     }
 

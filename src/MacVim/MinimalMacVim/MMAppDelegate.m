@@ -65,12 +65,6 @@
 }
 
 #pragma mark MMVimControllerDelegate
-- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background
-           foreground:(NSColor *)foreground
-                 data:(NSData *)data {
-    [self.vimView setDefaultColorsBackground:background foreground:foreground];
-}
-
 - (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data {
     // 3 = don't save
     // 1 = save
