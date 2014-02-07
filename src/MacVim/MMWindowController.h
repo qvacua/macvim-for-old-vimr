@@ -61,7 +61,6 @@
 - (void)setTitle:(NSString *)title;
 - (void)setDocumentFilename:(NSString *)filename;
 - (void)setToolbar:(NSToolbar *)toolbar;
-- (void)createScrollbarWithIdentifier:(int32_t)ident type:(int)type;
 - (BOOL)destroyScrollbarWithIdentifier:(int32_t)ident;
 - (BOOL)showScrollbarWithIdentifier:(int32_t)ident state:(BOOL)visible;
 - (void)setScrollbarPosition:(int)pos length:(int)len identifier:(int32_t)ident;

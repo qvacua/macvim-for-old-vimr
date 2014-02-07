@@ -71,10 +71,6 @@
     [self.vimController tellBackend:@[@3]];
 }
 
-- (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
-    [self.vimView createScrollbarWithIdentifier:identifier type:type];
-}
-
 - (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
     log4Debug(@"%@, %@, %@, %@", label, tip, icon, @(idx));
 }

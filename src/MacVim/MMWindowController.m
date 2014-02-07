@@ -495,11 +495,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)createScrollbarWithIdentifier:(int32_t)ident type:(int)type
-{
-    [vimView createScrollbarWithIdentifier:ident type:type];
-}
-
 - (BOOL)destroyScrollbarWithIdentifier:(int32_t)ident
 {
     BOOL scrollbarHidden = [vimView destroyScrollbarWithIdentifier:ident];   
@@ -1242,10 +1237,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     NSToolbarSizeMode size = flags & ToolbarSizeRegularFlag ? NSToolbarSizeModeRegular : NSToolbarSizeModeSmall;
 
     [self showToolbar:on size:size mode:mode];
-}
-
-- (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
-    [self createScrollbarWithIdentifier:identifier type:type];
 }
 
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data {
