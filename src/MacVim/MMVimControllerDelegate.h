@@ -20,6 +20,7 @@
 - (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data;
 
 /**
 * Vim measures Y-coordinates from top of screen.
@@ -29,8 +30,8 @@
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
 
+- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showToolbar:(BOOL)enable flags:(int)flags data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data;
@@ -38,7 +39,6 @@
 - (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data;

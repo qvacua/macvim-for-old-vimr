@@ -664,7 +664,11 @@ static BOOL isUnsafeMessage(int msgid);
             [name release];
         }
 
-        [self.delegate vimController:self setWideFont:font data:data];
+        self.vimView.textView.wideFont = font;
+        if ([self.delegate respondsToSelector:@selector(vimController:setWideFont:data:)]) {
+            [self.delegate vimController:self setWideFont:font data:data];
+        }
+
         return;
     }
 

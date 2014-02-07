@@ -71,10 +71,6 @@
     [self.vimController tellBackend:@[@3]];
 }
 
-- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
-    self.vimView.textView.wideFont = font;
-}
-
 - (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
     [self.vimView createScrollbarWithIdentifier:identifier type:type];
 }

@@ -1264,10 +1264,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
 }
 
-- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
-    [self setWideFont:font];
-}
-
 - (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
     [self setMouseShape:shape];
 }
