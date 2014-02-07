@@ -640,7 +640,11 @@ static BOOL isUnsafeMessage(int msgid);
             font = [NSFont userFixedPitchFontOfSize:size];
         }
 
-        [self.delegate vimController:self setFont:font data:data];
+        self.vimView.textView.font = font;
+        if ([self.delegate respondsToSelector:@selector(vimController:setFont:data:)]) {
+            [self.delegate vimController:self setFont:font data:data];
+        }
+
         return;
     }
 

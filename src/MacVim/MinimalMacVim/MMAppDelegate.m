@@ -71,10 +71,6 @@
     [self.vimController tellBackend:@[@3]];
 }
 
-- (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data {
-    self.vimView.textView.font = font;
-}
-
 - (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
     self.vimView.textView.wideFont = font;
 }
