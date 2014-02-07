@@ -1276,10 +1276,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setMouseShape:shape];
 }
 
-- (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data {
-    [self adjustLinespace:linespace];
-}
-
 - (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data {
     [NSApp activateIgnoringOtherApps:YES];
     [[self window] makeKeyAndOrderFront:self];

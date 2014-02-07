@@ -721,7 +721,11 @@ static BOOL isUnsafeMessage(int msgid);
         const void *bytes = [data bytes];
         int linespace = *((int *) bytes);
 
-        [self.delegate vimController:self adjustLinespace:linespace data:data];
+        self.vimView.textView.linespace = (float) linespace;
+        if ([self.delegate respondsToSelector:@selector(vimController:adjustLinespace:data:)]) {
+            [self.delegate vimController:self adjustLinespace:linespace data:data];
+        }
+
         return;
     }
 
