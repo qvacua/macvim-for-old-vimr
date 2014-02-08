@@ -870,12 +870,18 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (ActivateKeyScriptMsgID == msgid) {
-        [self.delegate vimController:self activateIm:YES data:data];
+        [self.vimView.textView activateIm:YES];
+        if ([self.delegate respondsToSelector:@selector(vimController:activateIm:data:)]) {
+            [self.delegate vimController:self activateIm:YES data:data];
+        }
         return;
     }
 
     if (DeactivateKeyScriptMsgID == msgid) {
-        [self.delegate vimController:self activateIm:NO data:data];
+        [self.vimView.textView activateIm:NO];
+        if ([self.delegate respondsToSelector:@selector(vimController:activateIm:data:)]) {
+            [self.delegate vimController:self activateIm:NO data:data];
+        }
         return;
     }
 

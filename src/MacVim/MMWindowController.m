@@ -1276,10 +1276,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [[MMFindReplaceController sharedInstance] showWithText:text flags:flags];
 }
 
-- (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data {
-    [[[self vimView] textView] activateIm:activate];
-}
-
 - (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data {
     [[[self vimView] textView] setImControl:control];
 }
