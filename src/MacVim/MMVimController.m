@@ -886,12 +886,18 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (EnableImControlMsgID == msgid) {
-        [self.delegate vimController:self setImControl:YES data:data];
+        self.vimView.textView.imControl = YES;
+        if ([self.delegate respondsToSelector:@selector(vimController:setImControl:data:)]) {
+            [self.delegate vimController:self setImControl:YES data:data];
+        }
         return;
     }
 
     if (DisableImControlMsgID == msgid) {
-        [self.delegate vimController:self setImControl:NO data:data];
+        self.vimView.textView.imControl = NO;
+        if ([self.delegate respondsToSelector:@selector(vimController:setImControl:data:)]) {
+            [self.delegate vimController:self setImControl:NO data:data];
+        }
         return;
     }
 

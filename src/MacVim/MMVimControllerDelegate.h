@@ -40,6 +40,7 @@
 - (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setAntialias:(BOOL)antialias data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data;
 
 // evaluate
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
@@ -52,7 +53,6 @@
 - (void)vimController:(MMVimController *)controller leaveFullScreenWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showFindReplaceDialogWithText:(id)text flags:(int)flags data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data;
