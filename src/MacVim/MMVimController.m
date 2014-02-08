@@ -810,7 +810,10 @@ static BOOL isUnsafeMessage(int msgid);
     if (SetPreEditPositionMsgID == msgid) {
         const int *dim = (const int *) [data bytes];
 
-        [self.delegate vimController:self setPreEditRow:dim[0] column:dim[1] data:data];
+        [self.vimView.textView setPreEditRow:dim[0] column:dim[1]];
+        if ([self.delegate respondsToSelector:@selector(vimController:setPreEditRow:column:data:)]) {
+            [self.delegate vimController:self setPreEditRow:dim[0] column:dim[1] data:data];
+        }
         return;
     }
 

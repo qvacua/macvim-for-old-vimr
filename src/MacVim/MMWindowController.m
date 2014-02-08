@@ -1268,10 +1268,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setBufferModified:modified];
 }
 
-- (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
-    [[[self vimView] textView] setPreEditRow:row column:column];
-}
-
 - (void)vimController:(MMVimController *)controller setAntialias:(BOOL)antialias data:(NSData *)data {
     [[[self vimView] textView] setAntialias:antialias];
 }

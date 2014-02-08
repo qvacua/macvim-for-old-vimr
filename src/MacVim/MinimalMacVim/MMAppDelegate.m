@@ -89,10 +89,6 @@
     [self.window makeKeyAndOrderFront:self];
 }
 
-- (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
-    [self.vimView.textView setPreEditRow:row column:column];
-}
-
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {
     [self.vimView.tabBarControl setHidden:NO];
     // Here we should resize and -position the Vim view...
