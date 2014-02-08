@@ -1247,10 +1247,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self showScrollbarWithIdentifier:identifier state:state];
 }
 
-- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
-    [self setScrollbarPosition:position length:length identifier:identifier];
-}
-
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
     [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
 }

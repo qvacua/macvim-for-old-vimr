@@ -36,13 +36,13 @@
 - (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data;
 
 // evaluate
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data;

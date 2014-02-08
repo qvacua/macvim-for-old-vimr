@@ -89,10 +89,6 @@
     [self.window makeKeyAndOrderFront:self];
 }
 
-- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
-    [self.vimView setScrollbarPosition:position length:length identifier:identifier];
-}
-
 - (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
     [self.vimView.textView setPreEditRow:row column:column];
 }

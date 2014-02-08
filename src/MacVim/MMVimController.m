@@ -617,7 +617,10 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int len = *((int *) bytes);
 
-        [self.delegate vimController:self setScrollbarPosition:pos length:len identifier:ident data:data];
+        [self.vimView setScrollbarPosition:pos length:len identifier:ident];
+        if ([self.delegate respondsToSelector:@selector(vimController:setScrollbarPosition:length:identifier:data:)]) {
+            [self.delegate vimController:self setScrollbarPosition:pos length:len identifier:ident data:data];
+        }
         return;
     }
 
