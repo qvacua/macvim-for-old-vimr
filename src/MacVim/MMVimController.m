@@ -818,12 +818,18 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (EnableAntialiasMsgID == msgid) {
-        [self.delegate vimController:self setAntialias:YES data:data];
+        self.vimView.textView.antialias = YES;
+        if ([self.delegate respondsToSelector:@selector(vimController:setAntialias:data:)]) {
+            [self.delegate vimController:self setAntialias:YES data:data];
+        }
         return;
     }
 
     if (DisableAntialiasMsgID == msgid) {
-        [self.delegate vimController:self setAntialias:NO data:data];
+        self.vimView.textView.antialias = NO;
+        if ([self.delegate respondsToSelector:@selector(vimController:setAntialias:data:)]) {
+            [self.delegate vimController:self setAntialias:NO data:data];
+        }
         return;
     }
 

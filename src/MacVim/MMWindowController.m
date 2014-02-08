@@ -1268,10 +1268,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setBufferModified:modified];
 }
 
-- (void)vimController:(MMVimController *)controller setAntialias:(BOOL)antialias data:(NSData *)data {
-    [[[self vimView] textView] setAntialias:antialias];
-}
-
 - (void)vimController:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data {
     [self setFullScreenBackgroundColor:color];
 }
