@@ -97,14 +97,6 @@
     [self.vimView.textView setPreEditRow:row column:column];
 }
 
-- (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
-    self.vimView.textView.mouseShape = shape;
-}
-
-- (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data {
-    log4Debug(@"%@", @(modified));
-}
-
 - (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
     log4Debug(@"%@", title);
 }

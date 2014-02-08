@@ -728,7 +728,10 @@ static BOOL isUnsafeMessage(int msgid);
         const void *bytes = [data bytes];
         int shape = *((int *) bytes);
 
-        [self.delegate vimController:self setMouseShape:shape data:data];
+        self.vimView.textView.mouseShape = shape;
+        if ([self.delegate respondsToSelector:@selector(vimController:setMouseShape:data:)]) {
+            [self.delegate vimController:self setMouseShape:shape data:data];
+        }
         return;
     }
 
@@ -787,7 +790,9 @@ static BOOL isUnsafeMessage(int msgid);
         // to show a warning or not when quitting).
         //
         // TODO: Make 'hasModifiedBuffer' part of the Vim state?
-        [self.delegate vimController:self setBufferModified:(state > 0) data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:setBufferModified:data:)]) {
+            [self.delegate vimController:self setBufferModified:(state > 0) data:data];
+        }
         hasModifiedBuffer = (state != 0);
 
         return;
