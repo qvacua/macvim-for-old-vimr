@@ -16,6 +16,11 @@
 
 @protocol MMVimControllerDelegate <NSObject>
 
+@required
+- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data; // TODO: make this optional
+- (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data; // TODO: make this optional
+
 @optional
 - (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue;
 - (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data;
@@ -27,19 +32,14 @@
 - (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx;
 - (void)vimController:(MMVimController *)controller showToolbar:(BOOL)enable flags:(int)flags data:(NSData *)data;
 
-/**
-* Vim measures Y-coordinates from top of screen.
-*/
-- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
 - (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data;
@@ -56,7 +56,6 @@
 - (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force;
 - (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier;
 
