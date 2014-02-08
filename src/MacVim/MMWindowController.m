@@ -495,11 +495,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)createScrollbarWithIdentifier:(int32_t)ident type:(int)type
-{
-    [vimView createScrollbarWithIdentifier:ident type:type];
-}
-
 - (BOOL)destroyScrollbarWithIdentifier:(int32_t)ident
 {
     BOOL scrollbarHidden = [vimView destroyScrollbarWithIdentifier:ident];   
@@ -1244,10 +1239,6 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self showToolbar:on size:size mode:mode];
 }
 
-- (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
-    [self createScrollbarWithIdentifier:identifier type:type];
-}
-
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data {
     [self destroyScrollbarWithIdentifier:identifier];
 }
@@ -1256,32 +1247,8 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self showScrollbarWithIdentifier:identifier state:state];
 }
 
-- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
-    [self setScrollbarPosition:position length:length identifier:identifier];
-}
-
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
     [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
-}
-
-- (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data {
-    [self setFont:font];
-}
-
-- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
-    [self setWideFont:font];
-}
-
-- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data {
-    [self setDefaultColorsBackground:background foreground:foreground];
-}
-
-- (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
-    [self setMouseShape:shape];
-}
-
-- (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data {
-    [self adjustLinespace:linespace];
 }
 
 - (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data {
@@ -1301,28 +1268,12 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setBufferModified:modified];
 }
 
-- (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
-    [[[self vimView] textView] setPreEditRow:row column:column];
-}
-
-- (void)vimController:(MMVimController *)controller setAntialias:(BOOL)antialias data:(NSData *)data {
-    [[[self vimView] textView] setAntialias:antialias];
-}
-
 - (void)vimController:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data {
     [self setFullScreenBackgroundColor:color];
 }
 
 - (void)vimController:(MMVimController *)controller showFindReplaceDialogWithText:(id)text flags:(int)flags data:(NSData *)data {
     [[MMFindReplaceController sharedInstance] showWithText:text flags:flags];
-}
-
-- (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data {
-    [[[self vimView] textView] activateIm:activate];
-}
-
-- (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data {
-    [[[self vimView] textView] setImControl:control];
 }
 
 - (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data {

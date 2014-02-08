@@ -65,44 +65,14 @@
 }
 
 #pragma mark MMVimControllerDelegate
-- (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background
-           foreground:(NSColor *)foreground
-                 data:(NSData *)data {
-    [self.vimView setDefaultColorsBackground:background foreground:foreground];
-}
-
 - (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data {
     // 3 = don't save
     // 1 = save
     [self.vimController tellBackend:@[@3]];
 }
 
-- (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data {
-    self.vimView.textView.linespace = (float) linespace;
-}
-
-- (void)vimController:(MMVimController *)controller setFont:(NSFont *)font data:(NSData *)data {
-    self.vimView.textView.font = font;
-}
-
-- (void)vimController:(MMVimController *)controller setWideFont:(NSFont *)font data:(NSData *)data {
-    self.vimView.textView.wideFont = font;
-}
-
-- (void)vimController:(MMVimController *)controller createScrollbarWithIdentifier:(int32_t)identifier type:(int)type data:(NSData *)data {
-    [self.vimView createScrollbarWithIdentifier:identifier type:type];
-}
-
-- (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
-    log4Debug(@"%@, %@, %@, %@", label, tip, icon, @(idx));
-}
-
 - (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data {
     [self.vimView showScrollbarWithIdentifier:identifier state:state];
-}
-
-- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)enable flags:(int)flags data:(NSData *)data {
-    log4Debug(@"%@: %@", @(enable), @(flags));
 }
 
 - (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data {
@@ -117,39 +87,6 @@
 
     [self.vimView addNewTabViewItem];
     [self.window makeKeyAndOrderFront:self];
-}
-
-- (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state {
-    log4Debug(@"%@: %@", identifier, @(state));
-}
-
-- (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue {
-    // noop
-    // this gets called very very often...
-}
-
-- (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
-    [self.vimView setScrollbarPosition:position length:length identifier:identifier];
-}
-
-- (void)vimController:(MMVimController *)controller setPreEditRow:(int)row column:(int)column data:(NSData *)data {
-    [self.vimView.textView setPreEditRow:row column:column];
-}
-
-- (void)vimController:(MMVimController *)controller setMouseShape:(int)shape data:(NSData *)data {
-    self.vimView.textView.mouseShape = shape;
-}
-
-- (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data {
-    log4Debug(@"%@", @(modified));
-}
-
-- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
-    log4Debug(@"%@", title);
-}
-
-- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
-    log4Debug(@"%@", filename);
 }
 
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {

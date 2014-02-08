@@ -341,7 +341,10 @@ static BOOL isUnsafeMessage(int msgid);
     // calling method).
     @try {
         [self doProcessInputQueue:queue];
-        [self.delegate vimController:self processFinishedForInputQueue:queue];
+
+        if ([self.delegate respondsToSelector:@selector(vimController:processFinishedForInputQueue:)]) {
+            [self.delegate vimController:self processFinishedForInputQueue:queue];
+        }
     }
     @catch (NSException *ex) {
         ASLogDebug(@"Exception: pid=%d id=%d reason=%@", pid, identifier, ex);
@@ -497,7 +500,9 @@ static BOOL isUnsafeMessage(int msgid);
                                                    length:(NSUInteger) len
                                                  encoding:NSUTF8StringEncoding];
 
-        [self.delegate vimController:self setWindowTitle:title data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:setWindowTitle:data:)]) {
+            [self.delegate vimController:self setWindowTitle:title data:data];
+        }
 
         [title release];
         return;
@@ -517,7 +522,9 @@ static BOOL isUnsafeMessage(int msgid);
             filename = [[NSString alloc] initWithString:@""];
         }
 
-        [self.delegate vimController:self setDocumentFilename:filename data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:setDocumentFilename:data:)]) {
+            [self.delegate vimController:self setDocumentFilename:filename data:data];
+        }
 
         [filename release];
         return;
@@ -564,7 +571,9 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int flags = *((int *) bytes);
 
-        [self.delegate vimController:self showToolbar:(BOOL) enable flags:flags data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:showToolbar:flags:data:)]) {
+            [self.delegate vimController:self showToolbar:(BOOL) enable flags:flags data:data];
+        }
         return;
     }
 
@@ -574,7 +583,11 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int32_t);
         int type = *((int *) bytes);
 
-        [self.delegate vimController:self createScrollbarWithIdentifier:ident type:type data:data];
+        [self.vimView createScrollbarWithIdentifier:identifier type:type];
+        if ([self.delegate respondsToSelector:@selector(vimController:createScrollbarWithIdentifier:type:data:)]) {
+            [self.delegate vimController:self createScrollbarWithIdentifier:ident type:type data:data];
+        }
+
         return;
     }
 
@@ -604,7 +617,10 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int len = *((int *) bytes);
 
-        [self.delegate vimController:self setScrollbarPosition:pos length:len identifier:ident data:data];
+        [self.vimView setScrollbarPosition:pos length:len identifier:ident];
+        if ([self.delegate respondsToSelector:@selector(vimController:setScrollbarPosition:length:identifier:data:)]) {
+            [self.delegate vimController:self setScrollbarPosition:pos length:len identifier:ident data:data];
+        }
         return;
     }
 
@@ -640,7 +656,11 @@ static BOOL isUnsafeMessage(int msgid);
             font = [NSFont userFixedPitchFontOfSize:size];
         }
 
-        [self.delegate vimController:self setFont:font data:data];
+        self.vimView.textView.font = font;
+        if ([self.delegate respondsToSelector:@selector(vimController:setFont:data:)]) {
+            [self.delegate vimController:self setFont:font data:data];
+        }
+
         return;
     }
 
@@ -660,7 +680,11 @@ static BOOL isUnsafeMessage(int msgid);
             [name release];
         }
 
-        [self.delegate vimController:self setWideFont:font data:data];
+        self.vimView.textView.wideFont = font;
+        if ([self.delegate respondsToSelector:@selector(vimController:setWideFont:data:)]) {
+            [self.delegate vimController:self setWideFont:font data:data];
+        }
+
         return;
     }
 
@@ -673,7 +697,11 @@ static BOOL isUnsafeMessage(int msgid);
         NSColor *back = [NSColor colorWithArgbInt:bg];
         NSColor *fore = [NSColor colorWithRgbInt:fg];
 
-        [self.delegate vimController:self setDefaultColorsBackground:back foreground:fore data:data];
+        [self.vimView setDefaultColorsBackground:back foreground:fore];
+        if ([self.delegate respondsToSelector:@selector(vimController:setDefaultColorsBackground:foreground:data:)]) {
+            [self.delegate vimController:self setDefaultColorsBackground:back foreground:fore data:data];
+        }
+
         return;
     }
 
@@ -709,7 +737,10 @@ static BOOL isUnsafeMessage(int msgid);
         const void *bytes = [data bytes];
         int shape = *((int *) bytes);
 
-        [self.delegate vimController:self setMouseShape:shape data:data];
+        self.vimView.textView.mouseShape = shape;
+        if ([self.delegate respondsToSelector:@selector(vimController:setMouseShape:data:)]) {
+            [self.delegate vimController:self setMouseShape:shape data:data];
+        }
         return;
     }
 
@@ -717,7 +748,11 @@ static BOOL isUnsafeMessage(int msgid);
         const void *bytes = [data bytes];
         int linespace = *((int *) bytes);
 
-        [self.delegate vimController:self adjustLinespace:linespace data:data];
+        self.vimView.textView.linespace = (float) linespace;
+        if ([self.delegate respondsToSelector:@selector(vimController:adjustLinespace:data:)]) {
+            [self.delegate vimController:self adjustLinespace:linespace data:data];
+        }
+
         return;
     }
 
@@ -764,7 +799,9 @@ static BOOL isUnsafeMessage(int msgid);
         // to show a warning or not when quitting).
         //
         // TODO: Make 'hasModifiedBuffer' part of the Vim state?
-        [self.delegate vimController:self setBufferModified:(state > 0) data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:setBufferModified:data:)]) {
+            [self.delegate vimController:self setBufferModified:(state > 0) data:data];
+        }
         hasModifiedBuffer = (state != 0);
 
         return;
@@ -773,17 +810,26 @@ static BOOL isUnsafeMessage(int msgid);
     if (SetPreEditPositionMsgID == msgid) {
         const int *dim = (const int *) [data bytes];
 
-        [self.delegate vimController:self setPreEditRow:dim[0] column:dim[1] data:data];
+        [self.vimView.textView setPreEditRow:dim[0] column:dim[1]];
+        if ([self.delegate respondsToSelector:@selector(vimController:setPreEditRow:column:data:)]) {
+            [self.delegate vimController:self setPreEditRow:dim[0] column:dim[1] data:data];
+        }
         return;
     }
 
     if (EnableAntialiasMsgID == msgid) {
-        [self.delegate vimController:self setAntialias:YES data:data];
+        self.vimView.textView.antialias = YES;
+        if ([self.delegate respondsToSelector:@selector(vimController:setAntialias:data:)]) {
+            [self.delegate vimController:self setAntialias:YES data:data];
+        }
         return;
     }
 
     if (DisableAntialiasMsgID == msgid) {
-        [self.delegate vimController:self setAntialias:NO data:data];
+        self.vimView.textView.antialias = NO;
+        if ([self.delegate respondsToSelector:@selector(vimController:setAntialias:data:)]) {
+            [self.delegate vimController:self setAntialias:NO data:data];
+        }
         return;
     }
 
@@ -824,22 +870,34 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (ActivateKeyScriptMsgID == msgid) {
-        [self.delegate vimController:self activateIm:YES data:data];
+        [self.vimView.textView activateIm:YES];
+        if ([self.delegate respondsToSelector:@selector(vimController:activateIm:data:)]) {
+            [self.delegate vimController:self activateIm:YES data:data];
+        }
         return;
     }
 
     if (DeactivateKeyScriptMsgID == msgid) {
-        [self.delegate vimController:self activateIm:NO data:data];
+        [self.vimView.textView activateIm:NO];
+        if ([self.delegate respondsToSelector:@selector(vimController:activateIm:data:)]) {
+            [self.delegate vimController:self activateIm:NO data:data];
+        }
         return;
     }
 
     if (EnableImControlMsgID == msgid) {
-        [self.delegate vimController:self setImControl:YES data:data];
+        self.vimView.textView.imControl = YES;
+        if ([self.delegate respondsToSelector:@selector(vimController:setImControl:data:)]) {
+            [self.delegate vimController:self setImControl:YES data:data];
+        }
         return;
     }
 
     if (DisableImControlMsgID == msgid) {
-        [self.delegate vimController:self setImControl:NO data:data];
+        self.vimView.textView.imControl = NO;
+        if ([self.delegate respondsToSelector:@selector(vimController:setImControl:data:)]) {
+            [self.delegate vimController:self setImControl:NO data:data];
+        }
         return;
     }
 
@@ -1031,8 +1089,9 @@ static BOOL isUnsafeMessage(int msgid);
     NSString *rootName = [desc objectAtIndex:0];
 
     if ([rootName isEqual:@"ToolBar"]) {
-        if ([desc count] == 2)
+        if ([desc count] == 2) if ([self.delegate respondsToSelector:@selector(vimController:addToolbarItemWithLabel:tip:icon:atIndex:)]) {
             [self.delegate vimController:self addToolbarItemWithLabel:title tip:tip icon:icon atIndex:idx];
+        }
         return;
     }
 
@@ -1122,7 +1181,10 @@ static BOOL isUnsafeMessage(int msgid);
     if ([rootName isEqual:@"ToolBar"]) {
         if ([desc count] == 2) {
             NSString *title = [desc lastObject];
-            [self.delegate vimController:self setStateToolbarItemWithIdentifier:title state:on];
+
+            if ([self.delegate respondsToSelector:@selector(vimController:setStateToolbarItemWithIdentifier:state:)]) {
+                [self.delegate vimController:self setStateToolbarItemWithIdentifier:title state:on];
+            }
         }
     } else {
         // Use tag to set whether item is enabled or disabled instead of
