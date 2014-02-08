@@ -571,7 +571,9 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int flags = *((int *) bytes);
 
-        [self.delegate vimController:self showToolbar:(BOOL) enable flags:flags data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:showToolbar:flags:data:)]) {
+            [self.delegate vimController:self showToolbar:(BOOL) enable flags:flags data:data];
+        }
         return;
     }
 
