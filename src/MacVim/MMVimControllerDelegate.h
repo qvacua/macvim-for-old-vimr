@@ -34,14 +34,13 @@
 - (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx;
 - (void)vimController:(MMVimController *)controller showToolbar:(BOOL)enable flags:(int)flags data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
+- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data;
 
 // evaluate
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
-
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
@@ -59,7 +58,6 @@
 - (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force;
 - (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier;
-
 - (void)vimController:(MMVimController *)controller setTooltipDelay:(float)delay;
 
 @end

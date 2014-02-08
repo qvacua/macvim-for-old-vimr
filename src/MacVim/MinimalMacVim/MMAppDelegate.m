@@ -97,14 +97,6 @@
     [self.vimView.textView setPreEditRow:row column:column];
 }
 
-- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
-    log4Debug(@"%@", title);
-}
-
-- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
-    log4Debug(@"%@", filename);
-}
-
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {
     [self.vimView.tabBarControl setHidden:NO];
     // Here we should resize and -position the Vim view...

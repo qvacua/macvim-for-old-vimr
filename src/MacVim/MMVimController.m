@@ -500,7 +500,9 @@ static BOOL isUnsafeMessage(int msgid);
                                                    length:(NSUInteger) len
                                                  encoding:NSUTF8StringEncoding];
 
-        [self.delegate vimController:self setWindowTitle:title data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:setWindowTitle:data:)]) {
+            [self.delegate vimController:self setWindowTitle:title data:data];
+        }
 
         [title release];
         return;
@@ -520,7 +522,9 @@ static BOOL isUnsafeMessage(int msgid);
             filename = [[NSString alloc] initWithString:@""];
         }
 
-        [self.delegate vimController:self setDocumentFilename:filename data:data];
+        if ([self.delegate respondsToSelector:@selector(vimController:setDocumentFilename:data:)]) {
+            [self.delegate vimController:self setDocumentFilename:filename data:data];
+        }
 
         [filename release];
         return;
