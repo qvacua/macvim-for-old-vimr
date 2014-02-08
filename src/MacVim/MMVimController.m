@@ -1054,8 +1054,9 @@ static BOOL isUnsafeMessage(int msgid);
     NSString *rootName = [desc objectAtIndex:0];
 
     if ([rootName isEqual:@"ToolBar"]) {
-        if ([desc count] == 2)
+        if ([desc count] == 2) if ([self.delegate respondsToSelector:@selector(vimController:addToolbarItemWithLabel:tip:icon:atIndex:)]) {
             [self.delegate vimController:self addToolbarItemWithLabel:title tip:tip icon:icon atIndex:idx];
+        }
         return;
     }
 
@@ -1145,7 +1146,10 @@ static BOOL isUnsafeMessage(int msgid);
     if ([rootName isEqual:@"ToolBar"]) {
         if ([desc count] == 2) {
             NSString *title = [desc lastObject];
-            [self.delegate vimController:self setStateToolbarItemWithIdentifier:title state:on];
+
+            if ([self.delegate respondsToSelector:@selector(vimController:setStateToolbarItemWithIdentifier:state:)]) {
+                [self.delegate vimController:self setStateToolbarItemWithIdentifier:title state:on];
+            }
         }
     } else {
         // Use tag to set whether item is enabled or disabled instead of

@@ -71,10 +71,6 @@
     [self.vimController tellBackend:@[@3]];
 }
 
-- (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
-    log4Debug(@"%@, %@, %@, %@", label, tip, icon, @(idx));
-}
-
 - (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data {
     [self.vimView showScrollbarWithIdentifier:identifier state:state];
 }
@@ -95,10 +91,6 @@
 
     [self.vimView addNewTabViewItem];
     [self.window makeKeyAndOrderFront:self];
-}
-
-- (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state {
-    log4Debug(@"%@: %@", identifier, @(state));
 }
 
 - (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
