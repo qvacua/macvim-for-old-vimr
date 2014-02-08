@@ -101,11 +101,6 @@
     log4Debug(@"%@: %@", identifier, @(state));
 }
 
-- (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue {
-    // noop
-    // this gets called very very often...
-}
-
 - (void)vimController:(MMVimController *)controller setScrollbarPosition:(int)position length:(int)length identifier:(int32_t)identifier data:(NSData *)data {
     [self.vimView setScrollbarPosition:position length:length identifier:identifier];
 }
