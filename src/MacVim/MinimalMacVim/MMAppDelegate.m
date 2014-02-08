@@ -75,10 +75,6 @@
     [self.vimView showScrollbarWithIdentifier:identifier state:state];
 }
 
-- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)enable flags:(int)flags data:(NSData *)data {
-    log4Debug(@"%@: %@", @(enable), @(flags));
-}
-
 - (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data {
     [self.vimView setDesiredRows:rows columns:columns];
 }
