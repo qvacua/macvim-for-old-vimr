@@ -21,6 +21,7 @@
 - (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)string data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data; // TODO: make this optional
 - (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data; // TODO: make this optional
+- (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 
 @optional
 - (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue;
@@ -42,9 +43,8 @@
 - (void)vimController:(MMVimController *)controller activateIm:(BOOL)activate data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setImControl:(BOOL)control data:(NSData *)data;
 
-// evaluate
+// evaluate whether optional or required...
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
-- (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
