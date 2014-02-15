@@ -22,31 +22,31 @@
     [string replaceOccurrencesOfString:@"\\"
                             withString:@"\\\\"
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@" "
                             withString:@"\\ "
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@"\t"
                             withString:@"\\\t "
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@"%"
                             withString:@"\\%"
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@"#"
                             withString:@"\\#"
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@"|"
                             withString:@"\\|"
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@"\""
                             withString:@"\\\""
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
 
     return string;
 }
@@ -62,28 +62,28 @@
     [string replaceOccurrencesOfString:@"\\<"
                             withString:@""
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     [string replaceOccurrencesOfString:@"\\>"
                             withString:@""
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     // \V = match whole word
     [string replaceOccurrencesOfString:@"\\V"
                             withString:@""
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
     // \c = case insensitive, \C = case sensitive
     [string replaceOccurrencesOfString:@"\\c"
                             withString:@""
                                options:NSCaseInsensitiveSearch | NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
 
     return string;
 }
 
 - (NSString *)stringBySanitizingSpotlightSearch {
     // Limit length of search text
-    NSUInteger len = [self length];
+    NSUInteger len = self.length;
     if (len > 1024) len = 1024;
     else if (len == 0) return self;
 
@@ -100,14 +100,14 @@
     [string replaceOccurrencesOfString:@"'"
                             withString:@"''"
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
 
     // Replace \ with \\ to avoid Vim interpreting it as the beginning of a
     // character class.
     [string replaceOccurrencesOfString:@"\\"
                             withString:@"\\\\"
                                options:NSLiteralSearch
-                                 range:NSMakeRange(0, [string length])];
+                                 range:NSMakeRange(0, string.length)];
 
     return string;
 }
@@ -141,18 +141,18 @@
 @implementation NSDictionary (MMExtras)
 
 + (id)dictionaryWithData:(NSData *)data {
-    id plist = [NSPropertyListSerialization
-            propertyListFromData:data
-                mutabilityOption:NSPropertyListImmutable
-                          format:NULL
-                errorDescription:NULL];
+    id plist = [NSPropertyListSerialization propertyListFromData:data
+                                                mutabilityOption:NSPropertyListImmutable
+                                                          format:NULL
+                                                errorDescription:NULL];
 
     return [plist isKindOfClass:[NSDictionary class]] ? plist : nil;
 }
 
 - (NSData *)dictionaryAsData {
     return [NSPropertyListSerialization dataFromPropertyList:self
-                                                      format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+                                                      format:NSPropertyListBinaryFormat_v1_0
+                                            errorDescription:NULL];
 }
 
 @end
@@ -161,11 +161,10 @@
 @implementation NSMutableDictionary (MMExtras)
 
 + (id)dictionaryWithData:(NSData *)data {
-    id plist = [NSPropertyListSerialization
-            propertyListFromData:data
-                mutabilityOption:NSPropertyListMutableContainers
-                          format:NULL
-                errorDescription:NULL];
+    id plist = [NSPropertyListSerialization propertyListFromData:data
+                                                mutabilityOption:NSPropertyListMutableContainers
+                                                          format:NULL
+                                                errorDescription:NULL];
 
     return [plist isKindOfClass:[NSMutableDictionary class]] ? plist : nil;
 }
@@ -176,18 +175,19 @@
 @implementation NSMenuItem (MMExtras)
 
 - (NSData *)descriptorAsDataForVim {
-    NSMutableArray *desc = [NSMutableArray arrayWithObject:[self title]];
+    NSMutableArray *desc = [NSMutableArray arrayWithObject:self.title];
 
-    NSMenu *menu = [self menu];
+    NSMenu *menu = self.menu;
     while (menu) {
-        [desc insertObject:[menu title] atIndex:0];
-        menu = [menu supermenu];
+        [desc insertObject:menu.title atIndex:0];
+        menu = menu.supermenu;
     }
 
     // The "MainMenu" item is part of the Cocoa menu and should not be part of
     // the descriptor.
-    if ([[desc objectAtIndex:0] isEqual:@"MainMenu"])
+    if ([desc[0] isEqualToString:@"MainMenu"]) {
         [desc removeObjectAtIndex:0];
+    }
 
     return [@{@"descriptor" : desc} dictionaryAsData];
 }
@@ -198,10 +198,11 @@
 @implementation NSTabView (MMExtras)
 
 - (void)removeAllTabViewItems {
-    NSArray *existingItems = [self tabViewItems];
-    NSEnumerator *e = [existingItems objectEnumerator];
+    NSArray *existingItems = self.tabViewItems;
+    NSEnumerator *e = existingItems.objectEnumerator;
     NSTabViewItem *item;
-    while ((item = [e nextObject])) {
+
+    while ((item = e.nextObject)) {
         [self removeTabViewItem:item];
     }
 }
