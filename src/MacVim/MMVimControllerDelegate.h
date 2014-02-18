@@ -24,6 +24,7 @@
 - (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 
 @optional
+- (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue;
 - (void)vimController:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller adjustLinespace:(int)linespace data:(NSData *)data;
@@ -47,7 +48,6 @@
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
 - (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data;
-- (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller leaveFullScreenWithData:(NSData *)data;

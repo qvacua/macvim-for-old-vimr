@@ -94,6 +94,10 @@
     // Here we should resize and -position the Vim view...
 }
 
+- (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
+    // Here we should resize and -position the Vim view...
+}
+
 #pragma mark MMVimManagerDelegateProtocol
 - (void)manager:(MMVimManager *)manager vimControllerCreated:(MMVimController *)controller {
     _vimController = controller;
