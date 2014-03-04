@@ -1551,6 +1551,7 @@
 				4B869F3018950C97005BE383 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MacVim" */ = {
 			isa = XCConfigurationList;

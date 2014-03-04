@@ -11,6 +11,7 @@
 #import <Cocoa/Cocoa.h>
 #import "MMAppProtocol.h"
 
+static int VIM_PROCESS_CREATION_UNSUCCESSFUL = -1;
 
 @class MMVimController;
 @protocol MMVimManagerDelegateProtocol;
@@ -37,6 +38,7 @@
 - (void)rebuildPreloadCache;
 - (void)toggleQuickStart;
 - (BOOL)openVimController:(MMVimController *)vc withArguments:(NSDictionary *)arguments;
+- (int)pidOfNewVimControllerWithArgs:(NSDictionary *)args;
 - (MMVimController *)getVimController;
 - (void)removeVimController:(id)controller;
 - (void)cleanUp;

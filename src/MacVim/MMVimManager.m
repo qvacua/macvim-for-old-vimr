@@ -144,24 +144,35 @@ static void fsEventCallback(
         // instantaneously.
         [vc passArguments:arguments];
         [[vc backendProxy] acknowledgeConnection];
-    } else {
-        NSArray *cmdline = nil;
-        NSString *cwd = [self workingDirectoryForArguments:arguments];
-        arguments = [self convertVimControllerArguments:arguments toCommandLine:&cmdline];
-        int pid = [self launchVimProcessWithArguments:cmdline workingDirectory:cwd];
-        if (-1 == pid)
-            return NO;
 
-        // TODO: If the Vim process fails to start, or if it changes PID,
-        // then the memory allocated for these parameters will leak.
-        // Ensure that this cannot happen or somehow detect it.
+        return YES;
+    }
 
-        if ([arguments count] > 0) {
-            pidArguments[@(pid)] = arguments;
-        }
+    if ([self pidOfNewVimControllerWithArgs:arguments] == VIM_PROCESS_CREATION_UNSUCCESSFUL) {
+        return NO;
     }
 
     return YES;
+}
+
+- (int)pidOfNewVimControllerWithArgs:(NSDictionary *)args {
+    NSArray *cmdline = nil;
+    NSString *cwd = [self workingDirectoryForArguments:args];
+    args = [self convertVimControllerArguments:args toCommandLine:&cmdline];
+    int pid = [self launchVimProcessWithArguments:cmdline workingDirectory:cwd];
+    if (-1 == pid) {
+        return VIM_PROCESS_CREATION_UNSUCCESSFUL;
+    }
+
+    // TODO: If the Vim process fails to start, or if it changes PID,
+    // then the memory allocated for these parameters will leak.
+    // Ensure that this cannot happen or somehow detect it.
+
+    if ([args count] > 0) {
+        pidArguments[@(pid)] = args;
+    }
+
+    return pid;
 }
 
 - (MMVimController *)getVimController {
