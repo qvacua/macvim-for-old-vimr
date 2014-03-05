@@ -20,7 +20,7 @@
 
 @required
 - (void)manager:(MMVimManager *)manager vimControllerCreated:(MMVimController *)controller;
-- (void)manager:(MMVimManager *)manager vimControllerRemovedWithIdentifier:(unsigned int)identifier;
+- (void)manager:(MMVimManager *)manager vimControllerRemovedWithControllerId:(unsigned int)identifier pid:(int)pid;
 
 - (NSMenuItem *)menuItemTemplateForManager:(MMVimManager *)manager;
 

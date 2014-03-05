@@ -105,7 +105,7 @@
     _vimView = _vimController.vimView;
 }
 
-- (void)manager:(MMVimManager *)manager vimControllerRemovedWithIdentifier:(unsigned int)identifier {
+- (void)manager:(MMVimManager *)manager vimControllerRemovedWithControllerId:(unsigned int)identifier pid:(int)pid {
     [self.vimView removeFromSuperviewWithoutNeedingDisplay];
     [self.vimView cleanup];
 

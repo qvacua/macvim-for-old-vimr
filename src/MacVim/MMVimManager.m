@@ -222,7 +222,8 @@ static void fsEventCallback(
 - (void)removeVimController:(MMVimController *)controller {
     ASLogDebug(@"Remove Vim controller pid=%d id=%d (processingFlag=%d)", controller.pid, controller.vimControllerId, processingFlag);
 
-    unsigned int controllerId = [controller vimControllerId];
+    int pid = controller.pid;
+    unsigned int controllerId = controller.vimControllerId;
     NSUInteger idx = [self.vimControllers indexOfObject:controller];
     if (NSNotFound == idx) {
         ASLogDebug(@"Controller not found, probably due to duplicate removal");
@@ -240,7 +241,7 @@ static void fsEventCallback(
     // reapChildProcesses: is called (but this should be harmless).
     [self performSelector:@selector(reapChildProcesses:) withObject:nil afterDelay:0.1];
 
-    [self.delegate manager:self vimControllerRemovedWithIdentifier:controllerId];
+    [self.delegate manager:self vimControllerRemovedWithControllerId:controllerId pid:pid];
 }
 
 - (void)cleanUp {

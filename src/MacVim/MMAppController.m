@@ -991,7 +991,7 @@ typedef struct
     [self addWindowControllerWithController:controller];
 }
 
-- (void)manager:(MMVimManager *)manager vimControllerRemovedWithIdentifier:(unsigned int)identifier{
+- (void)manager:(MMVimManager *)manager vimControllerRemovedWithControllerId:(unsigned int)identifier pid:(int)pid {
     NSNumber *idKey = @(identifier);
     [self.windowControllers[idKey] cleanup];
     [self.windowControllers removeObjectForKey:idKey];
@@ -1300,10 +1300,10 @@ typedef struct
     //
     // The format is: mvim://open?<arguments> where arguments can be:
     //
-    // * url â€” the actual file to open (i.e. a file://â€¦ URL), if you leave
+    // * url Ñ the actual file to open (i.e. a file://É URL), if you leave
     //         out this argument, the frontmost document is implied.
-    // * line â€” line number to go to (one based).
-    // * column â€” column number to go to (one based).
+    // * line Ñ line number to go to (one based).
+    // * column Ñ column number to go to (one based).
     //
     // Example: mvim://open?url=file:///etc/profile&line=20
 
