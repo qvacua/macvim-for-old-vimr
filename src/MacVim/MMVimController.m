@@ -456,7 +456,16 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (UpdateTabBarMsgID == msgid) {
+        if ([self.delegate respondsToSelector:@selector(vimController:tabShouldUpdateWithData:)]) {
+            [self.delegate vimController:self tabShouldUpdateWithData:data];
+        }
+
         [self.vimView updateTabsWithData:data];
+
+        if ([self.delegate respondsToSelector:@selector(vimController:tabDidUpdateWithData:)]) {
+            [self.delegate vimController:self tabDidUpdateWithData:data];
+        }
+
         return;
     }
 
@@ -969,7 +978,9 @@ static BOOL isUnsafeMessage(int msgid);
 
         NSArray *filenames = dict ? [dict objectForKey:@"filenames"] : nil;
         if (filenames) {
-            [self.delegate vimController:self addToMru:filenames data:data];
+            if ([self.delegate respondsToSelector:@selector(vimController:addToMru:data:)]) {
+                [self.delegate vimController:self addToMru:filenames data:data];
+            }
         }
 
         return;
