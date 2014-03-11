@@ -763,6 +763,17 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     [self queueMessage:SelectTabMsgID data:data];
 }
 
+- (NSArray *)filenamesOfTabs
+{
+    tabpage_T *tp;
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
+    for (tp = first_tabpage; tp != NULL; tp = tp->tp_next) {
+        [result addObject:[NSString stringWithVimString:(char *)(tp->tp_curwin->w_buffer->b_ffname)]];
+    }
+    
+    return [result autorelease];
+}
+
 - (void)updateTabBar
 {
     NSMutableData *data = [NSMutableData data];
@@ -1991,6 +2002,7 @@ static void netbeansReadCallback(CFSocketRef s,
         int idx = *((int*)bytes);
 
         tabpage_move(idx);
+        [self queueMessage:DraggedTabReplyMsgID data:data];
     } else if (SetTextDimensionsMsgID == msgid || LiveResizeMsgID == msgid
             || SetTextRowsMsgID == msgid || SetTextColumnsMsgID == msgid) {
         if (!data) return;

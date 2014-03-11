@@ -47,3 +47,4 @@ src/a.out.dSYM
 xcuserdata
 project.xcworkspace
 
+nbproject/*

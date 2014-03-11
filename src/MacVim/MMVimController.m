@@ -352,6 +352,10 @@ static BOOL isUnsafeMessage(int msgid);
 }
 
 
+- (NSArray *)filenamesOfTabs {
+    return [backendProxy filenamesOfTabs];
+}
+
 - (BOOL)tellBackend:(id)obj {
     BOOL success = NO;
     @try {
@@ -452,6 +456,13 @@ static BOOL isUnsafeMessage(int msgid);
 
     if (SelectTabMsgID == msgid) {
         // NOTE: Tab selection is done inside updateTabsWithData:.
+        return;
+    }
+
+    if (DraggedTabReplyMsgID == msgid) {
+        if ([self.delegate respondsToSelector:@selector(vimController:tabDraggedWithData:)]) {
+            [self.delegate vimController:self tabDraggedWithData:data];
+        }
         return;
     }
 

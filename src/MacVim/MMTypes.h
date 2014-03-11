@@ -24,6 +24,7 @@ enum {
     CloseTabMsgID,
     AddNewTabMsgID,
     DraggedTabMsgID,
+    DraggedTabReplyMsgID,
     UpdateTabBarMsgID,
     ShowTabBarMsgID,
     HideTabBarMsgID,

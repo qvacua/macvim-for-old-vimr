@@ -75,6 +75,8 @@
 - (NSString *)evaluateVimExpression:(NSString *)expr;
 - (void)processInputQueue:(NSArray *)queue;
 
+- (NSArray *)filenamesOfTabs;
+
 - (BOOL)tellBackend:(id)obj;
 - (BOOL)sendDialogReturnToBackend:(id)obj;
 

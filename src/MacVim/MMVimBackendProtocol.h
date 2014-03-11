@@ -32,6 +32,8 @@
 - (id)evaluateExpressionCocoa:(in bycopy NSString *)expr errorString:(out bycopy NSString **)errstr;
 - (BOOL)starRegisterToPasteboard:(byref NSPasteboard *)pboard;
 - (oneway void)acknowledgeConnection;
+- (NSArray *)filenamesOfTabs;
+
 @end
 
 

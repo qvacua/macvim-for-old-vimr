@@ -46,6 +46,7 @@
 - (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data;
 - (void)vimController:(MMVimController *)controller tabShouldUpdateWithData:(NSData *)data;
 - (void)vimController:(MMVimController *)controller tabDidUpdateWithData:(NSData *)data;
+- (void)vimController:(MMVimController *)controller tabDraggedWithData:(NSData *)data;
 
 // evaluate whether optional or required...
 - (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.
