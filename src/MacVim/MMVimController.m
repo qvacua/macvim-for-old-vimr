@@ -356,6 +356,10 @@ static BOOL isUnsafeMessage(int msgid);
     return [backendProxy filenamesOfTabs];
 }
 
+- (NSArray *)filenamesOfBuffers {
+    return [backendProxy filenamesOfBuffers];
+}
+
 - (BOOL)tellBackend:(id)obj {
     BOOL success = NO;
     @try {

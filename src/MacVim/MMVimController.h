@@ -77,6 +77,7 @@
 
 - (NSArray *)filenamesOfTabs;
 
+- (NSArray *)filenamesOfBuffers;
 - (BOOL)tellBackend:(id)obj;
 - (BOOL)sendDialogReturnToBackend:(id)obj;
 

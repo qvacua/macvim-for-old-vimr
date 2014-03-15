@@ -164,6 +164,9 @@ extern NSTimeInterval MMBalloonEvalInternalDelay;
 
 - (void)addToMRU:(NSArray *)filenames;
 
+- (NSArray *)filenamesOfTabs;
+- (NSArray *)filenamesOfBuffers;
+
 @end
 
 

@@ -774,6 +774,17 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     return [result autorelease];
 }
 
+- (NSArray *)filenamesOfBuffers
+{
+    buf_T *bf;
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
+    for (bf = firstbuf; bf != NULL; bf = bf->b_next) {
+        [result addObject:[NSString stringWithVimString:(char *)(bf->b_ffname)]];
+    }
+    
+    return [result autorelease];
+}
+
 - (void)updateTabBar
 {
     NSMutableData *data = [NSMutableData data];
