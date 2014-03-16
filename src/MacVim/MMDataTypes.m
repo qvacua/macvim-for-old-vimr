@@ -11,11 +11,12 @@
 
 @implementation MMBuffer
 
-- (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName {
+- (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName modified:(BOOL)modified {
     self = [super init];
     if (self) {
         _number = number;
         _fileName = [fileName copy];
+        _modified = modified;
     }
 
     return self;
@@ -25,6 +26,7 @@
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"self.number=%li", self.number];
     [description appendFormat:@", self.fileName=%@", self.fileName];
+    [description appendFormat:@", self.modified=%d", self.modified];
     [description appendString:@">"];
     return description;
 }

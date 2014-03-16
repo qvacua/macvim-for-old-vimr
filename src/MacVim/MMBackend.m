@@ -800,7 +800,8 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
         NSString *fileName = [NSString stringWithVimString:bf->b_ffname];
         int number = bf->b_fnum;
 
-        MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName];
+        MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName
+                                                   modified:bufIsChanged(bf)];
         [result addObject:buffer];
         [buffer release];
     }

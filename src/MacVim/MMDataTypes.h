@@ -13,8 +13,9 @@
 
 @property NSInteger number;
 @property (copy) NSString *fileName;
+@property BOOL modified;
 
-- (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName;
+- (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName modified:(BOOL)modified;
 - (NSString *)description;
 
 @end
