@@ -10,6 +10,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MacVim.h"
+#import "MMDataTypes.h"
 #import "vim.h"
 
 
@@ -164,6 +165,7 @@ extern NSTimeInterval MMBalloonEvalInternalDelay;
 
 - (void)addToMRU:(NSArray *)filenames;
 
+- (MMTabPage *)currentTab;
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 

@@ -11,6 +11,8 @@
 #import <Cocoa/Cocoa.h>
 
 
+@class MMTabPage;
+
 /**
 * This is the protocol MMBackend implements.
 *

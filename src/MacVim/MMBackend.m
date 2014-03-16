@@ -28,7 +28,6 @@
  */
 
 #import "MMBackend.h"
-#import "MMDataTypes.h"
 
 
 
@@ -762,6 +761,14 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     index -= 1;
     NSData *data = [NSData dataWithBytes:&index length:sizeof(int)];
     [self queueMessage:SelectTabMsgID data:data];
+}
+
+- (MMTabPage *)currentTab {
+    buf_T *bf = curtab->tp_curwin->w_buffer;
+    NSArray *buffers = [self buffers];
+    MMBuffer *buffer = [self bufferWithNumber:bf->b_fnum fromBuffers:buffers];
+
+    return [[[MMTabPage alloc] initWithBuffer:buffer] autorelease];
 }
 
 - (NSArray *)tabs

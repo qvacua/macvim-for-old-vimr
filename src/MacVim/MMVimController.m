@@ -19,6 +19,7 @@
 #import "MMTypes.h"
 #import "MMCocoaCategories.h"
 #import "MMVimBackendProtocol.h"
+#import "MMDataTypes.h"
 
 
 // NOTE: By default a message sent to the backend will be dropped if it cannot
@@ -351,6 +352,9 @@ static BOOL isUnsafeMessage(int msgid);
     }
 }
 
+- (MMTabPage *)currentTab {
+    return [backendProxy currentTab];
+}
 
 - (NSArray *)tabs {
     return [backendProxy tabs];

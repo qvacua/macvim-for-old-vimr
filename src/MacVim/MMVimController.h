@@ -12,6 +12,7 @@
 @class MMWindowController;
 @class MMVimView;
 @protocol MMVimControllerDelegate;
+@class MMTabPage;
 
 
 /**
@@ -75,6 +76,7 @@
 - (NSString *)evaluateVimExpression:(NSString *)expr;
 - (void)processInputQueue:(NSArray *)queue;
 
+- (MMTabPage *)currentTab;
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 
