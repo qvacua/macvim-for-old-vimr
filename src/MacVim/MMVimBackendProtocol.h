@@ -33,8 +33,8 @@
 - (BOOL)starRegisterToPasteboard:(byref NSPasteboard *)pboard;
 - (oneway void)acknowledgeConnection;
 
-- (NSArray *)filenamesOfTabs;
-- (NSArray *)filenamesOfBuffers;
+- (NSArray *)tabs;
+- (NSArray *)buffers;
 
 @end
 

@@ -1292,11 +1292,11 @@ CARBONGUI_TESTARG = VIMPROG=../$(APPDIR)/Contents/MacOS/$(VIMTARGET)
 # MACVIM GUI
 MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
 		  MacVim/MacVim.m MacVim/MMLog.m MacVim/MMTypes.m MacVim/MMCocoaCategories.m \
-		  MacVim/MMUtils.m MacVim/MMUserDefaults.m
+		  MacVim/MMUtils.m MacVim/MMUserDefaults.m MacVim/MMDataTypes.m
 MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o objects/pty.o \
 		  objects/gui_macvim.o objects/MMBackend.o objects/MacVim.o \
 		  objects/MMLog.o objects/MMTypes.o objects/MMCocoaCategories.o \
-		  objects/MMUtils.o objects/MMUserDefaults.o
+		  objects/MMUtils.o objects/MMUserDefaults.o objects/MMDataTypes.o
 MACVIMGUI_DEFS	= -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
 MACVIMGUI_IPATH	=
 MACVIMGUI_LIBS_DIR =
@@ -2524,6 +2524,9 @@ objects/MMUtils.o: MacVim/MMUtils.m
 
 objects/MMUserDefaults.o: MacVim/MMUserDefaults.m
 	$(CCC) -o $@ MacVim/MMUserDefaults.m
+
+objects/MMDataTypes.o: MacVim/MMDataTypes.m
+	$(CCC) -o $@ MacVim/MMDataTypes.m
 
 objects/MMCocoaCategories.o: MacVim/MMCocoaCategories.m
 	$(CCC) -fobjc-arc -o $@ MacVim/MMCocoaCategories.m

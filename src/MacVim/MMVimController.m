@@ -352,12 +352,12 @@ static BOOL isUnsafeMessage(int msgid);
 }
 
 
-- (NSArray *)filenamesOfTabs {
-    return [backendProxy filenamesOfTabs];
+- (NSArray *)tabs {
+    return [backendProxy tabs];
 }
 
-- (NSArray *)filenamesOfBuffers {
-    return [backendProxy filenamesOfBuffers];
+- (NSArray *)buffers {
+    return [backendProxy buffers];
 }
 
 - (BOOL)tellBackend:(id)obj {

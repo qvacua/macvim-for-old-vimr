@@ -28,6 +28,7 @@
  */
 
 #import "MMBackend.h"
+#import "MMDataTypes.h"
 
 
 
@@ -763,27 +764,54 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     [self queueMessage:SelectTabMsgID data:data];
 }
 
-- (NSArray *)filenamesOfTabs
+- (NSArray *)tabs
 {
+    NSArray *buffers = [self buffers];
+    
     tabpage_T *tp;
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
     for (tp = first_tabpage; tp != NULL; tp = tp->tp_next) {
-        [result addObject:[NSString stringWithVimString:(char *)(tp->tp_curwin->w_buffer->b_ffname)]];
+        int bufferNumber = tp->tp_curwin->w_buffer->b_fnum;
+        MMBuffer *buffer = [self bufferWithNumber:bufferNumber fromBuffers:buffers];
+
+        MMTabPage *tabPage = [[MMTabPage alloc] initWithBuffer:buffer];
+        [result addObject:tabPage];
+        [tabPage release];
+    }
+
+    return [result autorelease];
+}
+
+- (MMBuffer *)bufferWithNumber:(NSInteger)bufferNumber fromBuffers:(NSArray *)buffers {
+    for (MMBuffer *buffer in buffers) {
+        if (buffer.number == bufferNumber) {
+            return buffer;
+        }
+    }
+
+    return nil;
+}
+
+- (NSArray *)buffers
+{
+    buf_T *bf;
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
+    for (bf = firstbuf; bf != NULL; bf = bf->b_next) {
+        NSString *fileName = [NSString stringWithVimString:bf->b_ffname];
+        int number = bf->b_fnum;
+
+        MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName];
+        [result addObject:buffer];
+        [buffer release];
     }
     
     return [result autorelease];
 }
 
-- (NSArray *)filenamesOfBuffers
-{
-    buf_T *bf;
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
-    for (bf = firstbuf; bf != NULL; bf = bf->b_next) {
-        [result addObject:[NSString stringWithVimString:(char *)(bf->b_ffname)]];
-    }
-    
-    return [result autorelease];
-}
+/*- (void)closeBufferWithFileName:(NSString *)fileName {
+   char_u *bufferFileName = [fileName vimStringSave];
+   close_buffer(NULL, )
+}*/
 
 - (void)updateTabBar
 {
