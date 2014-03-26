@@ -37,6 +37,7 @@
 
 - (NSArray *)tabs;
 - (NSArray *)buffers;
+- (MMTabPage *)currentTab;
 
 @end
 
