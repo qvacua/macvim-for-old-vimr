@@ -18,3 +18,4 @@
 #import "MMVimManager.h"
 #import "MMVimManagerDelegateProtocol.h"
 #import "MMVimView.h"
+#import "MMDataTypes.h"

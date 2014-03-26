@@ -11,7 +11,7 @@
 		0395A8AA0D72D88B00881434 /* General.png in Resources */ = {isa = PBXBuildFile; fileRef = 0395A8A90D72D88B00881434 /* General.png */; };
 		1929B01F216AA92575355E74 /* MMVimController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B7ED04835FAC17D7B892 /* MMVimController.m */; };
 		1929B11322EDD574F466C867 /* MMCoreTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B08DC15089B43AB00F00 /* MMCoreTextView.m */; };
-		1929B1F6E21DF168A59D90C1 /* MMDataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B262B4469D6413B54651 /* MMDataTypes.h */; };
+		1929B1F6E21DF168A59D90C1 /* MMDataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B262B4469D6413B54651 /* MMDataTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1929B1FB6DF8BC56219E75C1 /* MMAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 1929B2F8057353131C913FD0 /* MMAlert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1929B3881D9408663BF8A67A /* MMTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929B11839EF061D23763730 /* MMTypes.m */; };
 		1929B3CFB04E6C28A4BD7614 /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 1929BCF859B6A68C22CB7DDB /* MMScroller.m */; };
@@ -774,10 +774,10 @@
 				4B00FEB9175D1E4700773FB5 /* MMVimManagerDelegateProtocol.h in Headers */,
 				4B00FEBA175D1E4700773FB5 /* MMVimController.h in Headers */,
 				4B00FEBB175D1E4700773FB5 /* MMScroller.h in Headers */,
+				1929B1F6E21DF168A59D90C1 /* MMDataTypes.h in Headers */,
 				4B00FEBC175D1E4700773FB5 /* MMVimView.h in Headers */,
 				4B869E7618942112005BE383 /* MacVimFramework.h in Headers */,
 				1929B1FB6DF8BC56219E75C1 /* MMAlert.h in Headers */,
-				1929B1F6E21DF168A59D90C1 /* MMDataTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
