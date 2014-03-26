@@ -804,7 +804,11 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     buf_T *bf;
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
     for (bf = firstbuf; bf != NULL; bf = bf->b_next) {
-        NSString *fileName = [NSString stringWithVimString:bf->b_ffname];
+        NSString *fileName = nil;
+        if (bf->b_ffname != NULL) {
+            fileName = [NSString stringWithVimString:bf->b_ffname];
+        }
+
         int number = bf->b_fnum;
 
         MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName
