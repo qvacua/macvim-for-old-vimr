@@ -763,10 +763,10 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     [self queueMessage:SelectTabMsgID data:data];
 }
 
-- (MMTabPage *)currentTab {
+- (MMTabPage *)currentTab
+{
     buf_T *bf = curtab->tp_curwin->w_buffer;
-    NSArray *buffers = [self buffers];
-    MMBuffer *buffer = [self bufferWithNumber:bf->b_fnum fromBuffers:buffers];
+    MMBuffer *buffer = [self bufferFromVimBuffer:bf];
 
     return [[[MMTabPage alloc] initWithBuffer:buffer] autorelease];
 }
@@ -789,7 +789,8 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     return [result autorelease];
 }
 
-- (MMBuffer *)bufferWithNumber:(NSInteger)bufferNumber fromBuffers:(NSArray *)buffers {
+- (MMBuffer *)bufferWithNumber:(NSInteger)bufferNumber fromBuffers:(NSArray *)buffers
+{
     for (MMBuffer *buffer in buffers) {
         if (buffer.number == bufferNumber) {
             return buffer;
@@ -804,20 +805,24 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     buf_T *bf;
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
     for (bf = firstbuf; bf != NULL; bf = bf->b_next) {
-        NSString *fileName = nil;
-        if (bf->b_ffname != NULL) {
-            fileName = [NSString stringWithVimString:bf->b_ffname];
-        }
+        MMBuffer *buffer= [self bufferFromVimBuffer:bf];
 
-        int number = bf->b_fnum;
-
-        MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName
-                                                   modified:bufIsChanged(bf)];
         [result addObject:buffer];
-        [buffer release];
     }
     
     return [result autorelease];
+}
+
+- (MMBuffer *)bufferFromVimBuffer:(buf_T *)bf
+{
+    NSString *fileName = nil;
+    if (bf->b_ffname != NULL) {
+        fileName = [NSString stringWithVimString:bf->b_ffname];
+    }
+    int number = bf->b_fnum;
+
+    MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName modified:bufIsChanged(bf)];
+    return [buffer autorelease];
 }
 
 /*- (void)closeBufferWithFileName:(NSString *)fileName {
