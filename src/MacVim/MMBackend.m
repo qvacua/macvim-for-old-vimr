@@ -765,8 +765,7 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
 
 - (MMTabPage *)currentTab
 {
-    buf_T *bf = curtab->tp_curwin->w_buffer;
-    MMBuffer *buffer = [self bufferFromVimBuffer:bf];
+    MMBuffer *buffer = [self bufferFromVimBuffer:curbuf];
 
     return [[[MMTabPage alloc] initWithBuffer:buffer] autorelease];
 }
