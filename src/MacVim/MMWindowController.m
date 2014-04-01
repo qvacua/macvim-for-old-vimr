@@ -1188,7 +1188,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
 #endif // (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
 
 #pragma mark MMVimControllerDelegate
-- (void)vimController:(MMVimController *)controller openWindowWithData:(NSData *)data {
+- (void)controller:(MMVimController *)controller openWindowWithData:(NSData *)data {
     [self openWindow];
 
     // HACK: Delay actually presenting the window onscreen until after
@@ -1200,19 +1200,19 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)vimController:(MMVimController *)controller showTabBarWithData:(NSData *)data {
+- (void)controller:(MMVimController *)controller showTabBarWithData:(NSData *)data {
     [self showTabBar:YES];
 }
 
-- (void)vimController:(MMVimController *)controller hideTabBarWithData:(NSData *)data {
+- (void)controller:(MMVimController *)controller hideTabBarWithData:(NSData *)data {
     [self showTabBar:NO];
 }
 
-- (void)vimController:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setTextDimensionsWithRows:(int)rows columns:(int)columns isLive:(BOOL)live keepOnScreen:(BOOL)screen data:(NSData *)data {
     [self setTextDimensionsWithRows:rows columns:columns isLive:live keepOnScreen:keepOnScreen];
 }
 
-- (void)vimController:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setWindowTitle:(NSString *)title data:(NSData *)data {
     // While in live resize the window title displays the dimensions of the
     // window so don't clobber this with a spurious "set title" message
     // from Vim.
@@ -1221,11 +1221,11 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)vimController:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setDocumentFilename:(NSString *)filename data:(NSData *)data {
     [self setDocumentFilename:filename];
 }
 
-- (void)vimController:(MMVimController *)controller showToolbar:(BOOL)on flags:(int)flags data:(NSData *)data {
+- (void)controller:(MMVimController *)controller showToolbar:(BOOL)on flags:(int)flags data:(NSData *)data {
     NSToolbarDisplayMode mode = NSToolbarDisplayModeDefault;
 
     if (flags & ToolbarLabelFlag) {
@@ -1239,48 +1239,48 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self showToolbar:on size:size mode:mode];
 }
 
-- (void)vimController:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data {
+- (void)controller:(MMVimController *)controller destroyScrollbarWithIdentifier:(int32_t)identifier data:(NSData *)data {
     [self destroyScrollbarWithIdentifier:identifier];
 }
 
-- (void)vimController:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data {
+- (void)controller:(MMVimController *)controller showScrollbarWithIdentifier:(int32_t)identifier state:(BOOL)state data:(NSData *)data {
     [self showScrollbarWithIdentifier:identifier state:state];
 }
 
-- (void)vimController:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data {
     [self setScrollbarThumbValue:value proportion:proportion identifier:identifier];
 }
 
-- (void)vimController:(MMVimController *)controller activateWithData:(NSData *)data {
+- (void)controller:(MMVimController *)controller activateWithData:(NSData *)data {
     [NSApp activateIgnoringOtherApps:YES];
     [[self window] makeKeyAndOrderFront:self];
 }
 
-- (void)vimController:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data {
+- (void)controller:(MMVimController *)controller enterFullScreen:(int)screen backgroundColor:(NSColor *)color data:(NSData *)data {
     [self enterFullScreen:screen backgroundColor:color];
 }
 
-- (void)vimController:(MMVimController *)controller leaveFullScreenWithData:(NSData *)data {
+- (void)controller:(MMVimController *)controller leaveFullScreenWithData:(NSData *)data {
     [self leaveFullScreen];
 }
 
-- (void)vimController:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setBufferModified:(BOOL)modified data:(NSData *)data {
     [self setBufferModified:modified];
 }
 
-- (void)vimController:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setFullScreenBackgroundColor:(NSColor *)color data:(NSData *)data {
     [self setFullScreenBackgroundColor:color];
 }
 
-- (void)vimController:(MMVimController *)controller showFindReplaceDialogWithText:(id)text flags:(int)flags data:(NSData *)data {
+- (void)controller:(MMVimController *)controller showFindReplaceDialogWithText:(id)text flags:(int)flags data:(NSData *)data {
     [[MMFindReplaceController sharedInstance] showWithText:text flags:flags];
 }
 
-- (void)vimController:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data {
+- (void)controller:(MMVimController *)controller zoomWithRows:(int)rows columns:(int)columns state:(int)state data:(NSData *)data {
     [self zoomWithRows:rows columns:columns state:state];
 }
 
-- (void)vimController:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data {
+- (void)controller:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data {
     // NOTE: Vim measures Y-coordinates from top of screen.
     NSRect frame = [[[self window] screen] frame];
     position.y = NSMaxY(frame) - position.y;
@@ -1288,11 +1288,11 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [self setTopLeft:position];
 }
 
-- (void)vimController:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data {
+- (void)controller:(MMVimController *)controller addToMru:(NSArray *)filenames data:(NSData *)data {
     [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
 }
 
-- (void)vimController:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data {
+- (void)controller:(MMVimController *)controller handleBrowseWithDirectoryUrl:(NSURL *)url browseDir:(BOOL)dir saving:(BOOL)saving data:(NSData *)data {
     if (saving) {
         NSSavePanel *panel = [NSSavePanel savePanel];
 
@@ -1335,7 +1335,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }];
 }
 
-- (void)vimController:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)textFieldString data:(NSData *)data {
+- (void)controller:(MMVimController *)controller handleShowDialogWithButtonTitles:(NSArray *)buttonTitles style:(NSAlertStyle)style message:(NSString *)message text:(NSString *)text textFieldString:(NSString *)textFieldString data:(NSData *)data {
     MMAlert *alert = [[MMAlert alloc] init];
 
     // NOTE! This has to be done before setting the informative text.
@@ -1399,12 +1399,12 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [alert release];
 }
 
-- (void)vimController:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force {
+- (void)controller:(MMVimController *)controller dropFiles:(NSArray *)filenames forceOpen:(BOOL)force {
     // Add dropped files to the "Recent Files" menu.
     [[NSDocumentController sharedDocumentController] noteNewRecentFilePaths:filenames];
 }
 
-- (void)vimController:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
+- (void)controller:(MMVimController *)controller addToolbarItemWithLabel:(NSString *)label tip:(NSString *)tip icon:(NSString *)icon atIndex:(int)idx {
     if (!toolbar) return;
 
     // Check for separator items.
@@ -1431,7 +1431,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     [toolbar insertItemWithItemIdentifier:label atIndex:idx];
 }
 
-- (void)vimController:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier {
+- (void)controller:(MMVimController *)controller removeToolbarItemWithIdentifier:(NSString *)identifier {
     // Only remove toolbar items, never actually remove the toolbar
     // itself or strange things may happen.
     NSUInteger idx = [toolbar indexOfItemWithItemIdentifier:identifier];
@@ -1439,11 +1439,11 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
         [toolbar removeItemAtIndex:idx];
 }
 
-- (void)vimController:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state {
+- (void)controller:(MMVimController *)controller setStateToolbarItemWithIdentifier:(NSString *)identifier state:(BOOL)state {
     [[toolbar itemWithItemIdentifier:identifier] setEnabled:state];
 }
 
-- (void)vimController:(MMVimController *)controller setTooltipDelay:(float)seconds {
+- (void)controller:(MMVimController *)controller setTooltipDelay:(float)seconds {
     // HACK! NSToolTipManager is an AppKit private class.
     static Class TTM = nil;
     if (!TTM)
@@ -1459,7 +1459,7 @@ static NSString *MMDefaultToolbarImageName = @"Attention";
     }
 }
 
-- (void)vimController:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue {
+- (void)controller:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue {
     // NOTE: Resizing is delayed until after all commands have been processed
     // since it often happens that more than one command will cause a resize.
     // If we were to immediately resize then the vim view size would jitter
