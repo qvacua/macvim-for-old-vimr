@@ -772,6 +772,15 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
 
 - (NSArray *)tabs
 {
+    if (!first_tabpage->tp_next) {
+        return @[[self currentTab]];
+    }
+    
+    /**
+     * When there is only one tab, the following code breaks down,
+     * Therefore, treat 1-tab-case separately
+     */
+    
     NSArray *buffers = [self buffers];
     
     tabpage_T *tp;
