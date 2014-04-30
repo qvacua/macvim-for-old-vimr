@@ -17,6 +17,9 @@
 
 - (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName modified:(BOOL)modified;
 - (NSString *)description;
+- (BOOL)isEqual:(id)other;
+- (BOOL)isEqualToBuffer:(MMBuffer *)buffer;
+- (NSUInteger)hash;
 
 @end
 
