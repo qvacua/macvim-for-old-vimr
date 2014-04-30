@@ -36,6 +36,33 @@
     [super dealloc];
 }
 
+- (BOOL)isEqual:(id)other {
+  if (other == self)
+    return YES;
+  if (!other || ![[other class] isEqual:[self class]])
+    return NO;
+
+  return [self isEqualToBuffer:other];
+}
+
+- (BOOL)isEqualToBuffer:(MMBuffer *)buffer {
+  if (self == buffer)
+    return YES;
+  if (buffer == nil)
+    return NO;
+  if (self.fileName != buffer.fileName && ![self.fileName isEqualToString:buffer.fileName])
+    return NO;
+  if (self.number != buffer.number)
+    return NO;
+  return YES;
+}
+
+- (NSUInteger)hash {
+  NSUInteger hash = [self.fileName hash];
+  hash = hash * 31u + self.number;
+  return hash;
+}
+
 @end
 
 @implementation MMTabPage
