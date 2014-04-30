@@ -12,7 +12,7 @@ Go to project root and do the following:
 
 ```
 cd src
-./configure
+./configure --with-features=huge --enable-rubyinterp --enable-pythoninterp --enable-perlinterp --enable-cscope
 make
 ```
 
