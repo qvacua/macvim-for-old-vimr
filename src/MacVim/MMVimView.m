@@ -44,7 +44,12 @@
 
 
 
-@implementation MMVimView
+@implementation MMVimView {
+    // When we embed the vim view in a split view, and it gets live resized, we want to call -viewWillStartLiveResize
+    // to indicate the live resizing. Even when we call -viewWillStartLiveResize, -isLiveResizing is NO, thus, we use
+    // a custom flag.
+    BOOL _customLiveResizing;
+}
 
 - (MMVimView *)initWithFrame:(NSRect)frame
                vimController:(MMVimController *)controller
@@ -543,6 +548,8 @@
 
 - (void)viewWillStartLiveResize
 {
+    _customLiveResizing = YES;
+
     id windowController = [[self window] windowController];
     [windowController liveResizeWillStart];
 
@@ -551,6 +558,8 @@
 
 - (void)viewDidEndLiveResize
 {
+    _customLiveResizing = NO;
+
     id windowController = [[self window] windowController];
     [windowController liveResizeDidEnd];
 
@@ -842,7 +851,7 @@
 
     if (constrained[0] != rows || constrained[1] != cols) {
         NSData *data = [NSData dataWithBytes:constrained length:2*sizeof(int)];
-        int msgid = [self inLiveResize] ? LiveResizeMsgID
+        int msgid = ([self inLiveResize] || _customLiveResizing) ? LiveResizeMsgID
                                         : SetTextDimensionsMsgID;
 
         ASLogDebug(@"Notify Vim that text dimensions changed from %dx%d to "
