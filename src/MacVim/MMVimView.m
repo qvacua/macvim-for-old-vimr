@@ -584,6 +584,14 @@
     [self frameSizeMayHaveChanged];
 }
 
+- (CGFloat)totalInset {
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    int left = [ud integerForKey:MMTextInsetLeftKey];
+    int right = [ud integerForKey:MMTextInsetRightKey];
+
+  return left + right;
+}
+
 @end // MMVimView
 
 
