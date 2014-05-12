@@ -66,6 +66,7 @@
 - (void)viewDidEndLiveResize;
 - (void)setFrameSize:(NSSize)size;
 - (void)setFrame:(NSRect)frame;
-- (CGFloat)totalInset;
+- (CGFloat)totalHorizontalInset;
+- (CGFloat)totalVerticalInset;
 
 @end
