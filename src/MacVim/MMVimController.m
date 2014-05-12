@@ -611,7 +611,7 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int32_t);
         int type = *((int *) bytes);
 
-        [self.vimView createScrollbarWithIdentifier:identifier type:type];
+        [self.vimView createScrollbarWithIdentifier:ident type:type];
         if ([self.delegate respondsToSelector:@selector(controller:createScrollbarWithIdentifier:type:data:)]) {
             [self.delegate controller:self createScrollbarWithIdentifier:ident type:type data:data];
         }
