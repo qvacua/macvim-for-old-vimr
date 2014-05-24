@@ -1880,6 +1880,10 @@ static void netbeansReadCallback(CFSocketRef s,
     }
 }
 
+- (NSString *)pwd {
+    return [[NSFileManager defaultManager] currentDirectoryPath];
+}
+
 - (void)insertVimStateMessage
 {
     // NOTE: This is the place to add Vim state that needs to be accessed from

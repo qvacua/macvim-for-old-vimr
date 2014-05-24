@@ -67,6 +67,10 @@ static BOOL isUnsafeMessage(int msgid);
 
 @implementation MMVimController
 
+- (NSURL *)pwd {
+    return [[[NSURL alloc] initWithString:[backendProxy pwd]] autorelease];
+}
+
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier {
     ASLogInfo(@"initing vim controller");
     if (!(self = [super init]))
@@ -866,10 +870,6 @@ static BOOL isUnsafeMessage(int msgid);
         if (dict) {
             [vimState release];
             vimState = [dict retain];
-        }
-
-        if ([self.delegate respondsToSelector:@selector(controller:vimStateSet:)]) {
-            [self.delegate controller:self vimStateSet:data];
         }
 
         return;
