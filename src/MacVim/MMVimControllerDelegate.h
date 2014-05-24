@@ -47,6 +47,7 @@
 - (void)controller:(MMVimController *)controller tabShouldUpdateWithData:(NSData *)data;
 - (void)controller:(MMVimController *)controller tabDidUpdateWithData:(NSData *)data;
 - (void)controller:(MMVimController *)controller tabDraggedWithData:(NSData *)data;
+- (void)controller:(MMVimController *)controller vimStateSet:(NSData *)set;
 
 // evaluate whether optional or required...
 - (void)controller:(MMVimController *)controller setWindowPosition:(NSPoint)position data:(NSData *)data; // Vim measures Y-coordinates from top of screen.

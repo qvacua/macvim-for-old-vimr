@@ -868,6 +868,10 @@ static BOOL isUnsafeMessage(int msgid);
             vimState = [dict retain];
         }
 
+        if ([self.delegate respondsToSelector:@selector(controller:vimStateSet:)]) {
+            [self.delegate controller:self vimStateSet:data];
+        }
+
         return;
     }
 
