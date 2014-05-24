@@ -68,7 +68,7 @@ static BOOL isUnsafeMessage(int msgid);
 @implementation MMVimController
 
 - (NSURL *)pwd {
-    return [[[NSURL alloc] initWithString:[backendProxy pwd]] autorelease];
+    return [[[NSURL alloc] initFileURLWithPath:[backendProxy pwd]] autorelease];
 }
 
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier {
