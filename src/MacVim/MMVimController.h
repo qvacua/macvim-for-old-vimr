@@ -51,6 +51,7 @@
 @property (assign) id <MMVimControllerDelegate> delegate;
 @property (readonly) MMVimView *vimView;
 
+- (NSURL *)pwd;
 - (id)initWithBackend:(id)backend pid:(int)processIdentifier;
 - (unsigned)vimControllerId;
 - (id)backendProxy;
