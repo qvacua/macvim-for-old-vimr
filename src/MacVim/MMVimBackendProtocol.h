@@ -38,7 +38,6 @@
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 - (MMTabPage *)currentTab;
-- (NSString *)pwd;
 
 @end
 
