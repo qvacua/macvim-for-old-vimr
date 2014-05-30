@@ -79,6 +79,7 @@
 - (MMTabPage *)currentTab;
 - (NSArray *)tabs;
 - (NSArray *)buffers;
+- (void)gotoBufferWithUrl:(NSURL *)url;
 
 - (BOOL)tellBackend:(id)obj;
 - (BOOL)sendDialogReturnToBackend:(id)obj;

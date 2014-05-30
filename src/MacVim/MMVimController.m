@@ -364,6 +364,10 @@ static BOOL isUnsafeMessage(int msgid);
     return [backendProxy buffers];
 }
 
+- (void)gotoBufferWithUrl:(NSURL *)url {
+  [backendProxy openWindowWithUrl:url];
+}
+
 - (BOOL)tellBackend:(id)obj {
     BOOL success = NO;
     @try {

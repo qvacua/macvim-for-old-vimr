@@ -833,10 +833,37 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     return [buffer autorelease];
 }
 
-/*- (void)closeBufferWithFileName:(NSString *)fileName {
-   char_u *bufferFileName = [fileName vimStringSave];
-   close_buffer(NULL, )
-}*/
+- (void)openWindowWithUrl:(NSURL *)url {
+  if (!first_tabpage->tp_next) {
+    if ([self gotoTab:first_tabpage withPath:url.path]) {
+      return;
+    }
+  }
+
+  /**
+   * When there is only one tab, the following code breaks down,
+   * Therefore, treat 1-tab-case separately
+   */
+
+  tabpage_T *tp;
+  for (tp = first_tabpage; tp != NULL; tp = tp->tp_next) {
+    if ([self gotoTab:tp withPath:url.path]) {
+      return;
+    }
+  }
+}
+
+- (BOOL)gotoTab:(tabpage_T *)tp withPath:(NSString *)path {
+  for (win_T *win = tp->tp_firstwin; win != NULL; win = win->w_next) {
+    NSString *bufferPath = [NSString stringWithVimString:win->w_buffer->b_ffname];
+    if ([bufferPath isEqualToString:path]) {
+      goto_tabpage_win(tp, win);
+      return YES;
+    }
+  }
+
+  return NO;
+}
 
 - (void)updateTabBar
 {

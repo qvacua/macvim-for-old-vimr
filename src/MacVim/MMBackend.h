@@ -168,6 +168,7 @@ extern NSTimeInterval MMBalloonEvalInternalDelay;
 - (MMTabPage *)currentTab;
 - (NSArray *)tabs;
 - (NSArray *)buffers;
+- (void)openWindowWithUrl:(NSURL *)url;
 
 @end
 

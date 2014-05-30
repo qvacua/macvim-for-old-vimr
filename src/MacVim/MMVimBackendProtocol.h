@@ -38,6 +38,7 @@
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 - (MMTabPage *)currentTab;
+- (void)openWindowWithUrl:(NSURL *)url;
 
 @end
 
