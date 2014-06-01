@@ -54,6 +54,12 @@
             kCFPreferencesCurrentApplication
     );
 
+    CFPreferencesSetAppValue(
+        CFSTR("ApplePressAndHoldEnabled"),
+        CFSTR("NO"),
+        kCFPreferencesCurrentApplication
+    );
+
     prefSet = YES;
 }
 
