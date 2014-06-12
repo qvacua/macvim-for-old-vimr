@@ -13,6 +13,7 @@
 @class MMVimView;
 @protocol MMVimControllerDelegate;
 @class MMTabPage;
+@class MMBuffer;
 
 
 /**
@@ -77,6 +78,7 @@
 - (void)processInputQueue:(NSArray *)queue;
 
 - (MMTabPage *)currentTab;
+- (MMBuffer *)currentBuffer;
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 - (void)gotoBufferWithUrl:(NSURL *)url;

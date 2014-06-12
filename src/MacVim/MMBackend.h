@@ -166,6 +166,7 @@ extern NSTimeInterval MMBalloonEvalInternalDelay;
 - (void)addToMRU:(NSArray *)filenames;
 
 - (MMTabPage *)currentTab;
+- (MMBuffer *)currentBuffer;
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 - (void)openWindowWithUrl:(NSURL *)url;

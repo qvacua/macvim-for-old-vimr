@@ -8,6 +8,7 @@
  * See README.txt for an overview of the Vim source code.
  */
 
+#import <MacVimFramework/MacVimFramework.h>
 #import "MMLog.h"
 #import "MMVimControllerDelegate.h"
 #import "MMVimController.h"
@@ -354,6 +355,10 @@ static BOOL isUnsafeMessage(int msgid);
 
 - (MMTabPage *)currentTab {
     return [backendProxy currentTab];
+}
+
+- (MMBuffer *)currentBuffer {
+  return [backendProxy currentBuffer];
 }
 
 - (NSArray *)tabs {

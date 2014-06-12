@@ -9,31 +9,32 @@
 
 #import "MMDataTypes.h"
 
+
 @implementation MMBuffer
 
 - (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName modified:(BOOL)modified {
-    self = [super init];
-    if (self) {
-        _number = number;
-        _fileName = [fileName copy];
-        _modified = modified;
-    }
+  self = [super init];
+  if (self) {
+    _number = number;
+    _fileName = [fileName copy];
+    _modified = modified;
+  }
 
-    return self;
+  return self;
 }
 
 - (NSString *)description {
-    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"self.number=%li", self.number];
-    [description appendFormat:@", self.fileName=%@", self.fileName];
-    [description appendFormat:@", self.modified=%d", self.modified];
-    [description appendString:@">"];
-    return description;
+  NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+  [description appendFormat:@"self.number=%li", self.number];
+  [description appendFormat:@", self.fileName=%@", self.fileName];
+  [description appendFormat:@", self.modified=%d", self.modified];
+  [description appendString:@">"];
+  return description;
 }
 
 - (void)dealloc {
-    self.fileName = nil;
-    [super dealloc];
+  [_fileName release];
+  [super dealloc];
 }
 
 - (BOOL)isEqual:(id)other {
@@ -65,27 +66,63 @@
 
 @end
 
-@implementation MMTabPage
+
+@implementation MMVimWindow
 
 - (instancetype)initWithBuffer:(MMBuffer *)buffer {
-    self = [super init];
-    if (self) {
-        _buffer = [buffer retain];
-    }
+  self = [super init];
+  if (self) {
+    _buffer = [buffer retain];
+  }
 
-    return self;
-}
-
-- (NSString *)description {
-    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"self.buffer=%@", self.buffer];
-    [description appendString:@">"];
-    return description;
+  return self;
 }
 
 - (void)dealloc {
-    [_buffer release];
-    [super dealloc];
+  [_buffer release];
+  [super dealloc];
+}
+
+- (NSString *)description {
+  NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+  [description appendFormat:@"self.buffer=%@", self.buffer];
+  [description appendString:@">"];
+  return description;
+}
+
+@end
+
+
+@implementation MMTabPage
+
+- (instancetype)initWithVimWindows:(NSArray *)vimWindows {
+  self = [super init];
+  if (self) {
+    _vimWindows = [vimWindows retain];
+  }
+
+  return self;
+}
+
+- (NSArray *)buffers {
+  NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:_vimWindows.count];
+  for (MMVimWindow *vimWindow in _vimWindows) {
+    [result addObject:vimWindow.buffer];
+  }
+
+  return [result autorelease];
+}
+
+- (NSString *)description {
+  NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+  [description appendFormat:@"self.vimWindow=%@", self.vimWindows];
+  [description appendString:@">"];
+  return description;
+}
+
+- (void)dealloc {
+  [_vimWindows release];
+  [super dealloc];
 }
 
 @end

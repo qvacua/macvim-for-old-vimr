@@ -763,74 +763,69 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     [self queueMessage:SelectTabMsgID data:data];
 }
 
-- (MMTabPage *)currentTab
-{
-    MMBuffer *buffer = [self bufferFromVimBuffer:curbuf];
-
-    return [[[MMTabPage alloc] initWithBuffer:buffer] autorelease];
+- (MMTabPage *)currentTab {
+  return [[[MMTabPage alloc] initWithVimWindows:[self vimWindowsOfTabT:curtab]] autorelease];
 }
 
-- (NSArray *)tabs
-{
-    if (!first_tabpage->tp_next) {
-        return @[[self currentTab]];
-    }
-    
-    /**
-     * When there is only one tab, the following code breaks down,
-     * Therefore, treat 1-tab-case separately
-     */
-    
-    NSArray *buffers = [self buffers];
-    
-    tabpage_T *tp;
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
-    for (tp = first_tabpage; tp != NULL; tp = tp->tp_next) {
-        int bufferNumber = tp->tp_curwin->w_buffer->b_fnum;
-        MMBuffer *buffer = [self bufferWithNumber:bufferNumber fromBuffers:buffers];
-
-        MMTabPage *tabPage = [[MMTabPage alloc] initWithBuffer:buffer];
-        [result addObject:tabPage];
-        [tabPage release];
-    }
-
-    return [result autorelease];
+- (MMBuffer *)currentBuffer {
+  return [self bufferFromVimBuffer:curbuf];
 }
 
-- (MMBuffer *)bufferWithNumber:(NSInteger)bufferNumber fromBuffers:(NSArray *)buffers
-{
-    for (MMBuffer *buffer in buffers) {
-        if (buffer.number == bufferNumber) {
-            return buffer;
-        }
-    }
+- (NSArray *)vimWindowsOfTabT:(tabpage_T *)tp {
+  NSMutableArray *vimWindows = [[NSMutableArray alloc] init];
+  for (win_T *win = tp->tp_firstwin; win != NULL; win = win->w_next) {
+    MMBuffer *buffer = [self bufferFromVimBuffer:win->w_buffer];
+    MMVimWindow *vimWindow = [[MMVimWindow alloc] initWithBuffer:buffer];
 
-    return nil;
+    [vimWindows addObject:vimWindow];
+    [vimWindow release];
+  }
+
+  return [vimWindows autorelease];
 }
 
-- (NSArray *)buffers
-{
-    buf_T *bf;
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
-    for (bf = firstbuf; bf != NULL; bf = bf->b_next) {
-        MMBuffer *buffer= [self bufferFromVimBuffer:bf];
+- (NSArray *)tabs {
+  if (!first_tabpage->tp_next) {
+    return @[[self currentTab]];
+  }
 
-        [result addObject:buffer];
-    }
-    
-    return [result autorelease];
+  /**
+   * When there is only one tab, the following code breaks down,
+   * Therefore, treat 1-tab-case separately
+   */
+
+  NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
+  for (tabpage_T *tp = first_tabpage; tp != NULL; tp = tp->tp_next) {
+    MMTabPage *tabPage = [[MMTabPage alloc] initWithVimWindows:[self vimWindowsOfTabT:tp]];
+
+    [result addObject:tabPage];
+    [tabPage release];
+  }
+
+  return [result autorelease];
 }
 
-- (MMBuffer *)bufferFromVimBuffer:(buf_T *)bf
-{
-    NSString *fileName = nil;
-    if (bf->b_ffname != NULL) {
-        fileName = [NSString stringWithVimString:bf->b_ffname];
+- (NSArray *)buffers {
+  NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:4];
+  NSArray *tabs = [self tabs];
+  for (MMTabPage *tab in tabs) {
+    for (MMVimWindow *vimWindow in tab.vimWindows) {
+      [result addObject:vimWindow.buffer];
     }
-    int number = bf->b_fnum;
+  }
 
-    MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName modified:bufIsChanged(bf)];
-    return [buffer autorelease];
+  return [result autorelease];
+}
+
+- (MMBuffer *)bufferFromVimBuffer:(buf_T *)bf {
+  NSString *fileName = nil;
+  if (bf->b_ffname != NULL) {
+    fileName = [NSString stringWithVimString:bf->b_ffname];
+  }
+  int number = bf->b_fnum;
+
+  MMBuffer *buffer = [[MMBuffer alloc] initWithNumber:(NSInteger) number fileName:fileName modified:bufIsChanged(bf)];
+  return [buffer autorelease];
 }
 
 - (void)openWindowWithUrl:(NSURL *)url {

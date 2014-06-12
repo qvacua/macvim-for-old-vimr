@@ -9,11 +9,12 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface MMBuffer : NSObject
 
-@property NSInteger number;
-@property (copy) NSString *fileName;
-@property BOOL modified;
+@property (readonly) NSInteger number;
+@property (copy, readonly) NSString *fileName;
+@property (readonly) BOOL modified;
 
 - (instancetype)initWithNumber:(NSInteger)number fileName:(NSString *)fileName modified:(BOOL)modified;
 - (NSString *)description;
@@ -23,11 +24,23 @@
 
 @end
 
-@interface MMTabPage : NSObject
 
-@property (strong) MMBuffer *buffer;
+@interface MMVimWindow : NSObject
+
+@property (strong, readonly) MMBuffer *buffer;
 
 - (instancetype)initWithBuffer:(MMBuffer *)buffer;
+- (NSString *)description;
+
+@end
+
+
+@interface MMTabPage : NSObject
+
+@property (strong, readonly) NSArray *vimWindows;
+
+- (instancetype)initWithVimWindows:(NSArray *)vimWindows;
+- (NSArray *)buffers;
 - (NSString *)description;
 
 @end

@@ -12,6 +12,7 @@
 
 
 @class MMTabPage;
+@class MMBuffer;
 
 /**
 * This is the protocol MMBackend implements.
@@ -38,6 +39,7 @@
 - (NSArray *)tabs;
 - (NSArray *)buffers;
 - (MMTabPage *)currentTab;
+- (MMBuffer *)currentBuffer;
 - (void)openWindowWithUrl:(NSURL *)url;
 
 @end
