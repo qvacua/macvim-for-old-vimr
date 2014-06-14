@@ -462,7 +462,7 @@ static BOOL isUnsafeMessage(int msgid);
 
 - (void)handleMessage:(int)msgid data:(NSData *)data {
     if (OpenWindowMsgID == msgid) {
-        [self.delegate controller:self openWindowWithData:data];
+        [_delegate controller:self openWindowWithData:data];
         return;
     }
 
@@ -477,33 +477,33 @@ static BOOL isUnsafeMessage(int msgid);
     }
 
     if (DraggedTabReplyMsgID == msgid) {
-        if ([self.delegate respondsToSelector:@selector(controller:tabDraggedWithData:)]) {
-            [self.delegate controller:self tabDraggedWithData:data];
+        if ([_delegate respondsToSelector:@selector(controller:tabDraggedWithData:)]) {
+            [_delegate controller:self tabDraggedWithData:data];
         }
         return;
     }
 
     if (UpdateTabBarMsgID == msgid) {
-        if ([self.delegate respondsToSelector:@selector(controller:tabShouldUpdateWithData:)]) {
-            [self.delegate controller:self tabShouldUpdateWithData:data];
+        if ([_delegate respondsToSelector:@selector(controller:tabShouldUpdateWithData:)]) {
+            [_delegate controller:self tabShouldUpdateWithData:data];
         }
 
         [self.vimView updateTabsWithData:data];
 
-        if ([self.delegate respondsToSelector:@selector(controller:tabDidUpdateWithData:)]) {
-            [self.delegate controller:self tabDidUpdateWithData:data];
+        if ([_delegate respondsToSelector:@selector(controller:tabDidUpdateWithData:)]) {
+            [_delegate controller:self tabDidUpdateWithData:data];
         }
 
         return;
     }
 
     if (ShowTabBarMsgID == msgid) {
-        [self.delegate controller:self showTabBarWithData:data];
+        [_delegate controller:self showTabBarWithData:data];
         return;
     }
 
     if (HideTabBarMsgID == msgid) {
-        [self.delegate controller:self hideTabBarWithData:data];
+        [_delegate controller:self hideTabBarWithData:data];
         return;
     }
 
@@ -519,7 +519,7 @@ static BOOL isUnsafeMessage(int msgid);
         BOOL onScreen = SetTextDimensionsReplyMsgID != msgid;
         BOOL isLive = LiveResizeMsgID == msgid;
 
-        [self.delegate controller:self
+        [_delegate controller:self
         setTextDimensionsWithRows:rows
                           columns:cols
                            isLive:isLive
@@ -537,8 +537,8 @@ static BOOL isUnsafeMessage(int msgid);
                                                    length:(NSUInteger) len
                                                  encoding:NSUTF8StringEncoding];
 
-        if ([self.delegate respondsToSelector:@selector(controller:setWindowTitle:data:)]) {
-            [self.delegate controller:self setWindowTitle:title data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setWindowTitle:data:)]) {
+            [_delegate controller:self setWindowTitle:title data:data];
         }
 
         [title release];
@@ -559,8 +559,8 @@ static BOOL isUnsafeMessage(int msgid);
             filename = [[NSString alloc] initWithString:@""];
         }
 
-        if ([self.delegate respondsToSelector:@selector(controller:setDocumentFilename:data:)]) {
-            [self.delegate controller:self setDocumentFilename:filename data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setDocumentFilename:data:)]) {
+            [_delegate controller:self setDocumentFilename:filename data:data];
         }
 
         [filename release];
@@ -608,8 +608,8 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int flags = *((int *) bytes);
 
-        if ([self.delegate respondsToSelector:@selector(controller:showToolbar:flags:data:)]) {
-            [self.delegate controller:self showToolbar:(BOOL) enable flags:flags data:data];
+        if ([_delegate respondsToSelector:@selector(controller:showToolbar:flags:data:)]) {
+            [_delegate controller:self showToolbar:(BOOL) enable flags:flags data:data];
         }
         return;
     }
@@ -621,8 +621,8 @@ static BOOL isUnsafeMessage(int msgid);
         int type = *((int *) bytes);
 
         [self.vimView createScrollbarWithIdentifier:ident type:type];
-        if ([self.delegate respondsToSelector:@selector(controller:createScrollbarWithIdentifier:type:data:)]) {
-            [self.delegate controller:self createScrollbarWithIdentifier:ident type:type data:data];
+        if ([_delegate respondsToSelector:@selector(controller:createScrollbarWithIdentifier:type:data:)]) {
+            [_delegate controller:self createScrollbarWithIdentifier:ident type:type data:data];
         }
 
         return;
@@ -632,7 +632,7 @@ static BOOL isUnsafeMessage(int msgid);
         const void *bytes = [data bytes];
         int32_t ident = *((int32_t *) bytes);
 
-        [self.delegate controller:self destroyScrollbarWithIdentifier:ident data:data];
+        [_delegate controller:self destroyScrollbarWithIdentifier:ident data:data];
         return;
     }
 
@@ -642,7 +642,7 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int32_t);
         int visible = *((int *) bytes);
 
-        [self.delegate controller:self showScrollbarWithIdentifier:ident state:(BOOL) visible data:data];
+        [_delegate controller:self showScrollbarWithIdentifier:ident state:(BOOL) visible data:data];
         return;
     }
 
@@ -655,8 +655,8 @@ static BOOL isUnsafeMessage(int msgid);
         int len = *((int *) bytes);
 
         [self.vimView setScrollbarPosition:pos length:len identifier:ident];
-        if ([self.delegate respondsToSelector:@selector(controller:setScrollbarPosition:length:identifier:data:)]) {
-            [self.delegate controller:self setScrollbarPosition:pos length:len identifier:ident data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setScrollbarPosition:length:identifier:data:)]) {
+            [_delegate controller:self setScrollbarPosition:pos length:len identifier:ident data:data];
         }
         return;
     }
@@ -669,7 +669,7 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(float);
         float prop = *((float *) bytes);
 
-        [self.delegate controller:self setScrollbarThumbValue:val proportion:prop identifier:ident data:data];
+        [_delegate controller:self setScrollbarThumbValue:val proportion:prop identifier:ident data:data];
         return;
     }
 
@@ -694,8 +694,8 @@ static BOOL isUnsafeMessage(int msgid);
         }
 
         self.vimView.textView.font = font;
-        if ([self.delegate respondsToSelector:@selector(controller:setFont:data:)]) {
-            [self.delegate controller:self setFont:font data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setFont:data:)]) {
+            [_delegate controller:self setFont:font data:data];
         }
 
         return;
@@ -718,8 +718,8 @@ static BOOL isUnsafeMessage(int msgid);
         }
 
         self.vimView.textView.wideFont = font;
-        if ([self.delegate respondsToSelector:@selector(controller:setWideFont:data:)]) {
-            [self.delegate controller:self setWideFont:font data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setWideFont:data:)]) {
+            [_delegate controller:self setWideFont:font data:data];
         }
 
         return;
@@ -735,8 +735,8 @@ static BOOL isUnsafeMessage(int msgid);
         NSColor *fore = [NSColor colorWithRgbInt:fg];
 
         [self.vimView setDefaultColorsBackground:back foreground:fore];
-        if ([self.delegate respondsToSelector:@selector(controller:setDefaultColorsBackground:foreground:data:)]) {
-            [self.delegate controller:self setDefaultColorsBackground:back foreground:fore data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setDefaultColorsBackground:foreground:data:)]) {
+            [_delegate controller:self setDefaultColorsBackground:back foreground:fore data:data];
         }
 
         return;
@@ -775,8 +775,8 @@ static BOOL isUnsafeMessage(int msgid);
         int shape = *((int *) bytes);
 
         self.vimView.textView.mouseShape = shape;
-        if ([self.delegate respondsToSelector:@selector(controller:setMouseShape:data:)]) {
-            [self.delegate controller:self setMouseShape:shape data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setMouseShape:data:)]) {
+            [_delegate controller:self setMouseShape:shape data:data];
         }
         return;
     }
@@ -786,15 +786,15 @@ static BOOL isUnsafeMessage(int msgid);
         int linespace = *((int *) bytes);
 
         self.vimView.textView.linespace = (float) linespace;
-        if ([self.delegate respondsToSelector:@selector(controller:adjustLinespace:data:)]) {
-            [self.delegate controller:self adjustLinespace:linespace data:data];
+        if ([_delegate respondsToSelector:@selector(controller:adjustLinespace:data:)]) {
+            [_delegate controller:self adjustLinespace:linespace data:data];
         }
 
         return;
     }
 
     if (ActivateMsgID == msgid) {
-        [self.delegate controller:self activateWithData:data];
+        [_delegate controller:self activateWithData:data];
         return;
     }
 
@@ -814,12 +814,12 @@ static BOOL isUnsafeMessage(int msgid);
 
         NSColor *back = [NSColor colorWithArgbInt:(unsigned int) bg];
 
-        [self.delegate controller:self enterFullScreen:fuoptions backgroundColor:back data:data];
+        [_delegate controller:self enterFullScreen:fuoptions backgroundColor:back data:data];
         return;
     }
 
     if (LeaveFullScreenMsgID == msgid) {
-        [self.delegate controller:self leaveFullScreenWithData:data];
+        [_delegate controller:self leaveFullScreenWithData:data];
         return;
     }
 
@@ -836,8 +836,8 @@ static BOOL isUnsafeMessage(int msgid);
         // to show a warning or not when quitting).
         //
         // TODO: Make 'hasModifiedBuffer' part of the Vim state?
-        if ([self.delegate respondsToSelector:@selector(controller:setBufferModified:data:)]) {
-            [self.delegate controller:self setBufferModified:(state > 0) data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setBufferModified:data:)]) {
+            [_delegate controller:self setBufferModified:(state > 0) data:data];
         }
         hasModifiedBuffer = (state != 0);
 
@@ -848,24 +848,24 @@ static BOOL isUnsafeMessage(int msgid);
         const int *dim = (const int *) [data bytes];
 
         [self.vimView.textView setPreEditRow:dim[0] column:dim[1]];
-        if ([self.delegate respondsToSelector:@selector(controller:setPreEditRow:column:data:)]) {
-            [self.delegate controller:self setPreEditRow:dim[0] column:dim[1] data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setPreEditRow:column:data:)]) {
+            [_delegate controller:self setPreEditRow:dim[0] column:dim[1] data:data];
         }
         return;
     }
 
     if (EnableAntialiasMsgID == msgid) {
         self.vimView.textView.antialias = YES;
-        if ([self.delegate respondsToSelector:@selector(controller:setAntialias:data:)]) {
-            [self.delegate controller:self setAntialias:YES data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setAntialias:data:)]) {
+            [_delegate controller:self setAntialias:YES data:data];
         }
         return;
     }
 
     if (DisableAntialiasMsgID == msgid) {
         self.vimView.textView.antialias = NO;
-        if ([self.delegate respondsToSelector:@selector(controller:setAntialias:data:)]) {
-            [self.delegate controller:self setAntialias:NO data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setAntialias:data:)]) {
+            [_delegate controller:self setAntialias:NO data:data];
         }
         return;
     }
@@ -876,7 +876,10 @@ static BOOL isUnsafeMessage(int msgid);
             [vimState release];
             vimState = [dict retain];
         }
-
+      
+        if ([_delegate respondsToSelector:@selector(controller:setVimState:data:)]) {
+            [_delegate controller:self setVimState:vimState data:data];
+        }
         return;
     }
 
@@ -890,14 +893,14 @@ static BOOL isUnsafeMessage(int msgid);
         const int *bg = (const int *) [data bytes];
         NSColor *color = [NSColor colorWithRgbInt:(unsigned int) *bg];
 
-        [self.delegate controller:self setFullScreenBackgroundColor:color data:data];
+        [_delegate controller:self setFullScreenBackgroundColor:color data:data];
         return;
     }
 
     if (ShowFindReplaceDialogMsgID == msgid) {
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         if (dict) {
-            [self.delegate controller:self
+            [_delegate controller:self
         showFindReplaceDialogWithText:dict[@"text"]
                                 flags:[dict[@"flags"] intValue]
                                  data:data];
@@ -908,32 +911,32 @@ static BOOL isUnsafeMessage(int msgid);
 
     if (ActivateKeyScriptMsgID == msgid) {
         [self.vimView.textView activateIm:YES];
-        if ([self.delegate respondsToSelector:@selector(controller:activateIm:data:)]) {
-            [self.delegate controller:self activateIm:YES data:data];
+        if ([_delegate respondsToSelector:@selector(controller:activateIm:data:)]) {
+            [_delegate controller:self activateIm:YES data:data];
         }
         return;
     }
 
     if (DeactivateKeyScriptMsgID == msgid) {
         [self.vimView.textView activateIm:NO];
-        if ([self.delegate respondsToSelector:@selector(controller:activateIm:data:)]) {
-            [self.delegate controller:self activateIm:NO data:data];
+        if ([_delegate respondsToSelector:@selector(controller:activateIm:data:)]) {
+            [_delegate controller:self activateIm:NO data:data];
         }
         return;
     }
 
     if (EnableImControlMsgID == msgid) {
         self.vimView.textView.imControl = YES;
-        if ([self.delegate respondsToSelector:@selector(controller:setImControl:data:)]) {
-            [self.delegate controller:self setImControl:YES data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setImControl:data:)]) {
+            [_delegate controller:self setImControl:YES data:data];
         }
         return;
     }
 
     if (DisableImControlMsgID == msgid) {
         self.vimView.textView.imControl = NO;
-        if ([self.delegate respondsToSelector:@selector(controller:setImControl:data:)]) {
-            [self.delegate controller:self setImControl:NO data:data];
+        if ([_delegate respondsToSelector:@selector(controller:setImControl:data:)]) {
+            [_delegate controller:self setImControl:NO data:data];
         }
         return;
     }
@@ -967,7 +970,7 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int state = *((int *) bytes);
 
-        [self.delegate controller:self zoomWithRows:rows columns:cols state:state data:data];
+        [_delegate controller:self zoomWithRows:rows columns:cols state:state data:data];
         return;
     }
 
@@ -977,7 +980,7 @@ static BOOL isUnsafeMessage(int msgid);
         bytes += sizeof(int);
         int y = *((int *) bytes);
 
-        [self.delegate controller:self setWindowPosition:NSMakePoint(x, y) data:data];
+        [_delegate controller:self setWindowPosition:NSMakePoint(x, y) data:data];
         return;
     }
 
@@ -997,7 +1000,7 @@ static BOOL isUnsafeMessage(int msgid);
         NSDictionary *dict = [NSDictionary dictionaryWithData:data];
         NSNumber *delay = dict ? [dict objectForKey:@"delay"] : nil;
         if (delay)
-            [self.delegate controller:self setTooltipDelay:[delay floatValue]];
+            [_delegate controller:self setTooltipDelay:[delay floatValue]];
         return;
     }
 
@@ -1006,8 +1009,8 @@ static BOOL isUnsafeMessage(int msgid);
 
         NSArray *filenames = dict ? [dict objectForKey:@"filenames"] : nil;
         if (filenames) {
-            if ([self.delegate respondsToSelector:@selector(controller:addToMru:data:)]) {
-                [self.delegate controller:self addToMru:filenames data:data];
+            if ([_delegate respondsToSelector:@selector(controller:addToMru:data:)]) {
+                [_delegate controller:self addToMru:filenames data:data];
             }
         }
 

@@ -24,6 +24,7 @@
 - (void)controller:(MMVimController *)controller showTabBarWithData:(NSData *)data;
 
 @optional
+- (void)controller:(MMVimController *)controller setVimState:(NSDictionary *)vimState data:(NSData *)data;
 - (void)controller:(MMVimController *)controller setScrollbarThumbValue:(float)value proportion:(float)proportion identifier:(int32_t)identifier data:(NSData *)data;
 - (void)controller:(MMVimController *)controller processFinishedForInputQueue:(NSArray *)inputQueue;
 - (void)controller:(MMVimController *)controller setDefaultColorsBackground:(NSColor *)background foreground:(NSColor *)foreground data:(NSData *)data;
