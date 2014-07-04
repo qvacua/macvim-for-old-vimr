@@ -853,6 +853,7 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     NSString *bufferPath = [NSString stringWithVimString:win->w_buffer->b_ffname];
     if ([bufferPath isEqualToString:path]) {
       goto_tabpage_win(tp, win);
+      [self redrawScreen];
       return YES;
     }
   }
