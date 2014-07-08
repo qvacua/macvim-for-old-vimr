@@ -49,3 +49,5 @@ project.xcworkspace
 
 src/nbproject/*
 .idea/*
+
+nbproject/*
