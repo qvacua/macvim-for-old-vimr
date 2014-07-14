@@ -488,10 +488,13 @@
 - (BOOL)tabView:(NSTabView *)theTabView shouldCloseTabViewItem:
         (NSTabViewItem *)tabViewItem
 {
-    // originally, we sent CloseTabMsgID, but at some occasions (with NERDTree installed)
-    // cf https://github.com/qvacua/vimr/issues/35
-    NSArray *descriptor = @[@"File", @"Close"];
-    [self.vimController sendMessage:ExecuteMenuMsgID data:[@{@"descriptor" : descriptor} dictionaryAsData]];
+    // HACK!  This method is only called when the user clicks the close button
+    // on the tab.  Instead of letting the tab bar close the tab, we return NO
+    // and pass a message on to Vim to let it handle the closing.
+    NSUInteger idx = [self representedIndexOfTabViewItem:tabViewItem];
+    int i = (int)idx;   // HACK! Never more than MAXINT tabs?!
+    NSData *data = [NSData dataWithBytes:&i length:sizeof(int)];
+    [self.vimController sendMessage:CloseTabMsgID data:data];
 
     return NO;
 }
