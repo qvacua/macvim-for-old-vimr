@@ -51,9 +51,6 @@ enum {
 // (techincally this is a user default but should not be used as such).
 extern NSString *MMNoWindowKey;
 
-extern NSString *MMAutosaveRowsKey;
-extern NSString *MMAutosaveColumnsKey;
-
 
 extern NSString *VimFindPboardType;
 

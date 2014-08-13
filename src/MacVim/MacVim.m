@@ -18,8 +18,6 @@
 // (techincally this is a user default but should not be used as such).
 NSString *MMNoWindowKey = @"MMNoWindow";
 
-NSString *MMAutosaveRowsKey    = @"MMAutosaveRows";
-NSString *MMAutosaveColumnsKey = @"MMAutosaveColumns";
 
 // Vim find pasteboard type (string contains Vim regex patterns)
 NSString *VimFindPboardType = @"VimFindPboardType";

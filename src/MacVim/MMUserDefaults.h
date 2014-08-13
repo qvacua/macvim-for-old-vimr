@@ -15,6 +15,9 @@
 #define INCLUDE_OLD_IM_CODE
 
 
+extern NSString *MMAutosaveRowsKey;
+extern NSString *MMAutosaveColumnsKey;
+
 extern NSString *MMCellWidthMultiplierKey;
 extern NSString *MMNoFontSubstitutionKey;
 extern NSString *MMBaselineOffsetKey;

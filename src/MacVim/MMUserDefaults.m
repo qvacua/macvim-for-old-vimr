@@ -11,6 +11,10 @@
 #import "MMUserDefaults.h"
 
 
+NSString *MMAutosaveRowsKey    = @"MMAutosaveRows";
+NSString *MMAutosaveColumnsKey = @"MMAutosaveColumns";
+
+
 NSString *MMCellWidthMultiplierKey = @"MMCellWidthMultiplier";
 NSString *MMNoFontSubstitutionKey = @"MMNoFontSubstitution";
 NSString *MMBaselineOffsetKey = @"MMBaselineOffset";
