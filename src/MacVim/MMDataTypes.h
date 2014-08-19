@@ -28,6 +28,7 @@
 @interface MMVimWindow : NSObject
 
 @property (strong, readonly) MMBuffer *buffer;
+@property BOOL currentWindow;
 
 - (instancetype)initWithBuffer:(MMBuffer *)buffer;
 - (NSString *)description;
@@ -40,6 +41,7 @@
 @property (strong, readonly) NSArray *vimWindows;
 
 - (instancetype)initWithVimWindows:(NSArray *)vimWindows;
+- (MMBuffer *)currentBuffer;
 - (NSArray *)buffers;
 - (NSString *)description;
 

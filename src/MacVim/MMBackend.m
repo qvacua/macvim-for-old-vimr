@@ -777,6 +777,10 @@ extern GuiFont gui_mch_retain_font(GuiFont font);
     MMBuffer *buffer = [self bufferFromVimBuffer:win->w_buffer];
     MMVimWindow *vimWindow = [[MMVimWindow alloc] initWithBuffer:buffer];
 
+    if (win == tp->tp_curwin) {
+      vimWindow.currentWindow = YES;
+    }
+
     [vimWindows addObject:vimWindow];
     [vimWindow release];
   }

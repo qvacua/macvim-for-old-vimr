@@ -73,6 +73,7 @@
   self = [super init];
   if (self) {
     _buffer = [buffer retain];
+    _currentWindow = NO;
   }
 
   return self;
@@ -102,6 +103,16 @@
   }
 
   return self;
+}
+
+- (MMBuffer *)currentBuffer {
+  for (MMVimWindow *vimWindow in _vimWindows) {
+    if (vimWindow.currentWindow) {
+      return vimWindow.buffer;
+    }
+  }
+
+  return nil;
 }
 
 - (NSArray *)buffers {
