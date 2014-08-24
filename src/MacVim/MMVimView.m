@@ -330,6 +330,26 @@
     [self selectTabWithIndex:curtabIdx];
 }
 
+- (void)selectTabWithIndexDelta:(NSInteger)delta {
+  NSTabViewItem *selectedTabViewItem = self.tabView.selectedTabViewItem;
+  NSArray *tabViewItems = [[self tabBarControl] representedTabViewItems];
+  NSInteger tabCount = (NSInteger) tabViewItems.count;
+  NSInteger selectedIndex = (NSInteger) [tabViewItems indexOfObject:selectedTabViewItem];
+  NSInteger targetIndex = selectedIndex + delta;
+
+  if (targetIndex >= tabCount) {
+    targetIndex = 0;
+  }
+
+  if (targetIndex < 0) {
+    targetIndex = tabCount - 1;
+  }
+
+  vimTaskSelectedTab = NO; // ie it's the GUI who wants to select the tab, not Vim
+  [self.tabView selectTabViewItem:tabViewItems[(NSUInteger) targetIndex]];
+  vimTaskSelectedTab = NO; // make sure that it's NO again
+}
+
 - (void)selectTabWithIndex:(int)idx
 {
     NSArray *tabViewItems = [[self tabBarControl] representedTabViewItems];

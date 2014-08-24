@@ -50,6 +50,7 @@
 - (PSMTabBarControl *)tabBarControl;
 - (IBAction)addNewTab:(id)sender;
 - (void)updateTabsWithData:(NSData *)data;
+- (void)selectTabWithIndexDelta:(NSInteger)delta;
 - (void)selectTabWithIndex:(int)idx;
 - (NSTabViewItem *)addNewTabViewItem;
 
