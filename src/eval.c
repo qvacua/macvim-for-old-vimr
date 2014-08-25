@@ -12513,7 +12513,7 @@ f_has(argvars, rettv)
 #ifdef FEAT_GUI_MAC
 	"gui_mac",
 #endif
-#if defined(FEAT_GUI_MACVIM) && !defined(FEAT_GUI_VIMR)
+#ifdef FEAT_GUI_MACVIM
 	"gui_macvim",
 #endif
 #ifdef FEAT_GUI_VIMR
