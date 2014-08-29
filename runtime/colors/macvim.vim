@@ -50,7 +50,7 @@ hi TabLineFill  gui=reverse
 hi TabLineSel   gui=bold
 hi Title        gui=bold guifg=DeepSkyBlue3
 hi VertSplit    gui=NONE guifg=DarkSlateGray guibg=Gray90
-if has("gui_macvim")
+if has("gui_macvim") || has("gui_vimr")
   hi Visual       guibg=MacSelectedTextBackgroundColor
 else
   hi Visual       guibg=#72F7FF
@@ -105,7 +105,7 @@ else
   hi DiffText     gui=NONE guibg=Gold
   hi LineNr       guifg=#888888 guibg=#E6E6E6
   hi MatchParen   guifg=White guibg=MediumPurple1
-  if has("gui_macvim")
+  if has("gui_macvim") || has("gui_vimr")
     hi Normal       gui=NONE guifg=MacTextColor guibg=MacTextBackgroundColor
   else
     hi Normal       gui=NONE guifg=Black guibg=White
@@ -123,7 +123,7 @@ endif
 " Change the selection color on focus change (but only if the "macvim"
 " colorscheme is active).
 "
-if has("gui_macvim") && !exists("s:augroups_defined")
+if (has("gui_macvim") || has("gui_vimr")) && !exists("s:augroups_defined")
   au FocusLost * if exists("colors_name") && colors_name == "macvim" | hi Visual guibg=MacSecondarySelectedControlColor | endif
   au FocusGained * if exists("colors_name") && colors_name == "macvim" | hi Visual guibg=MacSelectedTextBackgroundColor | endif
 

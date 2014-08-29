@@ -68,7 +68,7 @@ endif
 
 
 " MacVim Window menu (should be next to Help so give it a high priority)
-if has("gui_macvim")
+if has("gui_macvim") || has("gui_vimr")
   an <silent> 9998.300 Window.Minimize		    <Nop>
   an <silent> 9998.301 Window.Minimize\ All	    <Nop>
   an <silent> 9998.310 Window.Zoom		    <Nop>
@@ -83,7 +83,7 @@ if has("gui_macvim")
 endif
 
 " Help menu
-if has("gui_macvim")
+if has("gui_macvim") || has("gui_vimr")
   an 9999.1 &Help.MacVim\ Help		    :h gui_mac<CR>
   an <silent> 9999.2 Help.MacVim\ Website   <Nop>
   an 9999.3 &Help.-sep0-		    <Nop>
@@ -116,7 +116,7 @@ fun! s:Helpfind()
 endfun
 
 " File menu
-if has("gui_macvim")
+if has("gui_macvim") || has("gui_vimr")
   an <silent> 10.290 &File.New\ Window		    <Nop>
   an  10.295 &File.New\ Tab			    :tabnew<CR>
   an <silent> 10.310 &File.Open\.\.\.		    <Nop>
@@ -128,12 +128,12 @@ if has("gui_macvim")
   an 10.350 &File.Save\ As\.\.\.<Tab>:sav	    :browse confirm saveas<CR>
 else
 endif
-if !has("gui_macvim")
+if !(has("gui_macvim") || has("gui_vimr"))
   an 10.310 &File.&Open\.\.\.<Tab>:e		:browse confirm e<CR>
 endif
 an 10.320 &File.Sp&lit-Open\.\.\.<Tab>:sp	:browse sp<CR>
 an 10.320 &File.Open\ Tab\.\.\.<Tab>:tabnew	:browse tabnew<CR>
-if !has("gui_macvim")
+if !(has("gui_macvim") || has("gui_vimr"))
   an 10.325 &File.&New<Tab>:enew		:confirm enew<CR>
   an <silent> 10.330 &File.&Close<Tab>:close
 	\ :if winheight(2) < 0 && tabpagewinnr(2) == 0 <Bar>
@@ -163,7 +163,7 @@ elseif has("unix")
   vunmenu   &File.&Print
   vnoremenu &File.&Print			:w !lpr<CR>
 endif
-if !has("gui_macvim")
+if !(has("gui_macvim") || has("gui_vimr"))
   an 10.600 &File.-SEP4-				<Nop>
   an 10.610 &File.Sa&ve-Exit<Tab>:wqa		:confirm wqa<CR>
   an 10.620 &File.E&xit<Tab>:qa			:confirm qa<CR>
@@ -212,7 +212,7 @@ if has("win32") || has("win16") || has("gui_gtk") || has("gui_kde") || has("gui_
   an 20.420	 &Edit.Find\ and\ Rep&lace\.\.\.	:promptrepl<CR>
   vunmenu	 &Edit.Find\ and\ Rep&lace\.\.\.
   vnoremenu <silent>	 &Edit.Find\ and\ Rep&lace\.\.\. y:promptrepl <C-R>=<SID>FixFText()<CR><CR>
-elseif has("gui_macvim")
+elseif has("gui_macvim") || has("gui_vimr")
   an <silent> 20.410.10 &Edit.Find.Find\.\.\.	:promptfind<CR>
   vunmenu &Edit.Find.Find\.\.\.
   vnoremenu <silent> &Edit.Find.Find\.\.\.	y:promptfind <C-R>=<SID>FixFText()<CR><CR>
@@ -430,7 +430,7 @@ if has("keymap")
 endif
 if has("win32") || has("win16") || has("gui_motif") || has("gui_gtk") || has("gui_kde") || has("gui_photon") || has("gui_mac")
   an 20.470 &Edit.Select\ Fo&nt\.\.\.	:set guifont=*<CR>
-elseif has("gui_macvim")
+elseif has("gui_macvim") || has("gui_vimr")
   an 20.470 &Edit.-SEP4-                       <Nop>
   an 20.475.10 &Edit.Font.Show\ Fonts          <Nop>
   an 20.475.20 &Edit.Font.-SEP5-               <Nop>
@@ -848,7 +848,7 @@ endfunc
 
 " When just starting Vim, load the buffer menu later.  Don't do this for MacVim
 " because it makes the menu flicker each time a new editor window is opened.
-if has("vim_starting") && !has("gui_macvim")
+if has("vim_starting") && !(has("gui_macvim") || has("gui_vimr"))
   augroup LoadBufferMenu
     au! VimEnter * if !exists("no_buffers_menu") | call <SID>BMShow() | endif
     au  VimEnter * au! LoadBufferMenu
@@ -860,7 +860,7 @@ endif
 endif " !exists("no_buffers_menu")
 
 " Window menu
-if !has("gui_macvim")
+if !(has("gui_macvim") || has("gui_vimr"))
 an 70.300 &Window.&New<Tab>^Wn			<C-W>n
 an 70.310 &Window.S&plit<Tab>^Ws		<C-W>s
 an 70.320 &Window.Sp&lit\ To\ #<Tab>^W^^	<C-W><C-^>
@@ -893,7 +893,7 @@ an 70.380 &Window.&Max\ Height<Tab>^W_			<C-W>_
 an 70.390 &Window.M&in\ Height<Tab>^W1_			<C-W>1_
 an 70.400 &Window.Max\ &Width<Tab>^W\|			<C-W>\|
 an 70.410 &Window.Min\ Widt&h<Tab>^W1\|			<C-W>1\|
-endif " !has("gui_macvim")
+endif " !(has("gui_macvim") || has("gui_vimr"))
 
 " The popup menu
 an 1.10 PopUp.&Undo			u
@@ -1043,7 +1043,7 @@ if has("toolbar")
   exe 'vnoremenu <script>	 ToolBar.Paste	' . paste#paste_cmd['v']
   exe 'inoremenu <script>	 ToolBar.Paste	' . paste#paste_cmd['i']
 
-  if !has("gui_athena") && !has("gui_macvim")
+  if !has("gui_athena") && !(has("gui_macvim") || has("gui_vimr"))
     an 1.95   ToolBar.-sep3-		<Nop>
     an 1.100  ToolBar.Replace		:promptrepl<CR>
     vunmenu   ToolBar.Replace
@@ -1052,25 +1052,25 @@ if has("toolbar")
     an 1.120  ToolBar.FindPrev		N
   endif
 
-  if !has("gui_macvim")
+  if !(has("gui_macvim") || has("gui_vimr"))
     an 1.215 ToolBar.-sep5-		<Nop>
   endif
   an <silent> 1.220 ToolBar.LoadSesn	:call <SID>LoadVimSesn()<CR>
   an <silent> 1.230 ToolBar.SaveSesn	:call <SID>SaveVimSesn()<CR>
   an 1.240 ToolBar.RunScript		:browse so<CR>
 
-  if !has("gui_macvim")
+  if !(has("gui_macvim") || has("gui_vimr"))
     an 1.245 ToolBar.-sep6-		<Nop>
   endif
   an 1.250 ToolBar.Make			:make<CR>
-  if !has("gui_macvim")
+  if !(has("gui_macvim") || has("gui_vimr"))
     an 1.270 ToolBar.RunCtags		:exe "!" . g:ctags_command<CR>
     an 1.280 ToolBar.TagJump		g<C-]>
   endif
 
   an 1.295 ToolBar.-sep7-		<Nop>
   an 1.300 ToolBar.Help			:help<CR>
-  if !has("gui_macvim")
+  if !(has("gui_macvim") || has("gui_vimr"))
     an <silent> 1.310 ToolBar.FindHelp	:call <SID>Helpfind()<CR>
   endif
 
@@ -1175,7 +1175,7 @@ let &cpo = s:cpo_save
 unlet s:cpo_save
 
 
-if has("gui_macvim")
+if has("gui_macvim") || has("gui_vimr")
   "
   " Set up menu key equivalents (these should always have the 'D' modifier
   " set), action bindings, and alternate items.

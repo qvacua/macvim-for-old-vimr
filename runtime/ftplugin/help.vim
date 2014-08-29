@@ -18,7 +18,7 @@ if has("conceal")
   setlocal cole=2 cocu=nc
 endif
 
-if has("gui_macvim")
+if has("gui_macvim") || has("gui_vimr")
   " Use swipe gesture to navigate back/forward
   nmap <buffer> <silent> <SwipeLeft>  :po<CR>
   nmap <buffer> <silent> <SwipeRight> :ta<CR>
