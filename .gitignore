@@ -51,3 +51,6 @@ src/nbproject/*
 .idea/*
 
 nbproject/*
+.cproject
+.project
+.settings/*
