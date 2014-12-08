@@ -51,6 +51,7 @@
 - (IBAction)addNewTab:(id)sender;
 - (void)updateTabsWithData:(NSData *)data;
 - (void)selectTabWithIndexDelta:(NSInteger)delta;
+- (void)selectTabWithIndex:(int)idx fromVim:(BOOL)fromVim;
 - (void)selectTabWithIndex:(int)idx;
 - (NSTabViewItem *)addNewTabViewItem;
 

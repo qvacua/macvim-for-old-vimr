@@ -348,26 +348,32 @@
   vimTaskSelectedTab = NO; // ie it's the GUI who wants to select the tab, not Vim
   [self.tabView selectTabViewItem:tabViewItems[(NSUInteger) targetIndex]];
   vimTaskSelectedTab = NO; // make sure that it's NO again
+
+  [self placeScrollbars]; // copied from -selectTabWithIndex:fromVim:
+}
+
+- (void)selectTabWithIndex:(int)idx fromVim:(BOOL)fromVim {
+  NSArray *tabViewItems = [[self tabBarControl] representedTabViewItems];
+  if (idx < 0 || idx >= [tabViewItems count]) {
+    ASLogWarn(@"No tab with index %d exists.", idx);
+    return;
+  }
+
+  // Do not try to select a tab if already selected.
+  NSTabViewItem *tvi = [tabViewItems objectAtIndex:(NSUInteger) idx];
+  if (tvi != [[self tabView] selectedTabViewItem]) {
+    vimTaskSelectedTab = fromVim;
+    [[self tabView] selectTabViewItem:tvi];
+    vimTaskSelectedTab = NO;
+
+    // We might need to change the scrollbars that are visible.
+    [self placeScrollbars];
+  }
 }
 
 - (void)selectTabWithIndex:(int)idx
 {
-    NSArray *tabViewItems = [[self tabBarControl] representedTabViewItems];
-    if (idx < 0 || idx >= [tabViewItems count]) {
-        ASLogWarn(@"No tab with index %d exists.", idx);
-        return;
-    }
-
-    // Do not try to select a tab if already selected.
-    NSTabViewItem *tvi = [tabViewItems objectAtIndex:(NSUInteger) idx];
-    if (tvi != [[self tabView] selectedTabViewItem]) {
-        vimTaskSelectedTab = YES;
-        [[self tabView] selectTabViewItem:tvi];
-        vimTaskSelectedTab = NO;
-
-        // We might need to change the scrollbars that are visible.
-        [self placeScrollbars];
-    }
+  [self selectTabWithIndex:idx fromVim:YES];
 }
 
 - (NSTabViewItem *)addNewTabViewItem
