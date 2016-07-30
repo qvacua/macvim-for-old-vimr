@@ -1,3 +1,7 @@
+# Obsolete
+
+We started to rewrite [VimR](https://github.com/qvacua/vimr) with a NeoVim-backend.
+
 MacVimFramework
 ===============
 
